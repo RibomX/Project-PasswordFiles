@@ -6,22 +6,22 @@ const mongoose = require('mongoose');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// TVOJA DATABÁZA (MongoDB Atlas)
-const MONGO_URI = 'mongodb+srv://RibomX:bBa9bfKCgfYFD5vj@cluster0.h1zqx2e.mongodb.net/?appName=Cluster0';
+// TVOJ NOVÝ LINK (Nezabudni prepísať <db_password> na tvoje heslo!)
+const MONGO_URI = 'mongodb+srv://RibomX:bBa9bfKCgfYfD5vj@files.d4dcu2k.mongodb.net/?appName=Files'; 
 
-// TVOJ CLOUD SKLAD (Cloudinary)
+// KONFIGURÁCIA CLOUDINARY (tvoje údaje)
 cloudinary.config({ 
   cloud_name: 'dejdjlbfk', 
   api_key: '299794196721819', 
   api_secret: 'Cn5KTMB5_CrKu7YJH-C2m2s80hU' 
 });
 
-// Pripojenie k databáze s kontrolou
+// Pripojenie k databáze
 mongoose.connect(MONGO_URI)
     .then(() => console.log("✅ MongoDB Connected!"))
     .catch(err => console.error("❌ MongoDB Connection Error:", err));
 
-// Definícia dátového modelu (Schéma)
+// Schéma pre databázu
 const fileSchema = new mongoose.Schema({
     password: { type: String, required: true, unique: true },
     url: String,
@@ -37,7 +37,7 @@ const upload = multer({ storage: storage });
 app.use(express.json());
 app.use(express.static('public'));
 
-// 1. NAHRÁVANIE SÚBORU
+// API NA NAHRÁVANIE
 app.post('/upload', upload.single('file'), async (req, res) => {
     const password = req.body.password;
     if (!req.file || !password) return res.status(400).send('Chýba súbor alebo heslo.');
@@ -47,7 +47,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
       async (error, result) => {
         if (result) {
             try {
-                // Uloženie záznamu do MongoDB
                 await File.create({
                     password: password,
                     url: result.secure_url,
@@ -57,7 +56,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                 });
                 res.send({ success: true });
             } catch (dbErr) {
-                res.status(500).send("Heslo už existuje alebo chyba DB.");
+                res.status(500).send("Chyba databázy (možno už heslo existuje).");
             }
         } else {
             res.status(500).send(error);
@@ -67,7 +66,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     streamifier.createReadStream(req.file.buffer).pipe(stream);
 });
 
-// 2. HĽADANIE SÚBORU PODĽA HESLA
+// API NA STIAHNUTIE (Hľadanie v DB)
 app.post('/check-password', async (req, res) => {
     try {
         const fileData = await File.findOne({ password: req.body.password });
@@ -77,27 +76,24 @@ app.post('/check-password', async (req, res) => {
             res.send({ found: false });
         }
     } catch (err) {
-        res.status(500).send("Chyba pri hľadaní.");
+        res.status(500).send("Chyba pri hľadaní v databáze.");
     }
 });
 
-// 3. AUTOMATICKÝ ČISTIČ (beží každých 10 minút)
+// AUTOMATICKÝ ČISTIČ (každých 10 minút)
 setInterval(async () => {
-    const now = Date.now();
     try {
-        const expiredFiles = await File.find({ expiry: { $lt: now } });
+        const expiredFiles = await File.find({ expiry: { $lt: Date.now() } });
         for (const file of expiredFiles) {
-            // Zmazať z Cloudinary
             await cloudinary.uploader.destroy(file.public_id);
-            // Zmazať z MongoDB
             await File.deleteOne({ _id: file._id });
-            console.log(`🗑️ Zmazaný expirovaný súbor: ${file.password}`);
+            console.log(`🗑️ Automaticky zmazané: ${file.password}`);
         }
     } catch (err) {
-        console.error("Chyba pri čistení:", err);
+        console.error("Chyba čističa:", err);
     }
 }, 600000);
 
 app.listen(PORT, () => {
-    console.log(`🚀 Server beží na porte ${PORT}`);
+    console.log(`🚀 Server live na porte ${PORT}`);
 });
