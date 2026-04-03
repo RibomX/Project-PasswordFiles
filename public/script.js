@@ -14,9 +14,10 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Zobrazenie progress baru a reset
+    // Zobrazenie progress baru a reset dĺžky (bez textu)
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
+    progressBar.innerText = ''; // Odstránime akýkoľvek text vo vnútri
     status.innerHTML = 'Uploading...';
 
     try {
@@ -26,16 +27,16 @@ async function uploadFile() {
         });
 
         if (response.ok) {
-            // Nastavíme na 100%
+            // Vyfarbenie na 100%
             progressBar.style.width = '100%';
             status.innerHTML = '<span style="color: #27ae60; font-weight: bold;">File uploaded successfully!</span>';
 
-            // POČKÁME 1 SEKUNDU A VŠETKO VYČISTÍME
+            // Počkáme 1 sekundu a všetko schováme/vyčistíme
             setTimeout(() => {
-                progressContainer.style.display = 'none'; // Schová bar
-                status.innerText = '';                    // Zmaže nápis "successfully"
-                passwordInput.value = '';                 // Zmaže nastavené heslo
-                fileInput.value = '';                     // Resetuje výber súboru
+                progressContainer.style.display = 'none';
+                status.innerText = '';
+                passwordInput.value = ''; 
+                fileInput.value = '';
             }, 1000);
 
         } else {
@@ -61,7 +62,6 @@ async function checkPassword() {
     status.innerText = 'Checking...';
 
     try {
-        // Používame GET požiadavku, ktorú sme opravili v server.js
         const response = await fetch('/check-password?password=' + encodeURIComponent(password));
         
         if (!response.ok) {
@@ -71,7 +71,6 @@ async function checkPassword() {
         const data = await response.json();
 
         if (data.found) {
-            // Zobrazenie odkazu na stiahnutie
             status.innerHTML = `File found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold; text-decoration: underline;">Download ${data.name}</a>`;
         } else {
             status.innerText = 'Wrong password or file expired.';
