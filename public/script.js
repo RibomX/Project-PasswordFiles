@@ -14,7 +14,6 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Zobraziť progress bar
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
@@ -31,17 +30,19 @@ async function uploadFile() {
             progressBar.innerText = '100%';
             status.innerHTML = '<span style="color: #27ae60;">File uploaded successfully!</span>';
 
-            // Počkáme 1 sekundu a schováme progress bar
+            // POČKÁME 1 SEKUNDU A VYČISTÍME TO
             setTimeout(() => {
-                progressContainer.style.display = 'none';
+                progressContainer.style.display = 'none'; // Schová bar
+                status.innerText = '';                    // Zmaže text "successfully"
+                passwordInput.value = '';                 // Zmaže heslo z políčka
+                fileInput.value = '';                     // Resetuje výber súboru
             }, 1000);
         } else {
-            const errData = await response.json();
-            status.innerText = 'Upload failed: ' + (errData.error || 'Server error');
+            status.innerText = 'Upload failed.';
             progressContainer.style.display = 'none';
         }
     } catch (err) {
-        status.innerText = 'Error: ' + err.message;
+        status.innerText = 'Error connecting to server.';
         progressContainer.style.display = 'none';
     }
 }
@@ -55,19 +56,20 @@ async function checkPassword() {
         return;
     }
 
+    status.innerText = 'Checking...';
+
     try {
-        // Encode hesla je kľúčové, ak používaš špeciálne znaky
-        const response = await fetch(`/check-password?password=${encodeURIComponent(password)}`);
+        // EncodeURIComponent chráni pred chybou v adrese
+        const response = await fetch('/check-password?password=' + encodeURIComponent(password));
         
         if (!response.ok) {
-            throw new Error('Server responded with error');
+            throw new Error('Network error');
         }
 
         const data = await response.json();
 
         if (data.found) {
-            // Správne zobrazenie odkazu na stiahnutie ako vo videu
-            status.innerHTML = `File found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold; text-decoration: underline;">Download ${data.name}</a>`;
+            status.innerHTML = `File found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold;">Download ${data.name}</a>`;
         } else {
             status.innerText = 'Wrong password or file expired.';
         }
