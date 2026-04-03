@@ -14,7 +14,6 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Reset a zobrazenie baru
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
@@ -26,21 +25,19 @@ async function uploadFile() {
             body: formData
         });
 
+        const result = await response.json();
+
         if (response.ok) {
-            // Nastavíme na 100%
             progressBar.style.width = '100%';
             progressBar.innerText = '100%';
             status.innerHTML = '<span style="color: #27ae60;">File uploaded successfully!</span>';
+            console.log("Upload success:", result);
 
-            // POČKÁME 1 SEKUNDU A SCHOVÁME BAR
             setTimeout(() => {
                 progressContainer.style.display = 'none';
-                // Voliteľne: status.innerText = ''; // Ak chceš zmazať aj nápis "successfully"
             }, 1000);
-
         } else {
-            status.innerText = 'Upload failed.';
-            progressContainer.style.display = 'none';
+            status.innerText = 'Upload failed: ' + (result.error || 'Unknown error');
         }
     } catch (err) {
         status.innerText = 'Error: ' + err.message;
@@ -57,8 +54,10 @@ async function checkPassword() {
         return;
     }
 
+    status.innerText = 'Checking...';
+
     try {
-        const response = await fetch(`/check-password?password=${password}`);
+        const response = await fetch(`/check-password?password=${encodeURIComponent(password)}`);
         const data = await response.json();
 
         if (data.found) {
@@ -67,6 +66,7 @@ async function checkPassword() {
             status.innerText = 'Wrong password or file expired.';
         }
     } catch (err) {
+        console.error("Check error:", err);
         status.innerText = 'Error checking password.';
     }
 }
