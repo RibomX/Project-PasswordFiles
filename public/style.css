@@ -1,115 +1,50 @@
-:root {
-    --bg-color: #f4f7f6;
-    --container-bg: #ffffff;
-    --text-color: #333;
-    --primary-color: #2c3e50;
-    --accent-color: #3498db;
-    --secondary-text: #888;
-}
-
-body.dark-mode {
-    --bg-color: #1a1a1a;
-    --container-bg: #2d2d2d;
-    --text-color: #f4f4f4;
-    --primary-color: #ecf0f1;
-}
-
+/* Celkové rozloženie */
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: all 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    flex-direction: column; /* Aby logo bolo nad hlavným blokom */
+    height: auto;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Štýl pre horné logo a názov */
+.top-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.main-logo {
+    width: 100px; /* Uprav podľa potreby */
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.brand-name {
     margin: 0;
+    font-size: 2.5rem;
+    color: var(--primary-color);
 }
 
-.container {
-    background: var(--container-bg);
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
+/* Rozloženie pre maskota a kontajner */
+.main-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px; /* Medzera medzi maskotom a políčkom */
+    max-width: 1000px;
 }
 
-input, button {
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 6px;
-    border: 1px solid #ddd;
-    box-sizing: border-box;
-    font-size: 14px;
+.side-maskot {
+    width: 250px; /* Maskot bude dosť veľký a viditeľný */
+    height: auto;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
 }
 
-button {
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
+/* Responzivita - na mobile bude maskot nad políčkom */
+@media (max-width: 800px) {
+    .main-layout {
+        flex-direction: column;
+    }
+    .side-maskot {
+        width: 150px;
+    }
 }
-
-button:hover { opacity: 0.9; }
-
-/* Progress Bar */
-#progressContainer {
-    width: 100%;
-    background-color: #ddd;
-    border-radius: 10px;
-    margin: 10px 0;
-    overflow: hidden;
-}
-
-#progressBar {
-    width: 0%;
-    height: 20px;
-    background-color: #27ae60;
-    color: white;
-    font-size: 11px;
-    line-height: 20px;
-    text-align: center;
-    transition: width 0.2s;
-}
-
-/* Download Link Style (rovnaký ako input) */
-.download-link {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    background-color: #ebf5fb;
-    border: 1px solid var(--accent-color);
-    border-radius: 6px;
-    color: var(--accent-color);
-    text-decoration: none;
-    font-weight: bold;
-    box-sizing: border-box;
-}
-
-/* OK Button */
-.ok-btn {
-    background-color: #95a5a6;
-    width: auto;
-    padding: 8px 25px;
-    margin-top: 5px;
-}
-
-/* Footer Info */
-.footer-info {
-    margin-top: 25px;
-    font-size: 11px;
-    color: var(--secondary-text);
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-}
-
-.theme-toggle { position: absolute; top: 20px; right: 20px; }
-.theme-toggle button { width: auto; padding: 8px 15px; }
-
-hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
