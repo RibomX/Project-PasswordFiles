@@ -17,29 +17,23 @@
             <img src="maskot.png" alt="Maskot" class="dashboard-maskot">
         </div>
 
-        <div class="container" id="mainBox">
+        <div class="container upload-box">
             <section class="upload-section">
-                <input type="file" id="fileInput">
+                <div class="file-select-group">
+                    <button class="grey-file-select" onclick="document.getElementById('fileInput').click()">Vybrať súbor</button>
+                    <span id="fileName">Nie je vybraný žiadny súbor</span>
+                </div>
+                <input type="file" id="fileInput" style="display:none;" onchange="updateFileName()">
+                
                 <input type="text" id="passwordInput" placeholder="Set download password">
                 <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
                 
                 <div id="progressContainer" style="display:none;">
-                    <div id="progressBar">0%</div>
+                    <div id="progressBar"></div>
+                    <span id="uploadStatusText">0%</span>
                 </div>
                 <div id="uploadStatus"></div>
             </section>
-
-            <hr>
-
-            <section class="download-section">
-                <input type="text" id="downloadPassword" placeholder="Enter password to download">
-                <button onclick="checkPassword()">Check Password</button>
-                <div id="downloadStatus"></div>
-            </section>
-
-            <div class="footer-info">
-                Files deleted after 3 hours | Max 10MB
-            </div>
         </div>
     </div>
 
