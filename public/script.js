@@ -7,7 +7,8 @@ themeBtn.addEventListener('click', () => {
 
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
-    const password = document.getElementById('passwordInput').value;
+    const passwordInput = document.getElementById('passwordInput');
+    const password = passwordInput.value;
     const status = document.getElementById('uploadStatus');
     const progressBar = document.getElementById('progressBar');
     const progressContainer = document.getElementById('progressContainer');
@@ -46,9 +47,21 @@ async function uploadFile() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             status.innerHTML = `File uploaded successfully! <br> 
-                                <button onclick="copyToClipboard('${password}')">Copy Password</button>`;
+                                <button id="copyBtn" onclick="copyToClipboard('${password}')">Copy Password</button>`;
+            
+            // PO 3 SEKUNDÁCH TO VYČISTÍME
+            setTimeout(() => {
+                status.innerText = "";
+                progressContainer.style.display = 'none';
+                progressBar.style.width = '0%';
+                progressBar.innerText = '0%';
+                fileInput.value = ""; // Vymaže vybraný súbor
+                passwordInput.value = ""; // Vymaže zadané heslo
+            }, 3000);
+
         } else {
             status.innerText = "Error during upload. Please try again.";
+            setTimeout(() => { status.innerText = ""; progressContainer.style.display = 'none'; }, 3000);
         }
     };
 
@@ -57,7 +70,9 @@ async function uploadFile() {
 
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text);
-    alert("Password copied to clipboard!");
+    // Zmeníme text na tlačidle, aby si mal spätnú väzbu
+    const btn = document.getElementById('copyBtn');
+    if(btn) btn.innerText = "Copied!";
 }
 
 async function checkPassword() {
