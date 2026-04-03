@@ -20,78 +20,83 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', Tahoma, sans-serif; /* Pôvodný font webu */
+    font-family: 'Montserrat', sans-serif;
 }
 
 .top-header {
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* Zmenšené, aby nadpis nebol tak blízko k okraju */
+    z-index: 10;
 }
 
-/* PROFESIONÁLNY BIZNIS NADPIS */
 .brand-name {
-    font-family: 'Montserrat', sans-serif; /* Pôvodný sci-fi/tech nápis nahradený týmto serióznym */
     font-size: 2.8rem;
-    font-weight: 900; /* Extra Bold */
+    font-weight: 900;
     margin: 0;
     color: var(--primary-color);
-    letter-spacing: -1px; /* Moderný stiahnutý rozostup */
+    letter-spacing: -1px;
 }
 
 .main-layout {
     display: flex;
-    align-items: flex-end; /* Sedia na čiare */
+    align-items: flex-end;
     justify-content: center;
     gap: 60px;
     width: 100%;
 }
 
-/* MASKOT - BEZ ZMIEN */
 .side-maskot {
     height: 460px; 
     width: auto;
     display: block;
 }
 
-/* BIELE POLÍČKO - BEZ ZMIEN (Sedi na čiare) */
+/* BIELE POLÍČKO - FIXNÁ VÝŠKA A KOMPAKTNOSŤ */
 .container {
     background: var(--container-bg);
-    padding: 35px;
+    padding: 25px 35px; /* Menej paddingu, aby sa nerozťahoval */
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
     width: 400px;
     border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 420px; /* Nastavíme minimálnu výšku, aby pri zobrazení baru box "neskočil" */
 }
 
-/* OPRAVENÝ PROGRESS BAR */
+/* ELEGANTNÝ TENŠÍ PROGRESS BAR */
 #progressContainer {
     width: 100%;
-    background-color: #eee;
-    border-radius: 10px;
-    margin: 15px 0;
-    height: 24px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin: 5px 0; /* Veľmi malý margin */
+    height: 12px; /* Tenší bar nezaberá toľko miesta */
     overflow: hidden;
     display: none;
-    position: relative;
 }
 
 #progressBar {
     width: 0%;
     height: 100%;
     background-color: #27ae60;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    line-height: 24px;
     transition: width 0.3s ease;
+}
+
+/* TEXT STATUSU (Uploading...) */
+#uploadStatus {
+    font-size: 13px;
+    margin-top: 2px;
+    text-align: center;
 }
 
 input, button {
     width: 100%;
-    padding: 14px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 8px 0; /* Zmenšené medzery medzi inputmi */
     border-radius: 10px;
     border: 1px solid #ddd;
     box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
 }
 
 button {
@@ -103,13 +108,13 @@ button {
 }
 
 .footer-info {
-    margin-top: 20px;
+    margin-top: 15px;
     font-size: 11px;
     color: var(--secondary-text);
     text-align: center;
 }
 
-hr { border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0; }
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 15px 0; }
 
 .full-ground-line {
     width: 100vw;
