@@ -1,5 +1,6 @@
 :root {
-    --bg-color: #ffffff;
+:root {
+    --bg-color: #ffffff; /* Čistá biela, aby orezané okraje splynuli */
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
@@ -10,7 +11,7 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,113 +20,140 @@ body {
     padding: 40px 20px;
 }
 
-/* --- LOGO (OVEĽA VÄČŠIE) --- */
+/* --- LOGO (VÄČŠIE A ČISTÉ) --- */
 .top-header {
     text-align: center;
-    margin-bottom: 40px;
-}
-.main-logo {
-    width: 220px; /* Pôvodne bolo 150px */
-    height: auto;
-}
-.brand-name {
-    font-size: 3rem;
-    margin: 15px 0;
-    color: var(--primary-color);
-    font-weight: 800;
+    margin-bottom: 30px;
 }
 
-/* --- LAYOUT --- */
+.main-logo {
+    width: 280px; /* Poriadne viditeľné logo */
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.brand-name {
+    font-size: 3.2rem;
+    margin: 10px 0;
+    color: var(--primary-color);
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+/* --- LAYOUT (MASKOT + BOX) --- */
 .main-layout {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-end; /* Maskot aj box stoja na zemi */
     justify-content: center;
-    gap: 80px;
+    gap: 70px;
     width: 100%;
-    max-width: 1300px;
+    max-width: 1400px;
+    margin-top: 20px;
 }
 
-/* --- MASKOT (EXTRÉMNE VÄČŠÍ) --- */
+/* --- MASKOT A ČIERNA ZEM --- */
 .maskot-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-.side-maskot {
-    width: 500px; /* Pôvodne bolo 400px */
-    height: auto;
-    margin-bottom: -10px;
-}
-.ground-line {
-    width: 450px;
-    height: 5px;
-    background-color: #000000;
-    border-radius: 5px;
+    position: relative;
 }
 
-/* --- BIELE POLÍČKO --- */
+.side-maskot {
+    width: 550px; /* Keďže je orezaný, toto bude TERAZ EXTRÉMNE VEĽKÉ */
+    height: auto;
+    margin-bottom: -8px; /* Presné dosadnutie na čiaru */
+}
+
+.ground-line {
+    width: 500px;
+    height: 6px;
+    background-color: #000000;
+    border-radius: 10px;
+}
+
+/* --- NAHRÁVACIE POLÍČKO --- */
 .container {
     background: var(--container-bg);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-    width: 450px;
+    padding: 45px;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+    width: 100%;
+    max-width: 460px;
     border: 1px solid #f0f0f0;
-    margin-bottom: 30px;
+    margin-bottom: 40px; /* Zarovnanie s líniou maskota */
 }
 
-/* --- PROGRESS BAR (OPRAVENÝ) --- */
+/* --- PROGRESS BAR (OPRAVENÝ A VIDITEĽNÝ) --- */
 #progressContainer {
     width: 100%;
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    margin: 20px 0;
+    background-color: #eee;
+    border-radius: 12px;
+    margin: 25px 0;
+    height: 28px;
     overflow: hidden;
-    height: 25px;
+    display: none; /* Zapne sa cez JS pri uploade */
 }
 
 #progressBar {
     width: 0%;
     height: 100%;
-    background-color: #27ae60; /* Sýta zelená */
+    background-color: #27ae60;
     color: white;
     font-weight: bold;
     text-align: center;
-    line-height: 25px;
+    line-height: 28px;
     transition: width 0.3s ease;
     font-size: 14px;
 }
 
-/* FORMULÁRE */
+/* --- FORMULÁRE --- */
 input, button {
     width: 100%;
-    padding: 15px;
+    padding: 16px;
     margin: 12px 0;
-    border-radius: 10px;
+    border-radius: 12px;
     border: 1px solid #ddd;
     box-sizing: border-box;
+    font-size: 16px;
 }
+
 button {
     background-color: var(--accent-color);
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
-    font-size: 16px;
+    transition: all 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
 }
 
 .footer-info {
-    margin-top: 30px;
+    margin-top: 35px;
     font-size: 13px;
     color: var(--secondary-text);
     text-align: center;
+    line-height: 1.6;
 }
 
-hr { border: 0; border-top: 1px solid #eee; margin: 30px 0; }
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0; }
 
-/* MOBILE */
-@media (max-width: 1000px) {
-    .main-layout { flex-direction: column; align-items: center; }
-    .side-maskot { width: 300px; }
-    .ground-line { width: 250px; }
+/* --- RESPONSIVE PRE MOBILY --- */
+@media (max-width: 1100px) {
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+    .side-maskot {
+        width: 350px;
+    }
+    .ground-line {
+        width: 300px;
+    }
 }
