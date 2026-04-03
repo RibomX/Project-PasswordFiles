@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #ffffff;
+    --bg-color: #ffffff; /* ČISTÁ BIELA PRE SPLYNUTIE */
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
@@ -18,61 +18,77 @@ html, body {
 
 body {
     display: flex;
+    flex-direction: column; /* Nadpis hore, layout pod ním */
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Vycentrovanie celej skupiny */
     font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
-/* ROZLOŽENIE */
-.main-layout {
-    display: flex;
-    align-items: flex-end; /* Obaja sedia na "zemi" */
-    justify-content: center;
-    gap: 60px;
-    width: 100%;
-    max-width: 1200px;
-    padding: 20px;
+/* --- NÁZOV HORE (NAD VŠETKÝM) --- */
+.top-header {
+    text-align: center;
+    margin-bottom: 20px; /* Priestor pod nadpisom */
 }
 
-/* MASKOT */
+.brand-name {
+    font-size: 2.5rem;
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 800;
+}
+
+/* --- HLAVNÝ LAYOUT (MASKOT + BOX NA JEDNEJ LINKE) --- */
+.main-layout {
+    display: flex;
+    align-items: center; /* Vycentrovanie oboch prvkov vertically */
+    justify-content: center;
+    gap: 60px; /* Priestor medzi maskotom a boxom */
+    width: 100%;
+    max-width: 1300px;
+}
+
+/* --- MASKOT (ROVNAKO VYSOKÝ AKO BOX) --- */
 .maskot-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
+    /* Dôležité: Výška maskota sa bude prispôsobovať výške boxu */
 }
 
 .side-maskot {
-    width: 480px; /* Poriadna veľkosť aby ladil s boxom */
-    height: auto;
-    margin-bottom: -5px;
+    height: 400px; /* FIXNÁ VÝŠKA, ABY LADIELA S BOXOM (Nastav podľa potreby) */
+    width: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .ground-line {
-    width: 400px;
+    width: 110%; /* Čiara trocha širšia ako maskot */
     height: 2px; /* TENKÁ ČIARA */
-    background-color: #333;
-    opacity: 0.8;
+    background-color: #000000;
+    border-radius: 1px;
+    position: absolute;
+    bottom: -1px; /* Jemné podloženie pod nohy */
 }
 
-/* BOX */
+/* --- BIELE POLÍČKO (BOX) --- */
 .container {
     background: var(--container-bg);
     padding: 40px;
     border-radius: 24px;
     box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-    width: 420px;
+    width: 420px; /* Fixná šírka pre box */
+    height: 400px; /* FIXNÁ VÝŠKA, ABY LADIELA S MASKOTOM (Nastav podľa potreby) */
     border: 1px solid #f0f0f0;
     text-align: center;
+    box-sizing: border-box; /* Zahrnie padding do výšky */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Vyváženie obsahu v boxe */
 }
 
-.brand-name {
-    font-size: 2.2rem;
-    margin: 0 0 25px 0;
-    color: var(--primary-color);
-    font-weight: 800;
-}
-
-/* PROGRESS BAR */
+/* --- PROGRESS BAR (OPRAVENÝ A VIDITEĽNÝ) --- */
 #progressContainer {
     width: 100%;
     background-color: #eee;
@@ -94,7 +110,7 @@ body {
     font-size: 12px;
 }
 
-/* PRVKY */
+/* --- PRVKY --- */
 input, button {
     width: 100%;
     padding: 14px;
@@ -119,16 +135,27 @@ button:hover {
 }
 
 .footer-info {
-    margin-top: 25px;
+    margin-top: auto; /* Footer na spodok boxu */
     font-size: 11px;
     color: var(--secondary-text);
+    padding-top: 15px;
 }
 
 hr { border: 0; border-top: 1px solid #f0f0f0; margin: 25px 0; }
 
-/* RESPONSIVE */
-@media (max-height: 750px) {
-    .side-maskot { width: 350px; }
-    .container { padding: 30px; width: 380px; }
-    .brand-name { font-size: 1.8rem; }
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+    .side-maskot {
+        height: 250px;
+    }
+    .container {
+        width: 380px;
+        height: auto;
+        padding: 30px;
+    }
 }
