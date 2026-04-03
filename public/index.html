@@ -3,89 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FileDrop 5H</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .create-btn { position: fixed; top: 20px; left: 20px; padding: 12px 24px; cursor: pointer; border: none; background: #007bff; color: white; border-radius: 8px; font-weight: bold; transition: 0.3s; }
-        .create-btn:hover { background: #0056b3; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        button.action { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; transition: 0.3s; font-weight: bold; }
-        button.action:hover { background: #218838; }
-        .hidden { display: none; }
-        .download-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px; border: 1px dashed #28a745; }
-        a { color: #007bff; text-decoration: none; font-weight: bold; }
-    </style>
+    <title>Secure File Share</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<button class="create-btn" onclick="showView('create')">CREATE +</button>
-
-<div class="card" id="search-view">
-    <h2>Enter Password</h2>
-    <input type="password" id="input-pass" placeholder="Enter file password...">
-    <button class="action" onclick="findFile()">ENTER</button>
-    
-    <div id="result-box" class="hidden">
-        <div class="download-box">
-            <p>File found!</p>
-            <a id="file-link" href="#" download>Download File</a>
-        </div>
-        <button class="action" onclick="location.reload()" style="background:#6c757d; margin-top:15px;">OK</button>
+    <div class="theme-toggle">
+        <button id="themeBtn">Switch to Dark Mode</button>
     </div>
-</div>
 
-<div class="card hidden" id="create-view">
-    <h2>Upload File</h2>
-    <input type="file" id="upload-file">
-    <input type="text" id="upload-pass" placeholder="Create a password...">
-    <button class="action" onclick="upload()">UPLOAD</button>
-    <button onclick="showView('search')" style="margin-top:10px; border:none; background:none; color:blue; cursor:pointer;">Back</button>
-</div>
+    <div class="container">
+        <h1>Secure File Transfer</h1>
+        
+        <section class="upload-section">
+            <input type="file" id="fileInput">
+            <input type="text" id="passwordInput" placeholder="Enter download password">
+            <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
+            
+            <div id="progressContainer" style="display:none;">
+                <div id="progressBar">0%</div>
+            </div>
+            <p id="uploadStatus"></p>
+        </section>
 
-<script>
-    function showView(view) {
-        document.getElementById('search-view').classList.toggle('hidden', view === 'create');
-        document.getElementById('create-view').classList.toggle('hidden', view === 'search');
-    }
+        <hr>
 
-    async function upload() {
-        const file = document.getElementById('upload-file').files[0];
-        const password = document.getElementById('upload-pass').value;
-        if(!file || !password) return alert("Please fill in all fields!");
+        <section class="download-section">
+            <input type="text" id="downloadPassword" placeholder="Enter password to download">
+            <button onclick="checkPassword()">Download File</button>
+            <p id="downloadStatus"></p>
+        </section>
+    </div>
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('password', password);
-
-        try {
-            const res = await fetch('/upload', { method: 'POST', body: formData });
-            if(res.ok) {
-                alert("Success! File will be available for 5 hours.");
-                location.reload();
-            }
-        } catch (err) {
-            alert("Upload failed.");
-        }
-    }
-
-    async function findFile() {
-        const password = document.getElementById('input-pass').value;
-        const res = await fetch('/check-password', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ password })
-        });
-        const data = await res.json();
-
-        if(data.found) {
-            document.getElementById('file-link').href = data.url;
-            document.getElementById('file-link').innerText = "Download: " + data.name;
-            document.getElementById('result-box').classList.remove('hidden');
-        } else {
-            alert("Invalid password or file expired.");
-        }
-    }
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
