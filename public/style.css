@@ -7,7 +7,6 @@
     --secondary-text: #888;
 }
 
-/* ZÁKAZ SKROLOVANIA */
 html, body {
     height: 100vh;
     margin: 0;
@@ -37,37 +36,32 @@ body {
 
 .main-layout {
     display: flex;
-    align-items: flex-end; /* Obaja sedia na čiare */
+    align-items: flex-end;
     justify-content: center;
     gap: 60px;
     width: 100%;
 }
 
-/* MASKOT (BEZ ZMIEN) */
 .side-maskot {
     height: 460px; 
     width: auto;
     display: block;
 }
 
-/* BIELE POLÍČKO - ZMENŠENÉ ZHORA AJ ZDOLA */
+/* KOMPAKTNÉ POLÍČKO */
 .container {
     background: var(--container-bg);
-    padding: 15px 35px; /* Zmenšený horný a dolný padding z 35px na 15px */
+    padding: 15px 35px; /* Stlačené zhora aj zdola */
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
     width: 400px;
     border: 1px solid #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
-/* KOMPAKTNEJŠIA ŠTRUKTÚRA PRVKOV */
 input, button {
     width: 100%;
-    padding: 12px; /* Mierne zmenšený padding vnútri prvkov */
-    margin: 5px 0;  /* Zmenšený margin medzi prvkami z 10px na 5px */
+    padding: 12px;
+    margin: 5px 0;
     border-radius: 10px;
     border: 1px solid #ddd;
     box-sizing: border-box;
@@ -81,7 +75,6 @@ button {
     font-weight: bold;
 }
 
-/* OPRAVENÝ PROGRESS BAR */
 #progressContainer {
     width: 100%;
     background-color: #eee;
@@ -90,7 +83,6 @@ button {
     height: 22px;
     overflow: hidden;
     display: none;
-    position: relative;
 }
 
 #progressBar {
@@ -105,19 +97,14 @@ button {
 }
 
 .footer-info {
-    margin-top: 10px; /* Zmenšený odstup footeru */
+    margin-top: 10px;
     font-size: 11px;
     color: var(--secondary-text);
     text-align: center;
 }
 
-hr { 
-    border: 0; 
-    border-top: 1px solid #f0f0f0; 
-    margin: 15px 0; /* Zmenšený odstup čiary vnútri boxu */
-}
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 15px 0; }
 
-/* TENKÁ ČIARA CEZ CELÝ WEB */
 .full-ground-line {
     width: 100vw;
     height: 1px;
