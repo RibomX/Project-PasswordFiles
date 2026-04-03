@@ -1,10 +1,10 @@
 :root {
-    --bg-color: #fcfcfc; /* Mierne "off-white" pre prémiový pocit */
+    --bg-color: #ffffff;
     --container-bg: #ffffff;
-    --text-color: #1a1a1a;
-    --primary-color: #0f172a; /* Temná modro-čierna (biznis farba) */
-    --accent-color: #2563eb;  /* Čistá modrá (ako Microsoft/Facebook) */
-    --secondary-text: #64748b;
+    --text-color: #333;
+    --primary-color: #2c3e50;
+    --accent-color: #3498db;
+    --secondary-text: #888;
 }
 
 html, body {
@@ -20,116 +20,101 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Inter', sans-serif; /* Top biznis font súčasnosti */
-    -webkit-font-smoothing: antialiased;
+    font-family: 'Segoe UI', Tahoma, sans-serif; /* Pôvodný font webu */
 }
 
 .top-header {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
-/* PROFESIONÁLNY BIZNIS NÁPIS */
+/* PROFESIONÁLNY BIZNIS NADPIS */
 .brand-name {
-    font-size: 2.4rem;
-    font-weight: 800; /* Extra bold */
-    letter-spacing: -0.02em; /* Mierne stiahnuté medzery pre moderný look */
+    font-family: 'Montserrat', sans-serif; /* Pôvodný sci-fi/tech nápis nahradený týmto serióznym */
+    font-size: 2.8rem;
+    font-weight: 900; /* Extra Bold */
     margin: 0;
     color: var(--primary-color);
+    letter-spacing: -1px; /* Moderný stiahnutý rozostup */
 }
 
 .main-layout {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-end; /* Sedia na čiare */
     justify-content: center;
-    gap: 70px;
+    gap: 60px;
     width: 100%;
 }
 
+/* MASKOT - BEZ ZMIEN */
 .side-maskot {
     height: 460px; 
     width: auto;
     display: block;
 }
 
-/* BIELE POLÍČKO POSUNUTÉ VYŠŠIE */
+/* BIELE POLÍČKO - BEZ ZMIEN (Sedi na čiare) */
 .container {
     background: var(--container-bg);
-    padding: 25px 35px;
-    border-radius: 16px; /* Mierne ostrejšie rohy pre profi look */
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    width: 380px;
-    border: 1px solid #e2e8f0;
-    margin-bottom: 70px; /* Výraznejšie posunutie nahor */
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    width: 400px;
+    border: 1px solid #f0f0f0;
 }
 
-/* ÚPRAVA INPUTU PRE ANGLIČTINU */
-input[type="file"] {
-    font-size: 13px;
-    color: var(--secondary-text);
-}
-
-input, button {
-    width: 100%;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    transition: all 0.2s;
-}
-
-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
-button {
-    background-color: var(--primary-color); /* Tmavý biznis button */
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: 12px;
-}
-
-button:hover {
-    background-color: #1e293b;
-    transform: translateY(-1px);
-}
-
+/* OPRAVENÝ PROGRESS BAR */
 #progressContainer {
     width: 100%;
-    background-color: #f1f5f9;
-    border-radius: 999px;
+    background-color: #eee;
+    border-radius: 10px;
     margin: 15px 0;
-    height: 10px; /* Tenší, elegantnejší progress bar */
+    height: 24px;
     overflow: hidden;
     display: none;
+    position: relative;
 }
 
 #progressBar {
     width: 0%;
     height: 100%;
-    background-color: var(--accent-color);
+    background-color: #27ae60;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    line-height: 24px;
     transition: width 0.3s ease;
 }
 
+input, button {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
 .footer-info {
-    margin-top: 15px;
-    font-size: 12px;
+    margin-top: 20px;
+    font-size: 11px;
     color: var(--secondary-text);
     text-align: center;
 }
 
-hr { border: 0; border-top: 1px solid #f1f5f9; margin: 20px 0; }
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0; }
 
 .full-ground-line {
     width: 100vw;
     height: 1px;
-    background-color: #e2e8f0;
+    background-color: rgba(0,0,0,0.1);
     position: fixed;
     bottom: 12vh;
     left: 0;
