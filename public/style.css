@@ -7,9 +7,8 @@
     --secondary-text: #888;
 }
 
-/* ZÁKAZ SKROLOVANIA */
 html, body {
-    height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -20,74 +19,76 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     font-family: 'Segoe UI', Tahoma, sans-serif;
-    padding-top: 30px;
 }
 
-/* NÁZOV HORE (VYSOKO) */
 .top-header {
-    text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .brand-name {
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     margin: 0;
     color: var(--primary-color);
     font-weight: 800;
 }
 
-/* DASHBOARD KONTAJNER */
-.dashboard-container {
+.main-layout {
     display: flex;
-    align-items: center; 
+    align-items: flex-end; /* Sedia na čiare */
     justify-content: center;
-    gap: 80px; 
+    gap: 60px;
     width: 100%;
-    max-width: 1300px;
 }
 
-/* MASKOT (DOMINANTNÁ VÝŠKA) */
-.maskot-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.dashboard-maskot {
-    height: 520px; /* Zvysený pre dominanciu */
+/* MASKOT - TERAZ VÄČŠÍ AKO POLE */
+.side-maskot {
+    height: 460px; /* Dominantná veľkosť */
     width: auto;
     display: block;
 }
 
-/* BIELE POLÍČKO (BOX, MENŠIE) */
+/* BIELE POLE - PÔVODNÉ USPORIADANIE */
 .container {
     background: var(--container-bg);
-    padding: 30px;
+    padding: 35px;
     border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    width: 320px; /* Zmenseny a elegantny */
-    min-height: auto; 
-    height: auto;
+    width: 400px;
     border: 1px solid #f0f0f0;
-    text-align: center;
-    box-sizing: border-box; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
-/* ŠTÝLY PRE VNÚTRO POLÍČKA */
-input, button, .grey-file-select {
+/* OPRAVENÝ PROGRESS BAR (Z VIDEA) */
+#progressContainer {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
+    background-color: #eee;
+    border-radius: 10px;
+    margin: 15px 0;
+    height: 24px;
+    overflow: hidden;
+    display: none; /* Zapne sa cez JS */
+    position: relative;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background-color: #27ae60;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    line-height: 24px;
+    transition: width 0.3s ease;
+}
+
+input, button {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 10px;
     border: 1px solid #ddd;
     box-sizing: border-box;
-    font-size: 14px;
-    transition: 0.2s;
 }
 
 button {
@@ -98,74 +99,21 @@ button {
     font-weight: bold;
 }
 
-button:hover {
-    filter: brightness(1.05);
-}
-
-.grey-file-select {
-    background-color: #f4f4f4;
-    color: var(--primary-color);
-    border: none;
-    font-weight: bold;
-    margin-bottom: 4px; /* Viac priestoru pre text suboru */
-}
-
-.file-select-group span {
+.footer-info {
+    margin-top: 20px;
     font-size: 11px;
     color: var(--secondary-text);
-    display: block;
-    margin-bottom: 8px;
-}
-
-/* --- PROGRESS BAR (OPRAVENÝ) --- */
-#progressContainer {
-    width: 100%;
-    background-color: #eee;
-    border-radius: 8px;
-    margin: 15px 0;
-    height: 20px;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#progressBar {
-    width: 0%;
-    height: 100%;
-    background-color: #27ae60;
-    transition: width 0.3s;
-}
-
-#uploadStatusText {
-    font-size: 12px;
-    color: #333;
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-/* OSTATNÉ */
-#uploadStatus, #downloadStatus {
-    font-size: 12px;
-    margin-top: 5px;
+    text-align: center;
 }
 
 hr { border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0; }
 
-/* TENKÁ ČIARA CEZ CELÝ WEB */
 .full-ground-line {
     width: 100vw;
     height: 1px;
     background-color: rgba(0,0,0,0.1);
     position: fixed;
-    bottom: 30px; 
+    bottom: 12vh;
     left: 0;
     z-index: -1;
-}
-
-/* RESPONZIVITA (Zmenšenie na menšie obrazovky, aby sa stále neskrolovalo) */
-@media (max-width: 900px) {
-    .dashboard-container { flex-direction: column; gap: 30px; }
-    .dashboard-maskot { height: 350px; }
-    .container { width: 320px; }
 }
