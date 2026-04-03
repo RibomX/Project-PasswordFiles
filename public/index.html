@@ -16,22 +16,27 @@
         
         <section class="upload-section">
             <input type="file" id="fileInput">
-            <input type="text" id="passwordInput" placeholder="Enter download password">
+            <input type="text" id="passwordInput" placeholder="Set download password">
             <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
             
             <div id="progressContainer" style="display:none;">
                 <div id="progressBar">0%</div>
             </div>
-            <p id="uploadStatus"></p>
+            <div id="uploadStatus"></div>
         </section>
 
         <hr>
 
         <section class="download-section">
             <input type="text" id="downloadPassword" placeholder="Enter password to download">
-            <button onclick="checkPassword()">Download File</button>
-            <p id="downloadStatus"></p>
+            <button onclick="checkPassword()">Check Password</button>
+            <div id="downloadStatus"></div>
         </section>
+
+        <div class="footer-info">
+            Files are automatically deleted after 3 hours.<br>
+            Maximum file size: 10MB.
+        </div>
     </div>
 
     <script src="script.js"></script>
