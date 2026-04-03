@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
 <body>
 
     <header class="top-header">
+        <img src="logo.png" alt="Logo" class="mobile-only-logo">
         <h1 class="brand-name">Secure Transfer</h1>
     </header>
 
@@ -25,7 +26,7 @@
                 <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
                 
                 <div id="progressContainer" style="display:none;">
-                    <div id="progressBar">0%</div>
+                    <div id="progressBar"></div>
                 </div>
                 <div id="uploadStatus"></div>
             </section>
