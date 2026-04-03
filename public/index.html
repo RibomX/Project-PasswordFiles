@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="sk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure File Share</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header class="top-header">
-        <h1 class="brand-name">Secure Transfer</h1>
+        <h1 class="brand-name">SECURE TRANSFER</h1>
     </header>
 
     <div class="main-layout">
@@ -19,7 +20,7 @@
 
         <div class="container">
             <section class="upload-section">
-                <input type="file" id="fileInput">
+                <input type="file" id="fileInput" data-empty="No file chosen">
                 <input type="text" id="passwordInput" placeholder="Set download password">
                 <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
                 
