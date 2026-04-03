@@ -52,7 +52,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                     url: result.secure_url,
                     public_id: result.public_id,
                     originalName: req.file.originalname,
-                    expiry: Date.now() + (5 * 60 * 60 * 1000) // 5 hodín
+                    expiry: Date.now() + (3 * 60 * 60 * 1000) // 3 hodín
                 });
                 res.send({ success: true });
             } catch (dbErr) {
