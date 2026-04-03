@@ -1,11 +1,18 @@
 :root {
-:root {
-    --bg-color: #ffffff; /* Čistá biela, aby orezané okraje splynuli */
+    --bg-color: #ffffff;
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
     --accent-color: #3498db;
     --secondary-text: #888;
+}
+
+/* ZÁKAZ SKROLOVANIA A FIXNÁ OBRAZOVKA */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Odstráni skrolovanie */
 }
 
 body {
@@ -15,85 +22,76 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 40px 20px;
+    justify-content: center; /* Všetko presne na stred */
 }
 
-/* --- LOGO (VÄČŠIE A ČISTÉ) --- */
+/* --- LOGO (KOMPAKTNÉ ALE VIDITEĽNÉ) --- */
 .top-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .main-logo {
-    width: 280px; /* Poriadne viditeľné logo */
+    width: 150px; /* Zmenšené, aby nezaberalo výšku */
     height: auto;
-    display: block;
-    margin: 0 auto;
 }
 
 .brand-name {
-    font-size: 3.2rem;
-    margin: 10px 0;
+    font-size: 2.2rem;
+    margin: 5px 0;
     color: var(--primary-color);
-    font-weight: 900;
-    letter-spacing: -1px;
+    font-weight: 800;
 }
 
-/* --- LAYOUT (MASKOT + BOX) --- */
+/* --- HLAVNÝ LAYOUT (MASKOT + BOX NA JEDNEJ LINKE) --- */
 .main-layout {
     display: flex;
-    align-items: flex-end; /* Maskot aj box stoja na zemi */
+    align-items: flex-end; /* Obaja sedia na "zemi" */
     justify-content: center;
-    gap: 70px;
+    gap: 50px;
     width: 100%;
-    max-width: 1400px;
-    margin-top: 20px;
+    max-width: 1200px;
 }
 
-/* --- MASKOT A ČIERNA ZEM --- */
+/* --- MASKOT A TENKÁ ZEM --- */
 .maskot-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative;
 }
 
 .side-maskot {
-    width: 550px; /* Keďže je orezaný, toto bude TERAZ EXTRÉMNE VEĽKÉ */
+    width: 420px; /* Veľkosť nastavená tak, aby ladila s boxom */
     height: auto;
-    margin-bottom: -8px; /* Presné dosadnutie na čiaru */
+    margin-bottom: -5px;
 }
 
 .ground-line {
-    width: 500px;
-    height: 6px;
-    background-color: #000000;
-    border-radius: 10px;
+    width: 380px;
+    height: 2px; /* TENŠIA ČIARA */
+    background-color: #333;
+    border-radius: 1px;
 }
 
-/* --- NAHRÁVACIE POLÍČKO --- */
+/* --- BIELE POLÍČKO (BOX) --- */
 .container {
     background: var(--container-bg);
-    padding: 45px;
-    border-radius: 24px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.12);
-    width: 100%;
-    max-width: 460px;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.08);
+    width: 420px; /* Rovnaká šírka ako maskot */
     border: 1px solid #f0f0f0;
-    margin-bottom: 40px; /* Zarovnanie s líniou maskota */
 }
 
-/* --- PROGRESS BAR (OPRAVENÝ A VIDITEĽNÝ) --- */
+/* --- PROGRESS BAR --- */
 #progressContainer {
     width: 100%;
     background-color: #eee;
-    border-radius: 12px;
-    margin: 25px 0;
-    height: 28px;
+    border-radius: 8px;
+    margin: 15px 0;
+    height: 20px;
     overflow: hidden;
-    display: none; /* Zapne sa cez JS pri uploade */
+    display: none;
 }
 
 #progressBar {
@@ -103,20 +101,19 @@ body {
     color: white;
     font-weight: bold;
     text-align: center;
-    line-height: 28px;
-    transition: width 0.3s ease;
-    font-size: 14px;
+    line-height: 20px;
+    font-size: 12px;
 }
 
-/* --- FORMULÁRE --- */
+/* FORMULÁROVÉ PRVKY (KOMPAKTNEJŠIE) */
 input, button {
     width: 100%;
-    padding: 16px;
-    margin: 12px 0;
-    border-radius: 12px;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 8px;
     border: 1px solid #ddd;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 button {
@@ -125,35 +122,21 @@ button {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.2s;
-}
-
-button:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
 }
 
 .footer-info {
-    margin-top: 35px;
-    font-size: 13px;
+    margin-top: 20px;
+    font-size: 11px;
     color: var(--secondary-text);
     text-align: center;
-    line-height: 1.6;
 }
 
-hr { border: 0; border-top: 1px solid #f0f0f0; margin: 30px 0; }
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0; }
 
-/* --- RESPONSIVE PRE MOBILY --- */
-@media (max-width: 1100px) {
-    .main-layout {
-        flex-direction: column;
-        align-items: center;
-        gap: 40px;
-    }
-    .side-maskot {
-        width: 350px;
-    }
-    .ground-line {
-        width: 300px;
-    }
+/* RESPONZIVITA (Zmenšenie na menšie obrazovky, aby sa stále neskrolovalo) */
+@media (max-height: 800px) {
+    .side-maskot { width: 320px; }
+    .container { width: 320px; padding: 25px; }
+    .main-logo { width: 100px; }
+    .brand-name { font-size: 1.8rem; }
 }
