@@ -5,48 +5,35 @@ async function uploadFile() {
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
 
-    if (!fileInput.files[0]) {
-        alert("Vyber súbor!");
-        return;
-    }
+    if (!fileInput.files[0]) return alert("Vyber súbor!");
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Zobrazenie progress baru
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
-    progressBar.innerText = '0%';
     status.innerText = 'Uploading...';
 
     try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
-
+        const response = await fetch('/upload', { method: 'POST', body: formData });
         if (response.ok) {
-            // Nastavenie na 100%
             progressBar.style.width = '100%';
             progressBar.innerText = '100%';
             status.innerHTML = '<span style="color: #27ae60;">File uploaded successfully!</span>';
 
-            // POČKÁME 1 SEKUNDU A VYČISTÍME TO
+            // PO SEKUNDE VŠETKO ZMIZNE
             setTimeout(() => {
-                progressContainer.style.display = 'none'; // Schová bar
-                status.innerText = '';                    // Zmaže nápis "successfully"
-                passwordInput.value = '';                 // Zmaže zadané heslo
-                fileInput.value = '';                     // Resetuje výber súboru
+                progressContainer.style.display = 'none';
+                status.innerText = '';
+                passwordInput.value = ''; // Vymaže heslo
+                fileInput.value = '';    // Vymaže súbor
             }, 1000);
         } else {
             status.innerText = 'Upload failed.';
-            progressContainer.style.display = 'none';
         }
     } catch (err) {
-        console.error("Upload error:", err);
         status.innerText = 'Error connecting to server.';
-        progressContainer.style.display = 'none';
     }
 }
 
@@ -54,30 +41,15 @@ async function checkPassword() {
     const password = document.getElementById('downloadPassword').value;
     const status = document.getElementById('downloadStatus');
 
-    if (!password) {
-        alert("Zadaj heslo!");
-        return;
-    }
-
-    status.innerText = 'Checking...';
-
     try {
-        // Použitie encodeURIComponent zabraňuje chybám pri prenose hesla cez URL
         const response = await fetch('/check-password?password=' + encodeURIComponent(password));
-        
-        if (!response.ok) {
-            throw new Error('Server error');
-        }
-
         const data = await response.json();
-
         if (data.found) {
-            status.innerHTML = `File found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold;">Download ${data.name}</a>`;
+            status.innerHTML = `Found: <a href="${data.url}" target="_blank">Download ${data.name}</a>`;
         } else {
-            status.innerText = 'Wrong password or file expired.';
+            status.innerText = 'Wrong password.';
         }
     } catch (err) {
-        console.error("Check error:", err);
-        status.innerText = 'Error checking password. Is server running?';
+        status.innerText = 'Error checking password.';
     }
 }
