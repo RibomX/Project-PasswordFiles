@@ -14,6 +14,7 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
+    // Zobrazenie progress baru
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
@@ -26,6 +27,7 @@ async function uploadFile() {
         });
 
         if (response.ok) {
+            // Nastavenie na 100%
             progressBar.style.width = '100%';
             progressBar.innerText = '100%';
             status.innerHTML = '<span style="color: #27ae60;">File uploaded successfully!</span>';
@@ -33,8 +35,8 @@ async function uploadFile() {
             // POČKÁME 1 SEKUNDU A VYČISTÍME TO
             setTimeout(() => {
                 progressContainer.style.display = 'none'; // Schová bar
-                status.innerText = '';                    // Zmaže text "successfully"
-                passwordInput.value = '';                 // Zmaže heslo z políčka
+                status.innerText = '';                    // Zmaže nápis "successfully"
+                passwordInput.value = '';                 // Zmaže zadané heslo
                 fileInput.value = '';                     // Resetuje výber súboru
             }, 1000);
         } else {
@@ -42,6 +44,7 @@ async function uploadFile() {
             progressContainer.style.display = 'none';
         }
     } catch (err) {
+        console.error("Upload error:", err);
         status.innerText = 'Error connecting to server.';
         progressContainer.style.display = 'none';
     }
@@ -59,11 +62,11 @@ async function checkPassword() {
     status.innerText = 'Checking...';
 
     try {
-        // EncodeURIComponent chráni pred chybou v adrese
+        // Použitie encodeURIComponent zabraňuje chybám pri prenose hesla cez URL
         const response = await fetch('/check-password?password=' + encodeURIComponent(password));
         
         if (!response.ok) {
-            throw new Error('Network error');
+            throw new Error('Server error');
         }
 
         const data = await response.json();
@@ -74,7 +77,7 @@ async function checkPassword() {
             status.innerText = 'Wrong password or file expired.';
         }
     } catch (err) {
-        console.error(err);
+        console.error("Check error:", err);
         status.innerText = 'Error checking password. Is server running?';
     }
 }
