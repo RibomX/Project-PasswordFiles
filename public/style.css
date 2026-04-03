@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #ffffff; /* ČISTÁ BIELA PRE SPLYNUTIE */
+    --bg-color: #ffffff;
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
@@ -7,9 +7,9 @@
     --secondary-text: #888;
 }
 
-/* ZÁKAZ SKROLOVANIA */
+/* FIXNÁ OBRAZOVKA BEZ TLAČENIA */
 html, body {
-    height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -18,98 +18,79 @@ html, body {
 
 body {
     display: flex;
-    flex-direction: column; /* Nadpis hore, dashboard pod ním */
+    flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Nadpis vysoko */
+    justify-content: center; /* Všetko pekne v strede s rezervou od okrajov */
     font-family: 'Segoe UI', Tahoma, sans-serif;
-    padding-top: 30px; /* Priestor pre nadpis */
 }
 
-/* --- NÁZOV HORE (VYSOKO) --- */
+/* NÁZOV HORE S DOSTATOČNÝM ODSTUPOM */
 .top-header {
-    text-align: center;
-    margin-bottom: 20px; /* Priestor pod nadpisom */
+    margin-bottom: 4vh; 
 }
 
 .brand-name {
-    font-size: 2.5rem;
+    font-size: 2.8rem;
     margin: 0;
     color: var(--primary-color);
     font-weight: 800;
+    letter-spacing: -1px;
 }
 
-/* --- DASHBOARD KONTAJNER (SYMETERICKÉ BOXU) --- */
+/* DASHBOARD KONTAJNER */
 .dashboard-container {
     display: flex;
-    align-items: center; /* Vycentrovanie oboch prvkov vertically */
+    align-items: center; 
     justify-content: center;
-    gap: 60px; /* Priestor medzi maskotom a boxom */
+    gap: 80px; /* Väčšia medzera pre "vzdušnosť" */
     width: 100%;
-    max-width: 1300px;
+    max-width: 1400px;
 }
 
-/* MASKOT KRABICA */
+/* MASKOT BOX */
 .maskot-box {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 420px; /* Fixná šírka */
-    height: 480px; /* FIXNÁ VÝŠKA, ABY LADIELA S BOXOM */
 }
 
 .dashboard-maskot {
-    height: 480px; /* Maskot zaberie celú výšku krabice */
+    height: 55vh; /* Maskot určuje dominantnú výšku */
     width: auto;
     display: block;
 }
 
-/* BIELE POLÍČKO (BOX) */
+/* DYNAMICKÝ BOX */
 .container {
     background: var(--container-bg);
-    padding: 40px;
+    padding: 30px 40px;
     border-radius: 24px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.08);
-    width: 420px; /* Fixná šírka */
-    height: 480px; /* FIXNÁ VÝŠKA, ABY LADIELA S MASKOTOM */
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    width: 400px;
+    
+    /* TU JE TO KÚZLO: */
+    height: auto;
+    min-height: 40vh; /* Na začiatku menšie ako maskot */
+    max-height: 80vh; 
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Plynulé roztiahnutie */
+    
     border: 1px solid #f0f0f0;
-    text-align: center;
-    box-sizing: border-box; /* Zahrnie padding do výšky */
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Vyváženie obsahu */
-}
-
-/* --- PROGRESS BAR (OPRAVENÝ A VIDITEĽNÝ) --- */
-#progressContainer {
-    width: 100%;
-    background-color: #eee;
-    border-radius: 10px;
-    margin: 15px 0;
-    height: 22px;
+    justify-content: center;
     overflow: hidden;
-    display: none;
 }
 
-#progressBar {
-    width: 0%;
-    height: 100%;
-    background-color: #27ae60;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    line-height: 22px;
-    font-size: 12px;
-}
-
-/* --- PRVKY --- */
+/* PRVKY */
 input, button {
     width: 100%;
-    padding: 14px;
-    margin: 10px 0;
+    padding: 12px;
+    margin: 8px 0;
     border-radius: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #eee;
     box-sizing: border-box;
     font-size: 15px;
+    transition: all 0.2s;
 }
 
 button {
@@ -118,48 +99,57 @@ button {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.2s;
 }
 
-button:hover {
-    filter: brightness(1.05);
+button:hover { filter: brightness(1.05); }
+
+/* PROGRESS BAR */
+#progressContainer {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 20px;
+    margin: 10px 0;
+    height: 12px;
+    overflow: hidden;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background-color: #2ecc71;
+    transition: width 0.3s;
+}
+
+/* STATUS SPRÁVY */
+#uploadStatus, #downloadStatus {
+    font-size: 13px;
+    margin-top: 5px;
+    font-weight: 500;
 }
 
 .footer-info {
-    margin-top: auto; /* Footer na spodok */
+    margin-top: 20px;
     font-size: 11px;
     color: var(--secondary-text);
-    padding-top: 15px;
+    text-align: center;
 }
 
-hr { border: 0; border-top: 1px solid #f0f0f0; margin: 25px 0; }
+hr { border: 0; border-top: 1px solid #f8f8f8; margin: 20px 0; }
 
-/* --- TENKÁ ČIARA CEZ CELÝ WEB --- */
+/* TENKÁ ČIARA CEZ CELÝ WEB */
 .full-ground-line {
-    width: 100vw; /* Celá šírka viewportu */
-    height: 2px; /* TENKÁ ČIARA */
-    background-color: #000000;
+    width: 100vw;
+    height: 1px; /* Ešte jemnejšia */
+    background-color: rgba(0,0,0,0.1);
     position: fixed;
-    bottom: 30px; /* Jemné podloženie pod maskota/box */
+    bottom: 10vh; /* Zarovnané pod nohy maskota */
     left: 0;
+    z-index: -1;
 }
 
-/* RESPONZIVITA (Zmenšenie na menšie obrazovky, aby sa stále neskrolovalo) */
-@media (max-width: 900px) {
-    .dashboard-container {
-        flex-direction: column;
-        align-items: center;
-        gap: 30px;
-    }
-    .maskot-box {
-        height: 350px;
-    }
-    .dashboard-maskot {
-        height: 350px;
-    }
-    .container {
-        width: 380px;
-        height: auto;
-        padding: 30px;
-    }
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .dashboard-container { flex-direction: column; gap: 30px; }
+    .dashboard-maskot { height: 35vh; }
+    .container { width: 350px; min-height: auto; }
 }
