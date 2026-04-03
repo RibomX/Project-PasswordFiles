@@ -14,7 +14,7 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Zobrazenie progress baru
+    // Reset a zobrazenie baru
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     progressBar.innerText = '0%';
@@ -26,17 +26,25 @@ async function uploadFile() {
             body: formData
         });
 
-        // Po dokončení nastavíme 100%
-        progressBar.style.width = '100%';
-        progressBar.innerText = '100%';
-
         if (response.ok) {
+            // Nastavíme na 100%
+            progressBar.style.width = '100%';
+            progressBar.innerText = '100%';
             status.innerHTML = '<span style="color: #27ae60;">File uploaded successfully!</span>';
+
+            // POČKÁME 1 SEKUNDU A SCHOVÁME BAR
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                // Voliteľne: status.innerText = ''; // Ak chceš zmazať aj nápis "successfully"
+            }, 1000);
+
         } else {
             status.innerText = 'Upload failed.';
+            progressContainer.style.display = 'none';
         }
     } catch (err) {
         status.innerText = 'Error: ' + err.message;
+        progressContainer.style.display = 'none';
     }
 }
 
