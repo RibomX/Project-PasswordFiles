@@ -7,9 +7,9 @@
     --secondary-text: #888;
 }
 
-/* FIXNÁ OBRAZOVKA BEZ TLAČENIA */
+/* ZÁKAZ SKROLOVANIA */
 html, body {
-    height: 100vh;
+    height: 100%;
     margin: 0;
     padding: 0;
     overflow: hidden;
@@ -20,21 +20,22 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* Všetko pekne v strede s rezervou od okrajov */
+    justify-content: flex-start;
     font-family: 'Segoe UI', Tahoma, sans-serif;
+    padding-top: 30px;
 }
 
-/* NÁZOV HORE S DOSTATOČNÝM ODSTUPOM */
+/* NÁZOV HORE (VYSOKO) */
 .top-header {
-    margin-bottom: 4vh; 
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .brand-name {
-    font-size: 2.8rem;
+    font-size: 2.2rem;
     margin: 0;
     color: var(--primary-color);
     font-weight: 800;
-    letter-spacing: -1px;
 }
 
 /* DASHBOARD KONTAJNER */
@@ -42,12 +43,12 @@ body {
     display: flex;
     align-items: center; 
     justify-content: center;
-    gap: 80px; /* Väčšia medzera pre "vzdušnosť" */
+    gap: 80px; 
     width: 100%;
-    max-width: 1400px;
+    max-width: 1300px;
 }
 
-/* MASKOT BOX */
+/* MASKOT (DOMINANTNÁ VÝŠKA) */
 .maskot-box {
     display: flex;
     justify-content: center;
@@ -55,42 +56,38 @@ body {
 }
 
 .dashboard-maskot {
-    height: 55vh; /* Maskot určuje dominantnú výšku */
+    height: 520px; /* Zvysený pre dominanciu */
     width: auto;
     display: block;
 }
 
-/* DYNAMICKÝ BOX */
+/* BIELE POLÍČKO (BOX, MENŠIE) */
 .container {
     background: var(--container-bg);
-    padding: 30px 40px;
-    border-radius: 24px;
+    padding: 30px;
+    border-radius: 20px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    width: 400px;
-    
-    /* TU JE TO KÚZLO: */
+    width: 320px; /* Zmenseny a elegantny */
+    min-height: auto; 
     height: auto;
-    min-height: 40vh; /* Na začiatku menšie ako maskot */
-    max-height: 80vh; 
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Plynulé roztiahnutie */
-    
     border: 1px solid #f0f0f0;
+    text-align: center;
+    box-sizing: border-box; 
     display: flex;
     flex-direction: column;
     justify-content: center;
-    overflow: hidden;
 }
 
-/* PRVKY */
-input, button {
+/* ŠTÝLY PRE VNÚTRO POLÍČKA */
+input, button, .grey-file-select {
     width: 100%;
     padding: 12px;
     margin: 8px 0;
-    border-radius: 10px;
-    border: 1px solid #eee;
+    border-radius: 8px;
+    border: 1px solid #ddd;
     box-sizing: border-box;
-    font-size: 15px;
-    transition: all 0.2s;
+    font-size: 14px;
+    transition: 0.2s;
 }
 
 button {
@@ -101,55 +98,74 @@ button {
     font-weight: bold;
 }
 
-button:hover { filter: brightness(1.05); }
+button:hover {
+    filter: brightness(1.05);
+}
 
-/* PROGRESS BAR */
+.grey-file-select {
+    background-color: #f4f4f4;
+    color: var(--primary-color);
+    border: none;
+    font-weight: bold;
+    margin-bottom: 4px; /* Viac priestoru pre text suboru */
+}
+
+.file-select-group span {
+    font-size: 11px;
+    color: var(--secondary-text);
+    display: block;
+    margin-bottom: 8px;
+}
+
+/* --- PROGRESS BAR (OPRAVENÝ) --- */
 #progressContainer {
     width: 100%;
-    background-color: #f0f0f0;
-    border-radius: 20px;
-    margin: 10px 0;
-    height: 12px;
+    background-color: #eee;
+    border-radius: 8px;
+    margin: 15px 0;
+    height: 20px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #progressBar {
     width: 0%;
     height: 100%;
-    background-color: #2ecc71;
+    background-color: #27ae60;
     transition: width 0.3s;
 }
 
-/* STATUS SPRÁVY */
+#uploadStatusText {
+    font-size: 12px;
+    color: #333;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* OSTATNÉ */
 #uploadStatus, #downloadStatus {
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 5px;
-    font-weight: 500;
 }
 
-.footer-info {
-    margin-top: 20px;
-    font-size: 11px;
-    color: var(--secondary-text);
-    text-align: center;
-}
-
-hr { border: 0; border-top: 1px solid #f8f8f8; margin: 20px 0; }
+hr { border: 0; border-top: 1px solid #f0f0f0; margin: 20px 0; }
 
 /* TENKÁ ČIARA CEZ CELÝ WEB */
 .full-ground-line {
     width: 100vw;
-    height: 1px; /* Ešte jemnejšia */
+    height: 1px;
     background-color: rgba(0,0,0,0.1);
     position: fixed;
-    bottom: 10vh; /* Zarovnané pod nohy maskota */
+    bottom: 30px; 
     left: 0;
     z-index: -1;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1000px) {
+/* RESPONZIVITA (Zmenšenie na menšie obrazovky, aby sa stále neskrolovalo) */
+@media (max-width: 900px) {
     .dashboard-container { flex-direction: column; gap: 30px; }
-    .dashboard-maskot { height: 35vh; }
-    .container { width: 350px; min-height: auto; }
+    .dashboard-maskot { height: 350px; }
+    .container { width: 320px; }
 }
