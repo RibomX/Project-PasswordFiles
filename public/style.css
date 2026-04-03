@@ -1,5 +1,5 @@
 :root {
-    --bg-color: #ffffff; /* ČISTÁ BIELA AKO OBRÁZKY */
+    --bg-color: #ffffff; /* ČISTÁ BIELA PRE SPLYNUTIE S OBRÁZKAMI */
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
@@ -10,13 +10,13 @@
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    padding: 50px 20px;
+    padding: 60px 20px;
 }
 
 /* --- LOGO HORE --- */
@@ -24,13 +24,15 @@ body {
     text-align: center;
     margin-bottom: 60px;
 }
+
 .main-logo {
-    width: 140px;
+    width: 150px;
     height: auto;
 }
+
 .brand-name {
-    font-size: 2.8rem;
     margin: 10px 0;
+    font-size: 2.8rem;
     color: var(--primary-color);
     font-weight: 800;
 }
@@ -38,9 +40,9 @@ body {
 /* --- ROZLOŽENIE (MASKOT + BOX) --- */
 .main-layout {
     display: flex;
-    align-items: flex-end; /* Sedia na jednej úrovni */
+    align-items: flex-end; /* Obidve časti sedia na rovnakej linke */
     justify-content: center;
-    gap: 50px;
+    gap: 60px;
     width: 100%;
     max-width: 1100px;
 }
@@ -51,15 +53,17 @@ body {
     flex-direction: column;
     align-items: center;
 }
+
 .side-maskot {
-    width: 380px; /* Poriadne veľký maskot */
+    width: 400px; /* Poriadne veľký maskot */
     height: auto;
     margin-bottom: -5px; /* Aby sa dotýkal čiary */
 }
+
 .ground-line {
-    width: 320px;
+    width: 350px;
     height: 4px;
-    background-color: #000000; /* ČIERNA ČIARA - ZEM */
+    background-color: #000000; /* ČIERNA ČIARA AKO ZEM */
     border-radius: 2px;
 }
 
@@ -67,30 +71,52 @@ body {
 .container {
     background: var(--container-bg);
     padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1); /* Tieň aby box vynikol */
-    width: 400px;
-    border: 1px solid #eee;
-    margin-bottom: 20px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 420px;
+    border: 1px solid #f0f0f0;
+    margin-bottom: 20px; /* Zarovnanie s čiarou */
 }
 
-/* OSTATNÉ PRVKY */
+/* FORMULÁROVÉ PRVKY */
 input, button {
     width: 100%;
     padding: 14px;
     margin: 12px 0;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #ddd;
     box-sizing: border-box;
+    font-size: 15px;
 }
+
 button {
     background-color: var(--accent-color);
     color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
+    transition: transform 0.2s;
 }
-button:hover { opacity: 0.9; }
+
+button:hover {
+    transform: scale(1.02);
+}
+
+/* DOWNLOAD LINK */
+.download-link {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    margin: 15px 0;
+    background-color: #ebf5fb;
+    border: 2px solid var(--accent-color);
+    border-radius: 10px;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: bold;
+    text-align: center;
+}
 
 .footer-info {
     margin-top: 30px;
@@ -101,12 +127,16 @@ button:hover { opacity: 0.9; }
 
 hr { border: 0; border-top: 1px solid #eee; margin: 25px 0; }
 
-/* RESPONSIVE - MOBILY */
-@media (max-width: 900px) {
+/* MOBILNÁ VERZIA */
+@media (max-width: 950px) {
     .main-layout {
         flex-direction: column;
         align-items: center;
     }
-    .side-maskot { width: 220px; }
-    .ground-line { width: 180px; }
+    .side-maskot {
+        width: 250px;
+    }
+    .ground-line {
+        width: 220px;
+    }
 }
