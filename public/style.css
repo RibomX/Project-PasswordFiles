@@ -3,8 +3,7 @@
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
-    --accent-color: #3498db; /* Tvoja modrá */
-    --secondary-text: #888;
+    --accent-color: #3498db;
 }
 
 html, body {
@@ -13,6 +12,7 @@ html, body {
     padding: 0;
     overflow: hidden;
     background-color: var(--bg-color);
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -20,121 +20,71 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Montserrat', sans-serif;
 }
 
-/* --- !!! NOVO PRIDANÝ LOADING SCREEN STYLES !!! --- */
+/* --- MENU & SIDEBAR --- */
+#menu-toggle {
+    position: fixed; top: 20px; left: 20px;
+    width: 50px; height: 50px; background: white;
+    border-radius: 50%; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000;
+}
+.bar { width: 22px; height: 2px; background: var(--primary-color); margin: 2px 0; border-radius: 2px; }
+
+.sidebar {
+    position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+    background: white; z-index: 2000; transition: left 0.4s ease;
+    padding: 30px 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.05);
+}
+.sidebar.active { left: 0; }
+.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.close-btn { font-size: 35px; cursor: pointer; color: #333; }
+
+.nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 15px;
+    text-decoration: none; color: #555; font-weight: 600; border-radius: 10px;
+}
+.nav-item.active { background: #f0f7ff; color: var(--accent-color); }
+.dot { width: 8px; height: 8px; background: var(--accent-color); border-radius: 50%; }
+.nav-item.disabled { opacity: 0.4; font-size: 0.8rem; }
+
+#sidebar-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.2); display: none; z-index: 1500; backdrop-filter: blur(2px);
+}
+#sidebar-overlay.active { display: block; }
+
+/* --- LOADER --- */
 #loader-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; /* Nad všetkým */
-    transition: opacity 0.6s ease-out, visibility 0.6s ease-out; /* Hladké zmiznutie loaderu */
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: white; z-index: 9999; display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.6s ease;
 }
+.loader-hidden { opacity: 0; visibility: hidden; }
+.loader-logo { height: 80px; margin-bottom: 20px; }
+.bobbing { animation: bob 2s infinite ease-in-out; }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+.load-bar-container { width: 200px; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
+.load-bar-fill { width: 0%; height: 100%; background: var(--accent-color); transition: width 0.2s; }
 
-.loader-content {
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-}
-
-/* Jemný pohyb loga hore-dole */
-.loader-logo {
-    height: 90px;
-    margin-bottom: 25px;
-    animation: bobbing 2s infinite ease-in-out;
-}
-
-.loading-text {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin: 0 0 15px 0;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-
-/* LOADING BAR */
-.load-bar-container {
-    width: 250px;
-    height: 14px;
-    background-color: #f0f0f0;
-    border-radius: 99px;
-    margin: 0 auto;
-    overflow: hidden;
-    border: 1px solid #eee;
-}
-
-.load-bar-fill {
-    width: 0%; /* Začína na 0 */
-    height: 100%;
-    background-color: var(--accent-color); /* Modrá výplň */
-    border-radius: 99px;
-    transition: width 0.3s ease-out; /* Hladké plnenie */
-}
-
-/* KEYFRAMES PRE ANIMÁCIE */
-@keyframes bobbing {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); } /* Jemný pohyb hore */
-    100% { transform: translateY(0px); }
-}
-
-/* Trieda na zmiznutie loaderu */
-.loader-hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-
-/* --- !!! LOGIKA PRE VYSUNUTIE OBSAHU !!! --- */
-/* Štandardný container na PC */
+/* --- HLAVNÝ OBSAH --- */
 .container {
-    background: var(--container-bg);
-    padding: 25px 35px;
-    border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
-    width: 400px;
-    border: 1px solid #f0f0f0;
-    min-height: 410px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    /* Počiatočné nastavenie pre animáciu vysunutia */
-    opacity: 0; /* Skrytý */
-    transform: translateY(100px); /* Posunutý o 100px nižšie spoza čiary */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Hladké vysunutie */
+    background: white; padding: 30px; border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05); width: 400px;
+    opacity: 0; transform: translateY(50px);
+    transition: all 0.8s ease-out;
 }
+.content-visible { opacity: 1; transform: translateY(0); }
 
-/* Trieda, ktorú pridáme cez JS na "vytiahnutie" boxu */
-.content-visible {
-    opacity: 1; /* Viditeľný */
-    transform: translateY(0px); /* Na svojej normalnej pozícii */
-}
-
-
-/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
-.mobile-only-logo { display: none; }
-.top-header { margin-bottom: 20px; text-align: center; }
-.brand-name { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--primary-color); letter-spacing: -1px; }
-.main-layout { display: flex; align-items: flex-end; justify-content: center; gap: 60px; width: 100%; }
-.side-maskot { height: 460px; width: auto; display: block; }
-#progressContainer { width: 100%; background-color: #f0f0f0; border-radius: 5px; margin: 5px 0; height: 10px; display: none; overflow: hidden; }
-#progressBar { width: 0%; height: 100%; background-color: #27ae60; transition: width 0.3s ease; }
-input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
-button { background-color: var(--accent-color); color: white; border: none; cursor: pointer; font-weight: bold; }
-.full-ground-line { width: 100vw; height: 1px; background-color: rgba(0,0,0,0.1); position: fixed; bottom: 12vh; z-index: -1; }
+.brand-name { font-size: 2.8rem; font-weight: 900; color: var(--primary-color); margin-bottom: 20px; }
+.main-layout { display: flex; align-items: flex-end; gap: 50px; }
+.side-maskot { height: 450px; }
+.full-ground-line { position: fixed; bottom: 12vh; width: 100%; height: 1px; background: #eee; z-index: -1; }
 
 @media (max-width: 768px) {
-    .mobile-only-logo { display: block; height: 50px; width: auto; margin: 0 auto 10px auto; }
-    .maskot-container { display: none; }
-    .brand-name { font-size: 2.2rem; margin-bottom: 10px; }
-    .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
-    .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
-    .full-ground-line { display: none; }
+    .main-layout { flex-direction: column; align-items: center; }
+    .side-maskot { display: none; }
+    .container { width: 90%; }
+    .mobile-only-logo { display: block; height: 50px; margin: 0 auto 10px; }
 }
