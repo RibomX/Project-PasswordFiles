@@ -1,81 +1,125 @@
-// SIDEBAR LOGIC
+/**
+ * SIDEBAR NAVIGATION CONTROL
+ */
 function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('sidebar-overlay').classList.toggle('active');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    
+    if (sidebar.classList.contains('active')) {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    } else {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+    }
 }
 
-// LOADING & REVEAL LOGIC
-window.addEventListener('load', () => {
-    const loader = document.getElementById('loader-wrapper');
-    const loadFill = document.querySelector('.load-bar-fill');
-    const mainContent = document.getElementById('mainContent');
+/**
+ * LOADING SYSTEM & BOX ENTRANCE ANIMATION
+ */
+window.addEventListener('load', function() {
+    const loaderWrapper = document.getElementById('loader-wrapper');
+    const progressBarFill = document.querySelector('.load-bar-fill');
+    const mainBox = document.getElementById('mainBox');
     
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += Math.random() * 20;
-        if (progress > 100) progress = 100;
-        loadFill.style.width = progress + '%';
-
-        if (progress === 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-                loader.classList.add('loader-hidden'); // Hide loader
-                setTimeout(() => {
-                    mainContent.classList.add('content-visible'); // Slide up content
-                }, 400);
+    let currentProgress = 0;
+    
+    // Simulate loading progress
+    const loadingInterval = setInterval(function() {
+        currentProgress += Math.floor(Math.random() * 15) + 5;
+        
+        if (currentProgress >= 100) {
+            currentProgress = 100;
+            clearInterval(loadingInterval);
+            
+            // Finish loading
+            setTimeout(function() {
+                loaderWrapper.style.opacity = '0';
+                
+                setTimeout(function() {
+                    loaderWrapper.style.display = 'none';
+                    // TRIGGER THE BOTTOM-UP ANIMATION
+                    mainBox.classList.add('show');
+                }, 800);
             }, 500);
         }
-    }, 150);
+        
+        progressBarFill.style.width = currentProgress + '%';
+    }, 120);
 });
 
-// UPLOAD LOGIC
+/**
+ * FILE UPLOAD SYSTEM
+ */
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
-    const status = document.getElementById('uploadStatus');
+    const statusDisplay = document.getElementById('uploadStatus');
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
 
-    if (!fileInput.files[0]) return alert("Please select a file!");
+    if (!fileInput.files[0]) {
+        alert("Please select a file to continue!");
+        return;
+    }
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
     progressContainer.style.display = 'block';
-    status.innerText = 'Uploading...';
+    statusDisplay.innerText = 'Uploading to secure server...';
 
     try {
-        const response = await fetch('/upload', { method: 'POST', body: formData });
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
         if (response.ok) {
             progressBar.style.width = '100%';
-            status.innerHTML = '<span style="color:green">Success!</span>';
+            statusDisplay.innerHTML = '<b style="color: #27ae60;">Upload Successful!</b>';
         } else {
-            status.innerText = 'Upload failed.';
+            statusDisplay.innerText = 'Upload failed. Please check your connection.';
         }
-    } catch (err) {
-        status.innerText = 'Server error.';
+    } catch (error) {
+        console.error("Upload Error:", error);
+        statusDisplay.innerText = 'Critical Server Error.';
     }
 }
 
-// DOWNLOAD LOGIC
+/**
+ * FILE DOWNLOAD SYSTEM
+ */
 async function checkPassword() {
-    const password = document.getElementById('downloadPassword').value;
-    const status = document.getElementById('downloadStatus');
+    const passwordField = document.getElementById('downloadPassword');
+    const statusDisplay = document.getElementById('downloadStatus');
+    
+    const passwordValue = passwordField.value;
 
-    if (!password) return alert("Enter password!");
+    if (!passwordValue) {
+        alert("Password is required for decryption!");
+        return;
+    }
 
-    status.innerText = 'Checking...';
+    statusDisplay.innerText = 'Searching for file...';
+
     try {
-        const response = await fetch('/check-password?password=' + encodeURIComponent(password));
-        const data = await response.json();
+        const response = await fetch('/check-password?password=' + encodeURIComponent(passwordValue));
+        const result = await response.json();
 
-        if (data.found) {
-            status.innerHTML = `<a href="${data.url}" target="_blank">Download: ${data.name}</a>`;
+        if (result.found) {
+            statusDisplay.innerHTML = `
+                <div style="margin-top: 15px; padding: 10px; background: #f0f9ff; border-radius: 10px;">
+                    <p style="margin: 0; font-size: 0.9rem;">File Found: <b>${result.name}</b></p>
+                    <a href="${result.url}" target="_blank" style="color: #3498db; font-weight: 900; text-decoration: none;">CLICK HERE TO DOWNLOAD</a>
+                </div>
+            `;
         } else {
-            status.innerText = 'Wrong password.';
+            statusDisplay.innerText = 'Invalid password or file has expired.';
         }
-    } catch (err) {
-        status.innerText = 'Error connecting.';
+    } catch (error) {
+        console.error("Download Error:", error);
+        statusDisplay.innerText = 'Connection to database failed.';
     }
 }
