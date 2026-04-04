@@ -2,19 +2,26 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Transfer | Storage</title>
+    <title>Secure Transfer | Secure Cloud Storage</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="loader-wrapper">
         <div class="loader-content">
-            <img src="logo.png" alt="Logo" class="loader-logo bobbing">
-            <p class="loading-text">Loading...</p>
-            <div class="load-bar-container">
-                <div class="load-bar-fill"></div>
+            <img src="logo.png" alt="Secure Logo" class="loader-logo bobbing">
+            <div class="loading-status-container">
+                <p class="loading-text">System Booting...</p>
+                <div class="load-bar-container">
+                    <div class="load-bar-fill"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -27,14 +34,24 @@
 
     <div id="sidebar">
         <div class="sidebar-header">
-            <h3>Services</h3>
+            <h3>PORTAL SERVICES</h3>
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
+        <div class="sidebar-divider"></div>
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active"><span class="dot"></span> Secure Transfer</a>
-            <a href="#" class="nav-item disabled">New Service (Soon)</a>
+            <a href="#" class="nav-item active">
+                <span class="dot"></span> 
+                Secure Transfer
+            </a>
+            <a href="#" class="nav-item disabled">
+                File Encryptor (Soon)
+            </a>
+            <a href="#" class="nav-item disabled">
+                Cloud Vault (Soon)
+            </a>
         </nav>
     </div>
+
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <header class="top-header">
@@ -42,28 +59,42 @@
     </header>
 
     <div class="main-layout">
+        
         <div class="maskot-container">
-            <img src="maskot.png" alt="Maskot" class="side-maskot">
+            <img src="maskot.png" alt="Secure Maskot" class="side-maskot">
         </div>
 
         <div class="container" id="mainBox">
+            
             <section class="upload-section">
+                <label class="section-label">Upload your file</label>
                 <input type="file" id="fileInput">
-                <input type="text" id="passwordInput" placeholder="Set download password">
-                <button onclick="uploadFile()">Upload File</button>
-                <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
+                <input type="text" id="passwordInput" placeholder="Enter download password...">
+                <button onclick="uploadFile()" id="uploadBtn">
+                    UPLOAD TO CLOUD
+                </button>
+                
+                <div id="progressContainer" style="display:none;">
+                    <div id="progressBar"></div>
+                </div>
                 <div id="uploadStatus"></div>
             </section>
 
-            <hr>
+            <div class="main-divider"></div>
 
             <section class="download-section">
-                <input type="text" id="downloadPassword" placeholder="Enter password to download">
-                <button onclick="checkPassword()">Check Password</button>
+                <label class="section-label">Download encrypted file</label>
+                <input type="text" id="downloadPassword" placeholder="Enter your secret password...">
+                <button onclick="checkPassword()" id="downloadBtn">
+                    GET FILE
+                </button>
                 <div id="downloadStatus"></div>
             </section>
 
-            <div class="footer-info">Files deleted after 3 hours | Max 10MB</div>
+            <footer class="footer-info">
+                <p>Security Note: Files are automatically deleted after 3 hours.</p>
+                <p>Maximum file size: 10MB</p>
+            </footer>
         </div>
     </div>
 
