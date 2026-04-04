@@ -1,17 +1,82 @@
-// ... (začiatok uploadFile a checkPassword zostáva rovnaký, pridávame len na koniec)
-
+// --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
 async function uploadFile() {
-    // ... tvoj pôvodný kód ...
+    const fileInput = document.getElementById('fileInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const status = document.getElementById('uploadStatus');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+
+    if (!fileInput.files[0]) {
+        alert("Please select a file!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+    formData.append('password', passwordInput.value);
+
+    // Reset a zobrazenie progresu (čistý bar bez percent)
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    status.innerHTML = 'Uploading...';
+
+    try {
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            progressBar.style.width = '100%';
+            status.innerHTML = '<span style="color: #27ae60; font-weight: bold;">File uploaded successfully!</span>';
+
+            // Zmiznutie po 1 sekunde a premazanie políčok
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                status.innerText = '';
+                passwordInput.value = '';
+                fileInput.value = '';
+            }, 1000);
+        } else {
+            status.innerText = 'Upload failed. Try a different password.';
+            progressContainer.style.display = 'none';
+        }
+    } catch (err) {
+        console.error(err);
+        status.innerText = 'Server error.';
+        progressContainer.style.display = 'none';
+    }
 }
 
+// --- 2. FUNKCIA PRE KONTROLU HESLA ---
 async function checkPassword() {
-    // ... tvoj pôvodný kód ...
+    const password = document.getElementById('downloadPassword').value;
+    const status = document.getElementById('downloadStatus');
+
+    if (!password) {
+        alert("Enter password!");
+        return;
+    }
+
+    status.innerText = 'Checking...';
+
+    try {
+        const response = await fetch('/check-password?password=' + encodeURIComponent(password));
+        if (!response.ok) throw new Error('Server error');
+
+        const data = await response.json();
+
+        if (data.found) {
+            status.innerHTML = `Found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold;">Download ${data.name}</a>`;
+        } else {
+            status.innerText = 'Wrong password or expired.';
+        }
+    } catch (err) {
+        status.innerText = 'Error connecting to database.';
+    }
 }
 
-
-// !!! --- NOVO PRIDANÁ LOGIKA PRE LOADING SCREEN & VYSUNUTIE OBSAHU --- !!!
-
-// Počkáme, kým sa načíta celá stránka (obrázky, štýly)
+// --- 3. LOGIKA PRE LOADING SCREEN (Simulácia + Animácia vysunutia) ---
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader-wrapper');
     const loadFill = document.querySelector('.load-bar-fill');
@@ -19,27 +84,30 @@ window.addEventListener('load', () => {
     
     let progress = 0;
     
-    // !!! SIMULÁCIA PLNENIA BARU (cca 1.5 sekundy) !!!
+    // Simulácia plnenia baru pri štarte stránky
     const loadingInterval = setInterval(() => {
-        progress += Math.random() * 20; // Náhodné plnenie, aby to vyzeralo reálne
+        progress += Math.random() * 15; 
         
         if (progress > 100) progress = 100;
         
-        loadFill.style.width = progress + '%';
-        
-        // Keď je bar plný (100%)
-        if (progress === 100) {
-            clearInterval(loadingInterval); // Zastavíme simuláciu
-            
-            // !!! FÁZA 1: Schováme Loader plynule !!!
-            setTimeout(() => {
-                loader.classList.add('loader-hidden'); // Loader zmizne (fade out)
-            }, 500); // Krátka pauza, kým si používateľ užije 100%
-
-            // !!! FÁZA 2: VYTIAHNEME OBSAH ZDOLA !!!
-            setTimeout(() => {
-                mainContent.classList.add('content-visible'); // Vytiahne box hore a ukáže ho (smooth vysunutie)
-            }, 1000); // Spustí sa 1 sekundu po tom, čo loader začne miznúť
+        if (loadFill) {
+            loadFill.style.width = progress + '%';
         }
-    }, 150); // Rýchlosť simulácie
+        
+        if (progress === 100) {
+            clearInterval(loadingInterval);
+            
+            // Fáza 1: Loader zmizne
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 400);
+
+            // Fáza 2: Box sa vysunie zdola
+            setTimeout(() => {
+                if (mainContent) {
+                    mainContent.classList.add('content-visible');
+                }
+            }, 800);
+        }
+    }, 120);
 });
