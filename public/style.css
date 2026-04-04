@@ -1,9 +1,11 @@
+/* --- ZÁKLADNÉ NASTAVENIA (TVOJE PÔVODNÉ) --- */
 :root {
     --bg-color: #ffffff;
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
     --accent-color: #3498db;
+    --secondary-text: #888;
 }
 
 html, body {
@@ -12,7 +14,6 @@ html, body {
     padding: 0;
     overflow: hidden;
     background-color: var(--bg-color);
-    font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -20,71 +21,241 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
-/* --- MENU & SIDEBAR --- */
-#menu-toggle {
-    position: fixed; top: 20px; left: 20px;
-    width: 50px; height: 50px; background: white;
-    border-radius: 50%; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1000;
+/* --- HEADER A LOGO (PRESNÉ ROZMERY) --- */
+.top-header {
+    margin-bottom: 20px;
+    text-align: center;
 }
-.bar { width: 22px; height: 2px; background: var(--primary-color); margin: 2px 0; border-radius: 2px; }
+
+.mobile-only-logo {
+    display: none;
+}
+
+.brand-name {
+    font-size: 2.8rem;
+    font-weight: 900;
+    margin: 0;
+    color: var(--primary-color);
+    letter-spacing: -1px;
+}
+
+/* --- ROZLOŽENIE (LAYOUT) --- */
+.main-layout {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 60px;
+    width: 100%;
+}
+
+.maskot-container {
+    display: flex;
+    align-items: flex-end;
+}
+
+.side-maskot {
+    height: 460px;
+    width: auto;
+    display: block;
+}
+
+/* --- HLAVNÝ KONTAJNER (TEN BIELY BOX) --- */
+.container {
+    background: var(--container-bg);
+    padding: 25px 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    width: 400px;
+    border: 1px solid #f0f0f0;
+    min-height: 410px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* --- FORMULÁRE A TLAČIDLÁ --- */
+input[type="file"],
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--accent-color);
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* --- PROGRESS BAR --- */
+#progressContainer {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin: 5px 0;
+    height: 10px;
+    display: none;
+    overflow: hidden;
+}
+
+#progressBar {
+    width: 0%;
+    height: 100%;
+    background-color: #27ae60;
+    transition: width 0.3s ease;
+}
+
+/* --- DOPLNKY --- */
+hr {
+    border: 0;
+    height: 1px;
+    background: #eee;
+    margin: 20px 0;
+}
+
+.footer-info {
+    font-size: 0.75rem;
+    color: var(--secondary-text);
+    text-align: center;
+    margin-top: 15px;
+}
+
+.full-ground-line {
+    width: 100vw;
+    height: 1px;
+    background-color: rgba(0,0,0,0.1);
+    position: fixed;
+    bottom: 12vh;
+    z-index: -1;
+}
+
+/* --- !!! NOVÁ SEKCIA: BOČNÁ LIŠTA (SIDEBAR) !!! --- */
+#menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.bar {
+    width: 22px;
+    height: 2px;
+    background-color: var(--primary-color);
+    margin: 2px 0;
+}
 
 .sidebar {
-    position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
-    background: white; z-index: 2000; transition: left 0.4s ease;
-    padding: 30px 20px; box-shadow: 5px 0 25px rgba(0,0,0,0.05);
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: white;
+    box-shadow: 5px 0 25px rgba(0,0,0,0.1);
+    z-index: 2000;
+    transition: left 0.3s ease;
+    padding: 30px 20px;
 }
-.sidebar.active { left: 0; }
-.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-.close-btn { font-size: 35px; cursor: pointer; color: #333; }
+
+.sidebar.active {
+    left: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.close-btn {
+    font-size: 32px;
+    cursor: pointer;
+    color: #333;
+}
 
 .nav-item {
-    display: flex; align-items: center; gap: 10px; padding: 15px;
-    text-decoration: none; color: #555; font-weight: 600; border-radius: 10px;
+    display: block;
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
-.nav-item.active { background: #f0f7ff; color: var(--accent-color); }
-.dot { width: 8px; height: 8px; background: var(--accent-color); border-radius: 50%; }
-.nav-item.disabled { opacity: 0.4; font-size: 0.8rem; }
+
+.nav-item.active {
+    background: #f0f7ff;
+    color: var(--accent-color);
+}
 
 #sidebar-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.2); display: none; z-index: 1500; backdrop-filter: blur(2px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    display: none;
+    z-index: 1500;
 }
-#sidebar-overlay.active { display: block; }
 
-/* --- LOADER --- */
-#loader-wrapper {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: white; z-index: 9999; display: flex; justify-content: center; align-items: center;
-    transition: opacity 0.6s ease;
+#sidebar-overlay.active {
+    display: block;
 }
-.loader-hidden { opacity: 0; visibility: hidden; }
-.loader-logo { height: 80px; margin-bottom: 20px; }
-.bobbing { animation: bob 2s infinite ease-in-out; }
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-.load-bar-container { width: 200px; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
-.load-bar-fill { width: 0%; height: 100%; background: var(--accent-color); transition: width 0.2s; }
 
-/* --- HLAVNÝ OBSAH --- */
-.container {
-    background: white; padding: 30px; border-radius: 20px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.05); width: 400px;
-    opacity: 0; transform: translateY(50px);
-    transition: all 0.8s ease-out;
-}
-.content-visible { opacity: 1; transform: translateY(0); }
-
-.brand-name { font-size: 2.8rem; font-weight: 900; color: var(--primary-color); margin-bottom: 20px; }
-.main-layout { display: flex; align-items: flex-end; gap: 50px; }
-.side-maskot { height: 450px; }
-.full-ground-line { position: fixed; bottom: 12vh; width: 100%; height: 1px; background: #eee; z-index: -1; }
-
+/* --- MOBILNÁ RESPONSIVITA --- */
 @media (max-width: 768px) {
-    .main-layout { flex-direction: column; align-items: center; }
-    .side-maskot { display: none; }
-    .container { width: 90%; }
-    .mobile-only-logo { display: block; height: 50px; margin: 0 auto 10px; }
+    .mobile-only-logo {
+        display: block;
+        height: 50px;
+        margin: 0 auto 10px auto;
+    }
+    .maskot-container {
+        display: none;
+    }
+    .brand-name {
+        font-size: 2.2rem;
+    }
+    .main-layout {
+        flex-direction: column;
+        align-items: center;
+    }
+    .container {
+        width: 90%;
+        min-height: auto;
+        box-shadow: none;
+        border: 1px solid #eee;
+    }
+    .full-ground-line {
+        display: none;
+    }
 }
