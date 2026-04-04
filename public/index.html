@@ -25,23 +25,19 @@
         <div class="bar"></div>
     </div>
 
-    <div id="sidebar" class="sidebar">
+    <div id="sidebar">
         <div class="sidebar-header">
             <h3>Services</h3>
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active">
-                <span class="dot"></span> Secure Transfer
-            </a>
+            <a href="#" class="nav-item active"><span class="dot"></span> Secure Transfer</a>
             <a href="#" class="nav-item disabled">New Service (Soon)</a>
-            <a href="#" class="nav-item disabled">Admin Panel (Soon)</a>
         </nav>
     </div>
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <header class="top-header">
-        <img src="logo.png" alt="Logo" class="mobile-only-logo">
         <h1 class="brand-name">Secure Transfer</h1>
     </header>
 
@@ -50,15 +46,12 @@
             <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
 
-        <div class="container animate-up" id="mainContent">
+        <div class="container" id="mainBox">
             <section class="upload-section">
                 <input type="file" id="fileInput">
                 <input type="text" id="passwordInput" placeholder="Set download password">
                 <button onclick="uploadFile()">Upload File</button>
-                
-                <div id="progressContainer" style="display:none;">
-                    <div id="progressBar"></div>
-                </div>
+                <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
                 <div id="uploadStatus"></div>
             </section>
 
@@ -70,9 +63,7 @@
                 <div id="downloadStatus"></div>
             </section>
 
-            <div class="footer-info">
-                Files deleted after 3 hours | Max 10MB
-            </div>
+            <div class="footer-info">Files deleted after 3 hours | Max 10MB</div>
         </div>
     </div>
 
