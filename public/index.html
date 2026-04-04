@@ -1,14 +1,23 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure File Share</title>
+    <title>Secure Transfer | Storage</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <div id="loader-wrapper">
+        <div class="loader-content">
+            <img src="logo.png" alt="Logo" class="loader-logo bobbing">
+            <p class="loading-text">Loading...</p>
+            <div class="load-bar-container">
+                <div class="load-bar-fill"></div>
+            </div>
+        </div>
+    </div>
 
     <div id="menu-toggle" onclick="toggleSidebar()">
         <div class="bar"></div>
@@ -18,7 +27,7 @@
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3>Our Services</h3>
+            <h3>Services</h3>
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
         <nav class="sidebar-nav">
@@ -29,7 +38,6 @@
             <a href="#" class="nav-item disabled">Admin Panel (Soon)</a>
         </nav>
     </div>
-
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <header class="top-header">
@@ -38,17 +46,15 @@
     </header>
 
     <div class="main-layout">
-        
         <div class="maskot-container">
             <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
 
-        <div class="container" id="mainContent">
-            
+        <div class="container animate-up" id="mainContent">
             <section class="upload-section">
                 <input type="file" id="fileInput">
                 <input type="text" id="passwordInput" placeholder="Set download password">
-                <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
+                <button onclick="uploadFile()">Upload File</button>
                 
                 <div id="progressContainer" style="display:none;">
                     <div id="progressBar"></div>
