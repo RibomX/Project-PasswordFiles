@@ -1,5 +1,4 @@
 :root {
-    --bg-color: #ffffff;
     --primary-color: #2c3e50;
     --accent-color: #3498db;
 }
@@ -8,22 +7,23 @@ body, html {
     margin: 0; padding: 0; height: 100vh; width: 100vw;
     font-family: 'Montserrat', sans-serif; overflow: hidden;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
+    background: #fff;
 }
 
-/* LOADER - TOTÁLNE CENTROVANÝ A FIXNÝ */
+/* --- LOADER (FIXED & CENTERED) --- */
 #loader-wrapper {
     position: fixed; inset: 0; background: white; z-index: 9999;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     transition: opacity 0.5s ease;
 }
-.img-loader-icon { height: 100px; width: auto; margin-bottom: 20px; } /* FIXNÁ VÝŠKA */
+.loader-icon-fixed { height: 100px; width: auto; margin-bottom: 20px; }
 .bobbing { animation: bob 2s infinite ease-in-out; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 .loading-text { font-weight: 900; color: var(--primary-color); letter-spacing: 2px; margin-bottom: 15px; }
 .load-bar-container { width: 250px; height: 8px; background: #eee; border-radius: 10px; overflow: hidden; }
 .load-bar-fill { width: 0%; height: 100%; background: var(--accent-color); transition: width 0.2s; }
 
-/* SIDEBAR - SKRYTÝ */
+/* --- SIDEBAR (HIDDEN LEFT) --- */
 #menu-toggle {
     position: fixed; top: 25px; left: 25px; width: 50px; height: 50px;
     background: white; border-radius: 50%; display: flex; flex-direction: column;
@@ -40,18 +40,18 @@ body, html {
 #sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.2); display: none; z-index: 1500; }
 #sidebar-overlay.active { display: block; }
 
-/* HLAVNÝ BOX A ANIMÁCIA ZDOLA */
+/* --- MAIN BOX & BOTTOM ANIMATION --- */
 .brand-name { font-size: 3rem; font-weight: 900; color: var(--primary-color); margin-bottom: 20px; }
 .main-layout { display: flex; align-items: flex-end; gap: 60px; }
-.side-maskot { height: 460px; width: auto; } /* FIXNÁ VÝŠKA MASKOTA */
+.side-maskot { height: 460px; width: auto; }
 
 .container {
     background: white; padding: 35px; border-radius: 25px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.06); width: 420px;
-    opacity: 0; transform: translateY(150px); /* START POZÍCIA PRE ANIMÁCIU */
-    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease;
+    opacity: 0; transform: translateY(200px); /* START POSITION FOR ANIMATION */
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s ease;
 }
-.container.show { opacity: 1; transform: translateY(0); } /* KONIEC ANIMÁCIE */
+.container.show { opacity: 1; transform: translateY(0); } /* END POSITION */
 
 input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; font-family: 'Montserrat'; box-sizing: border-box; }
 button { width: 100%; padding: 15px; background: var(--accent-color); color: white; border: none; border-radius: 12px; font-weight: 900; cursor: pointer; }
