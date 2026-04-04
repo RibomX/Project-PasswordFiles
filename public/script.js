@@ -3,7 +3,7 @@ function toggleSidebar() {
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// LOADING LOGIC
+// EXACT LOADING LOGIC FROM VIDEO
 window.addEventListener('load', () => {
     const fill = document.getElementById('loader-fill');
     const loader = document.getElementById('loader-wrapper');
@@ -19,7 +19,8 @@ window.addEventListener('load', () => {
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
-                    mainBox.classList.add('show'); // START BOX ANIMATION
+                    // SPUSTÍ ANIMÁCIU LEN PRE BOX
+                    mainBox.classList.add('show');
                 }, 600);
             }, 400);
         }
@@ -27,55 +28,39 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// FILE SELECTION
+// FILE UI
 document.getElementById('fileInput').addEventListener('change', function() {
-    const name = this.files[0] ? this.files[0].name : "No file chosen";
-    document.getElementById('fileNameDisplay').innerText = name;
+    document.getElementById('fileName').innerText = this.files[0] ? this.files[0].name : "No file chosen";
 });
 
-// FIXED UPLOAD LOGIC
+// UPLOAD
 async function uploadFile() {
     const file = document.getElementById('fileInput').files[0];
     const pass = document.getElementById('passwordInput').value;
-    const status = document.getElementById('uploadStatus');
-    const bar = document.getElementById('progressBar');
-
-    if (!file) return alert("Select a file first!");
+    if (!file) return alert("Please select a file!");
 
     const fd = new FormData();
     fd.append('file', file);
     fd.append('password', pass);
 
     document.getElementById('progressContainer').style.display = 'block';
-    status.innerText = "Uploading...";
-
     try {
         const res = await fetch('/upload', { method: 'POST', body: fd });
         if (res.ok) {
-            bar.style.width = '100%';
-            status.innerHTML = '<b style="color:green">File Secured!</b>';
-        } else {
-            status.innerText = "Upload failed.";
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('uploadStatus').innerHTML = '<b style="color:green">Uploaded!</b>';
         }
-    } catch (e) {
-        status.innerText = "Server Error.";
-    }
+    } catch (e) { console.error(e); }
 }
 
+// DOWNLOAD
 async function checkPassword() {
     const pass = document.getElementById('downloadPassword').value;
-    const status = document.getElementById('downloadStatus');
-    if (!pass) return alert("Enter password!");
-
-    try {
-        const res = await fetch('/check-password?password=' + encodeURIComponent(pass));
-        const data = await res.json();
-        if (data.found) {
-            status.innerHTML = `<a href="${data.url}" target="_blank" style="color:#3498db; font-weight:900; text-decoration:none;">DOWNLOAD: ${data.name}</a>`;
-        } else {
-            status.innerText = "Wrong password.";
-        }
-    } catch (e) {
-        status.innerText = "Error.";
+    const res = await fetch('/check-password?password=' + encodeURIComponent(pass));
+    const data = await res.json();
+    if (data.found) {
+        document.getElementById('downloadStatus').innerHTML = `<a href="${data.url}" target="_blank">Download File</a>`;
+    } else {
+        alert("Wrong password!");
     }
 }
