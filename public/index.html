@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Transfer | Storage</title>
+    <title>Secure Transfer</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,11 +11,11 @@
 
     <div id="loader-wrapper">
         <div class="loader-content">
-            <img src="logo.png" alt="Loading" class="loader-icon-fixed bobbing">
-            <p class="loading-text">Loading...</p>
-            <div class="load-bar-container">
-                <div class="load-bar-fill"></div>
+            <img src="logo.png" alt="Logo" class="loader-img">
+            <div class="loader-bar">
+                <div class="loader-progress"></div>
             </div>
+            <h2 class="loading-text">LOADING...</h2>
         </div>
     </div>
 
@@ -27,51 +27,46 @@
 
     <div id="sidebar">
         <div class="sidebar-header">
-            <h3>Services</h3>
+            <h3>Menu</h3>
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
-        <nav class="sidebar-nav">
-            <a href="#" class="nav-item active"><span class="dot"></span> Secure Transfer</a>
-            <a href="#" class="nav-item disabled">Upcoming</a>
+        <nav>
+            <a href="#" class="active">Secure Transfer</a>
+            <a href="#">Settings</a>
+            <a href="#">About</a>
         </nav>
     </div>
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-    <header class="top-header">
-        <h1 class="brand-name">Secure Transfer</h1>
-    </header>
+    <div class="main-content" id="pageContent">
+        <header>
+            <h1 class="main-title">Secure Transfer</h1>
+        </header>
 
-    <div class="main-layout">
-        <div class="maskot-container">
-            <img src="maskot.png" alt="Maskot" class="side-maskot">
-        </div>
+        <div class="hero-section">
+            <img src="maskot.png" alt="Maskot" class="maskot">
+            
+            <div class="upload-container">
+                <div class="input-group">
+                    <label class="file-label">
+                        <input type="file" id="fileInput">
+                        <span class="custom-file-btn">Choose file</span>
+                        <span id="fileName">No file chosen</span>
+                    </label>
+                </div>
 
-        <div class="container" id="mainBox">
-            <section class="upload-section">
-                <label>Upload your file</label>
-                <input type="file" id="fileInput">
-                <input type="text" id="passwordInput" placeholder="Enter download password...">
-                <button onclick="uploadFile()">UPLOAD TO CLOUD</button>
-                <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
-                <div id="uploadStatus"></div>
-            </section>
+                <input type="text" id="passwordInput" placeholder="Set download password">
+                <button class="action-btn" onclick="uploadFile()">Upload File</button>
 
-            <hr class="main-divider">
+                <div class="divider"></div>
 
-            <section class="download-section">
-                <label>Download encrypted file</label>
-                <input type="text" id="downloadPassword" placeholder="Enter your secret password...">
-                <button onclick="checkPassword()">GET FILE</button>
-                <div id="downloadStatus"></div>
-            </section>
+                <input type="text" id="downloadPassword" placeholder="Enter password to download">
+                <button class="action-btn" onclick="checkPassword()">Check Password</button>
 
-            <footer class="footer-info">
-                Files deleted after 3 hours | Max 10MB
-            </footer>
+                <p class="footer-note">Files deleted after 3 hours | Max 10MB</p>
+            </div>
         </div>
     </div>
-
-    <div class="full-ground-line"></div>
 
     <script src="script.js"></script>
 </body>
