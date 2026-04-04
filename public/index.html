@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Transfer</title>
+    <title>Secure File Share</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,72 +11,49 @@
 
     <div id="loader-wrapper">
         <div class="loader-content">
-            <img src="logo.png" alt="Logo" class="loader-img bobbing">
-            <div class="loader-bar-bg">
-                <div id="loader-fill"></div>
-            </div>
-            <h2 class="loading-text">LOADING...</h2>
+            <img src="logo.png" alt="Logo" class="loader-logo bobbing"> <p class="loading-text">Loading...</p>
+            <div class="load-bar-container">
+                <div class="load-bar-fill"></div> </div>
         </div>
     </div>
 
-    <div id="menu-toggle" onclick="toggleSidebar()">
-        <div class="bar"></div>
-        <div class="bar-mid"></div>
-        <div class="bar"></div>
-    </div>
+    <header class="top-header">
+        <img src="logo.png" alt="Logo" class="mobile-only-logo">
+        <h1 class="brand-name">Secure Transfer</h1>
+    </header>
 
-    <div id="sidebar">
-        <div class="sidebar-header">
-            <h3>MENU</h3>
-            <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+    <div class="main-layout">
+        <div class="maskot-container">
+            <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
-        <nav>
-            <a href="#" class="active">Secure Transfer</a>
-            <a href="#">History</a>
-        </nav>
-    </div>
-    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
-    <div class="page-wrapper">
-        <header class="header-center">
-            <h1 class="main-title">Secure Transfer</h1>
-        </header>
-
-        <div class="main-layout">
-            <div class="maskot-container">
-                <img src="maskot.png" alt="Maskot" class="big-maskot">
-            </div>
-
-            <div class="container" id="mainBox">
-                <div class="upload-section">
-                    <p class="input-label">Upload your file</p>
-                    
-                    <div class="file-input-row">
-                        <button class="file-btn" onclick="document.getElementById('fileInput').click()">Choose file</button>
-                        <span id="fileName">No file chosen</span>
-                        <input type="file" id="fileInput" style="display: none;">
-                    </div>
-
-                    <input type="text" id="passwordInput" placeholder="Set download password...">
-                    <button class="primary-btn" onclick="uploadFile()">UPLOAD TO CLOUD</button>
-                    
-                    <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
-                    <div id="uploadStatus"></div>
+        <div class="container animate-content" id="mainContent">
+            <section class="upload-section">
+                <input type="file" id="fileInput">
+                <input type="text" id="passwordInput" placeholder="Set download password">
+                <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
+                
+                <div id="progressContainer" style="display:none;">
+                    <div id="progressBar"></div>
                 </div>
+                <div id="uploadStatus"></div>
+            </section>
 
-                <div class="divider"></div>
+            <hr>
 
-                <div class="download-section">
-                    <p class="input-label">Download encrypted file</p>
-                    <input type="text" id="downloadPassword" placeholder="Enter secret password...">
-                    <button class="primary-btn" onclick="checkPassword()">GET FILE</button>
-                    <div id="downloadStatus"></div>
-                </div>
+            <section class="download-section">
+                <input type="text" id="downloadPassword" placeholder="Enter password to download">
+                <button onclick="checkPassword()">Check Password</button>
+                <div id="downloadStatus"></div>
+            </section>
 
-                <p class="footer-text">Files deleted after 3 hours | Max 10MB</p>
+            <div class="footer-info">
+                Files deleted after 3 hours | Max 10MB
             </div>
         </div>
     </div>
+
+    <div class="full-ground-line"></div>
 
     <script src="script.js"></script>
 </body>
