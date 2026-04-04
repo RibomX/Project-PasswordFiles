@@ -140,22 +140,91 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 }
 /* --- STYL PRE BURGER A MENU --- */
 
+
+/* 1. SAMOTNÉ OKRÚHLE TLAČIDLO (BURGER) */
+#menu-toggle {
+    position: fixed; 
+    top: 20px; 
+    left: 20px; 
+    width: 50px; 
+    height: 50px;
+    background: #fff; 
+    border-radius: 50%; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+    z-index: 3000; /* Zvýšený z-index, aby bol nad loaderom aj maskotom */
+}
+
+/* Tri čiarky vnútri krúžku */
+.bar { 
+    width: 22px; 
+    height: 2px; 
+    background: #333; 
+    margin: 2px 0; 
+    border-radius: 10px;
+}
+
+/* 2. BOČNÁ LIŠTA (SIDEBAR) - POSUNUTÁ VIAC DOĽAVA */
 #sidebar {
     position: fixed; 
     top: 0; 
-    left: -350px; /* Posunuli sme ho viac doľava (predtým bolo -320px) */
+    left: -350px; /* Dostatočne ďaleko, aby nebolo vidno ani tieň */
     width: 300px; 
     height: 100%;
     background: #fff; 
-    z-index: 2000; 
+    z-index: 4000; 
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 40px 30px; 
-    /* Tieň sa zobrazí, až keď sa lišta vysunie */
-    box-shadow: none; 
+    padding: 30px;
+    box-shadow: none; /* Žiadny tieň, keď je zavretá */
 }
 
-/* Keď je lišta aktívna, vrátime jej tieň a posunieme ju na nulu */
+/* Keď klikneš a pridá sa trieda .active cez JS */
 #sidebar.active { 
     left: 0; 
     box-shadow: 10px 0 40px rgba(0,0,0,0.1); 
+}
+
+/* 3. ZATMAVENIE POZADIA */
+#sidebar-overlay { 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(0,0,0,0.2); 
+    display: none; 
+    z-index: 3500; 
+}
+
+#sidebar-overlay.active { 
+    display: block; 
+}
+
+/* 4. DOPLNKY DO MENU */
+.sidebar-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 30px; 
+}
+
+.close-btn { 
+    font-size: 30px; 
+    cursor: pointer; 
+    color: #ccc; 
+}
+
+.nav-item { 
+    display: block; 
+    padding: 15px; 
+    text-decoration: none; 
+    color: #333; 
+    font-weight: 700; 
+    border-radius: 10px; 
+}
+
+.nav-item.active { 
+    background: #f0f7ff; 
+    color: #3498db; 
 }
