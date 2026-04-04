@@ -11,7 +11,7 @@
 
     <div id="loader-wrapper">
         <div class="loader-content">
-            <img src="logo.png" alt="Logo" class="loader-img">
+            <img src="logo.png" alt="Logo" class="loader-img bobbing">
             <div class="loader-bar-bg">
                 <div id="loader-fill"></div>
             </div>
@@ -21,7 +21,7 @@
 
     <div id="menu-toggle" onclick="toggleSidebar()">
         <div class="bar"></div>
-        <div class="bar"></div>
+        <div class="bar-mid"></div>
         <div class="bar"></div>
     </div>
 
@@ -38,7 +38,7 @@
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <div class="page-wrapper">
-        <header>
+        <header class="header-center">
             <h1 class="main-title">Secure Transfer</h1>
         </header>
 
@@ -47,22 +47,20 @@
                 <img src="maskot.png" alt="Maskot" class="big-maskot">
             </div>
 
-            <div class="container animate-box" id="mainBox">
+            <div class="container" id="mainBox">
                 <div class="upload-section">
                     <p class="input-label">Upload your file</p>
                     
-                    <div class="file-input-wrapper">
-                        <button class="custom-file-btn" onclick="document.getElementById('fileInput').click()">Choose file</button>
-                        <span id="fileNameDisplay">No file chosen</span>
+                    <div class="file-input-row">
+                        <button class="file-btn" onclick="document.getElementById('fileInput').click()">Choose file</button>
+                        <span id="fileName">No file chosen</span>
                         <input type="file" id="fileInput" style="display: none;">
                     </div>
 
                     <input type="text" id="passwordInput" placeholder="Set download password...">
                     <button class="primary-btn" onclick="uploadFile()">UPLOAD TO CLOUD</button>
                     
-                    <div id="progressContainer" style="display:none;">
-                        <div id="progressBar"></div>
-                    </div>
+                    <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
                     <div id="uploadStatus"></div>
                 </div>
 
@@ -70,7 +68,7 @@
 
                 <div class="download-section">
                     <p class="input-label">Download encrypted file</p>
-                    <input type="text" id="downloadPassword" placeholder="Enter your secret password...">
+                    <input type="text" id="downloadPassword" placeholder="Enter secret password...">
                     <button class="primary-btn" onclick="checkPassword()">GET FILE</button>
                     <div id="downloadStatus"></div>
                 </div>
