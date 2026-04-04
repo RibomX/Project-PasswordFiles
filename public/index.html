@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure File Share</title>
+    <title>Secure Transfer | Portál</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,11 +11,35 @@
 
     <div id="loader-wrapper">
         <div class="loader-content">
-            <img src="logo.png" alt="Logo" class="loader-logo bobbing"> <p class="loading-text">Loading...</p>
+            <img src="logo.png" alt="Logo" class="loader-logo bobbing">
+            <p class="loading-text">Loading...</p>
             <div class="load-bar-container">
-                <div class="load-bar-fill"></div> </div>
+                <div class="load-bar-fill"></div>
+            </div>
         </div>
     </div>
+
+    <div id="menu-toggle" onclick="toggleSidebar()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h3>Moje Služby</h3>
+            <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <span class="dot"></span> Secure Transfer
+            </a>
+            <a href="#" class="nav-item disabled">New Service (Soon)</a>
+            <a href="#" class="nav-item disabled">Admin Panel (Soon)</a>
+        </nav>
+    </div>
+
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <header class="top-header">
         <img src="logo.png" alt="Logo" class="mobile-only-logo">
@@ -27,7 +51,7 @@
             <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
 
-        <div class="container animate-content" id="mainContent">
+        <div class="container" id="mainContent">
             <section class="upload-section">
                 <input type="file" id="fileInput">
                 <input type="text" id="passwordInput" placeholder="Set download password">
