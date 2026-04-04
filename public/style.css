@@ -1,70 +1,141 @@
 
-* { box-sizing: border-box; }
-body, html { 
-    margin: 0; padding: 0; height: 100%; width: 100%;
-    font-family: 'Montserrat', sans-serif; overflow: hidden; background: #fff;
+:root {
+    --bg-color: #ffffff;
+    --container-bg: #ffffff;
+    --text-color: #333;
+    --primary-color: #2c3e50;
+    --accent-color: #3498db; /* Tvoja modrá */
+    --secondary-text: #888;
 }
 
-/* --- LOADING (FIXED) --- */
+html, body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: var(--bg-color);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* --- !!! NOVO PRIDANÝ LOADING SCREEN STYLES !!! --- */
 #loader-wrapper {
-    position: fixed; inset: 0; background: #fff; z-index: 9999;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Nad všetkým */
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out; /* Hladké zmiznutie loaderu */
 }
-.loader-img { width: 140px; height: auto; margin-bottom: 20px; }
-.bobbing { animation: bob 2.5s infinite ease-in-out; }
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-.loader-bar-bg { width: 280px; height: 12px; background: #f0f0f0; border-radius: 6px; overflow: hidden; margin-bottom: 15px; border: 1px solid #eee; }
-#loader-fill { width: 0%; height: 100%; background: #3498db; transition: width 0.2s; }
-.loading-text { font-weight: 900; font-size: 1.1rem; color: #2c3e50; letter-spacing: 5px; margin: 0; }
-
-/* --- SIDEBAR & BURGER --- */
-#menu-toggle { position: fixed; top: 30px; left: 30px; cursor: pointer; z-index: 1000; }
-.bar, .bar-mid { width: 25px; height: 3px; background: #333; margin: 4px 0; border-radius: 2px; }
-.bar-mid { width: 18px; }
-
-#sidebar {
-    position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
-    background: #fff; z-index: 2000; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 50px 30px; box-shadow: 10px 0 30px rgba(0,0,0,0.03);
+.loader-content {
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
-#sidebar.active { left: 0; }
-#sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.1); display: none; z-index: 1500; }
-#sidebar-overlay.active { display: block; }
 
-/* --- HLAVNÝ LAYOUT --- */
-.page-wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.header-center { width: 100%; text-align: center; position: absolute; top: 40px; }
-.main-title { font-size: 3.5rem; font-weight: 900; color: #2c3e50; margin: 0; }
+/* Jemný pohyb loga hore-dole */
+.loader-logo {
+    height: 90px;
+    margin-bottom: 25px;
+    animation: bobbing 2s infinite ease-in-out;
+}
 
-.main-layout { display: flex; align-items: stretch; gap: 60px; margin-top: 60px; }
+.loading-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-.big-maskot { height: 500px; width: auto; }
+/* LOADING BAR */
+.load-bar-container {
+    width: 250px;
+    height: 14px;
+    background-color: #f0f0f0;
+    border-radius: 99px;
+    margin: 0 auto;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
 
-/* BOX ANIMÁCIA */
+.load-bar-fill {
+    width: 0%; /* Začína na 0 */
+    height: 100%;
+    background-color: var(--accent-color); /* Modrá výplň */
+    border-radius: 99px;
+    transition: width 0.3s ease-out; /* Hladké plnenie */
+}
+
+/* KEYFRAMES PRE ANIMÁCIE */
+@keyframes bobbing {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); } /* Jemný pohyb hore */
+    100% { transform: translateY(0px); }
+}
+
+/* Trieda na zmiznutie loaderu */
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* --- !!! LOGIKA PRE VYSUNUTIE OBSAHU !!! --- */
+/* Štandardný container na PC */
 .container {
-    background: #fff; width: 440px; padding: 40px; border-radius: 25px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.07); border: 1px solid #f5f5f5;
-    display: flex; flex-direction: column; justify-content: center;
-    opacity: 0; transform: translateY(250px); /* Iba toto políčko ide zdola */
-    transition: transform 1.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease;
+    background: var(--container-bg);
+    padding: 25px 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    width: 400px;
+    border: 1px solid #f0f0f0;
+    min-height: 410px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    /* Počiatočné nastavenie pre animáciu vysunutia */
+    opacity: 0; /* Skrytý */
+    transform: translateY(100px); /* Posunutý o 100px nižšie spoza čiary */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Hladké vysunutie */
 }
-.container.show { opacity: 1; transform: translateY(0); }
 
-/* PRVKY V POLÍČKU */
-.input-label { font-weight: 700; color: #333; margin-bottom: 12px; }
-.file-input-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
-.file-btn { background: #eee; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: 'Montserrat'; }
-#fileName { font-size: 0.8rem; color: #999; }
+/* Trieda, ktorú pridáme cez JS na "vytiahnutie" boxu */
+.content-visible {
+    opacity: 1; /* Viditeľný */
+    transform: translateY(0px); /* Na svojej normalnej pozícii */
+}
 
-input[type="text"] { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; font-family: 'Montserrat'; font-size: 1rem; }
-.primary-btn { width: 100%; padding: 18px; background: #3498db; color: #fff; border: none; border-radius: 12px; font-weight: 900; font-size: 1rem; cursor: pointer; }
-.divider { height: 1px; background: #f0f0f0; margin: 30px 0; }
-.footer-text { text-align: center; font-size: 0.75rem; color: #ccc; margin-top: 20px; }
 
-@media (max-width: 1000px) {
-    .main-layout { flex-direction: column; align-items: center; gap: 20px; margin-top: 100px; }
-    .big-maskot { height: 300px; }
-    .container { width: 90%; transform: translateY(0); opacity: 1; }
-    .main-title { font-size: 2.5rem; }
+/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
+.mobile-only-logo { display: none; }
+.top-header { margin-bottom: 20px; text-align: center; }
+.brand-name { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--primary-color); letter-spacing: -1px; }
+.main-layout { display: flex; align-items: flex-end; justify-content: center; gap: 60px; width: 100%; }
+.side-maskot { height: 460px; width: auto; display: block; }
+#progressContainer { width: 100%; background-color: #f0f0f0; border-radius: 5px; margin: 5px 0; height: 10px; display: none; overflow: hidden; }
+#progressBar { width: 0%; height: 100%; background-color: #27ae60; transition: width 0.3s ease; }
+input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+button { background-color: var(--accent-color); color: white; border: none; cursor: pointer; font-weight: bold; }
+.full-ground-line { width: 100vw; height: 1px; background-color: rgba(0,0,0,0.1); position: fixed; bottom: 12vh; z-index: -1; }
+
+@media (max-width: 768px) {
+    .mobile-only-logo { display: block; height: 50px; width: auto; margin: 0 auto 10px auto; }
+    .maskot-container { display: none; }
+    .brand-name { font-size: 2.2rem; margin-bottom: 10px; }
+    .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
+    .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
+    .full-ground-line { display: none; }
 }
