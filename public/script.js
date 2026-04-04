@@ -1,15 +1,34 @@
-// --- 1. FUNKCIA PRE OTVÁRANIE/ZATVÁRANIE LIŠTY ---
+// SIDEBAR LOGIC
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    
-    if (sidebar && overlay) {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
-// --- 2. TVOJA PÔVODNÁ FUNKCIA NA UPLOAD SÚBORU ---
+// LOADING & REVEAL LOGIC
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader-wrapper');
+    const loadFill = document.querySelector('.load-bar-fill');
+    const mainContent = document.getElementById('mainContent');
+    
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 20;
+        if (progress > 100) progress = 100;
+        loadFill.style.width = progress + '%';
+
+        if (progress === 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                loader.classList.add('loader-hidden'); // Hide loader
+                setTimeout(() => {
+                    mainContent.classList.add('content-visible'); // Slide up content
+                }, 400);
+            }, 500);
+        }
+    }, 150);
+});
+
+// UPLOAD LOGIC
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
@@ -17,70 +36,46 @@ async function uploadFile() {
     const progressContainer = document.getElementById('progressContainer');
     const progressBar = document.getElementById('progressBar');
 
-    if (!fileInput.files[0]) {
-        alert("Prosím, vyber súbor!");
-        return;
-    }
+    if (!fileInput.files[0]) return alert("Please select a file!");
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Zobrazenie progresu
-    if (progressContainer) progressContainer.style.display = 'block';
-    if (progressBar) progressBar.style.width = '0%';
-    status.innerText = 'Nahrávam...';
+    progressContainer.style.display = 'block';
+    status.innerText = 'Uploading...';
 
     try {
-        const response = await fetch('/upload', {
-            method: 'POST',
-            body: formData
-        });
-
+        const response = await fetch('/upload', { method: 'POST', body: formData });
         if (response.ok) {
-            if (progressBar) progressBar.style.width = '100%';
-            status.innerHTML = '<span style="color: #27ae60; font-weight: bold;">Súbor úspešne nahraný!</span>';
-            
-            // Reset políčok po úspechu
-            setTimeout(() => {
-                if (progressContainer) progressContainer.style.display = 'none';
-                status.innerText = '';
-                passwordInput.value = '';
-                fileInput.value = '';
-            }, 2000);
+            progressBar.style.width = '100%';
+            status.innerHTML = '<span style="color:green">Success!</span>';
         } else {
-            status.innerText = 'Nahrávanie zlyhalo. Skús iné heslo alebo menší súbor.';
+            status.innerText = 'Upload failed.';
         }
     } catch (err) {
-        console.error(err);
-        status.innerText = 'Chyba servera pri nahrávaní.';
+        status.innerText = 'Server error.';
     }
 }
 
-// --- 3. TVOJA PÔVODNÁ FUNKCIA NA KONTROLU HESLA (DOWNLOAD) ---
+// DOWNLOAD LOGIC
 async function checkPassword() {
     const password = document.getElementById('downloadPassword').value;
     const status = document.getElementById('downloadStatus');
 
-    if (!password) {
-        alert("Zadaj heslo pre stiahnutie!");
-        return;
-    }
+    if (!password) return alert("Enter password!");
 
-    status.innerText = 'Overujem heslo...';
-
+    status.innerText = 'Checking...';
     try {
         const response = await fetch('/check-password?password=' + encodeURIComponent(password));
-        if (!response.ok) throw new Error('Chyba servera');
-
         const data = await response.json();
 
         if (data.found) {
-            status.innerHTML = `Nájdené: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold;">Stiahnuť ${data.name}</a>`;
+            status.innerHTML = `<a href="${data.url}" target="_blank">Download: ${data.name}</a>`;
         } else {
-            status.innerText = 'Nesprávne heslo alebo súbor už expiroval.';
+            status.innerText = 'Wrong password.';
         }
     } catch (err) {
-        status.innerText = 'Chyba pri pripájaní k databáze.';
+        status.innerText = 'Error connecting.';
     }
 }
