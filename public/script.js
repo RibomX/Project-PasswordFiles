@@ -1,4 +1,8 @@
 // --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('active');
+    document.getElementById('sidebar-overlay').classList.toggle('active');
+}
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
