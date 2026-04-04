@@ -139,3 +139,29 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
     .full-ground-line { display: none; }
 }
+/* --- BURGER & SIDEBAR LOGIKA --- */
+#menu-toggle {
+    position: fixed; top: 25px; left: 25px; width: 50px; height: 50px;
+    background: #fff; border-radius: 50%; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1001;
+}
+.bar { width: 22px; height: 2px; background: #333; margin: 2px 0; }
+
+#sidebar {
+    position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
+    background: #fff; z-index: 2000; transition: left 0.4s ease;
+    padding: 30px; box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+}
+#sidebar.active { left: 0; }
+
+.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.sidebar-header h3 { font-weight: 900; margin: 0; color: var(--primary-color); }
+.close-btn { font-size: 35px; cursor: pointer; color: #ccc; line-height: 1; }
+
+.nav-item { display: block; padding: 15px; text-decoration: none; color: #666; font-weight: 700; border-radius: 10px; margin-bottom: 5px; }
+.nav-item.active { background: #f4f9ff; color: var(--accent-color); }
+.nav-item.disabled { opacity: 0.5; cursor: default; }
+
+#sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.2); display: none; z-index: 1500; }
+#sidebar-overlay.active { display: block; }
