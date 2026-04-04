@@ -1,8 +1,4 @@
 // --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('active');
-    document.getElementById('sidebar-overlay').classList.toggle('active');
-}
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
@@ -85,22 +81,22 @@ window.addEventListener('load', () => {
     const loader = document.getElementById('loader-wrapper');
     const loadFill = document.querySelector('.load-bar-fill');
     const mainContent = document.getElementById('mainContent');
-    
+   
     let progress = 0;
-    
+   
     // Simulácia plnenia baru pri štarte stránky
     const loadingInterval = setInterval(() => {
-        progress += Math.random() * 15; 
-        
+        progress += Math.random() * 15;
+       
         if (progress > 100) progress = 100;
-        
+       
         if (loadFill) {
             loadFill.style.width = progress + '%';
         }
-        
+       
         if (progress === 100) {
             clearInterval(loadingInterval);
-            
+           
             // Fáza 1: Loader zmizne
             setTimeout(() => {
                 loader.classList.add('loader-hidden');
