@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,14 +18,18 @@
 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <h3>Services</h3>
+            <h3>Our Services</h3>
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
         <nav class="sidebar-nav">
-            <a href="#" class="nav-item active"><span class="dot"></span> Secure Transfer</a>
-            <a href="#" class="nav-item disabled">Coming Soon...</a>
+            <a href="#" class="nav-item active">
+                <span class="dot"></span> Secure Transfer
+            </a>
+            <a href="#" class="nav-item disabled">New Service (Soon)</a>
+            <a href="#" class="nav-item disabled">Admin Panel (Soon)</a>
         </nav>
     </div>
+
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <header class="top-header">
@@ -33,27 +38,38 @@
     </header>
 
     <div class="main-layout">
+        
         <div class="maskot-container">
             <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
 
-        <div class="container">
+        <div class="container" id="mainContent">
+            
             <section class="upload-section">
                 <input type="file" id="fileInput">
                 <input type="text" id="passwordInput" placeholder="Set download password">
-                <button onclick="uploadFile()">Upload File</button>
-                <div id="progressContainer" style="display:none;"><div id="progressBar"></div></div>
+                <button onclick="uploadFile()" id="uploadBtn">Upload File</button>
+                
+                <div id="progressContainer" style="display:none;">
+                    <div id="progressBar"></div>
+                </div>
                 <div id="uploadStatus"></div>
             </section>
+
             <hr>
+
             <section class="download-section">
                 <input type="text" id="downloadPassword" placeholder="Enter password to download">
                 <button onclick="checkPassword()">Check Password</button>
                 <div id="downloadStatus"></div>
             </section>
-            <div class="footer-info">Files deleted after 3 hours | Max 10MB</div>
+
+            <div class="footer-info">
+                Files deleted after 3 hours | Max 10MB
+            </div>
         </div>
     </div>
+
     <div class="full-ground-line"></div>
 
     <script src="script.js"></script>
