@@ -9,6 +9,14 @@
 </head>
 <body>
 
+    <div id="loader-wrapper">
+        <div class="loader-content">
+            <img src="logo.png" alt="Logo" class="loader-logo bobbing"> <p class="loading-text">Loading...</p>
+            <div class="load-bar-container">
+                <div class="load-bar-fill"></div> </div>
+        </div>
+    </div>
+
     <header class="top-header">
         <img src="logo.png" alt="Logo" class="mobile-only-logo">
         <h1 class="brand-name">Secure Transfer</h1>
@@ -19,7 +27,7 @@
             <img src="maskot.png" alt="Maskot" class="side-maskot">
         </div>
 
-        <div class="container">
+        <div class="container animate-content" id="mainContent">
             <section class="upload-section">
                 <input type="file" id="fileInput">
                 <input type="text" id="passwordInput" placeholder="Set download password">
