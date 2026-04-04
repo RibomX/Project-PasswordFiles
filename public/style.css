@@ -105,4 +105,61 @@ body {
     flex-direction: column;
     justify-content: center;
 
-    /
+    /* Počiatočné nastavenie pre animáciu vysunutia */
+    opacity: 0; /* Skrytý */
+    transform: translateY(100px); /* Posunutý o 100px nižšie spoza čiary */
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Hladké vysunutie */
+}
+
+/* Trieda, ktorú pridáme cez JS na "vytiahnutie" boxu */
+.content-visible {
+    opacity: 1; /* Viditeľný */
+    transform: translateY(0px); /* Na svojej normalnej pozícii */
+}
+
+
+/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
+.mobile-only-logo { display: none; }
+.top-header { margin-bottom: 20px; text-align: center; }
+.brand-name { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--primary-color); letter-spacing: -1px; }
+.main-layout { display: flex; align-items: flex-end; justify-content: center; gap: 60px; width: 100%; }
+.side-maskot { height: 460px; width: auto; display: block; }
+#progressContainer { width: 100%; background-color: #f0f0f0; border-radius: 5px; margin: 5px 0; height: 10px; display: none; overflow: hidden; }
+#progressBar { width: 0%; height: 100%; background-color: #27ae60; transition: width 0.3s ease; }
+input, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #ddd; box-sizing: border-box; }
+button { background-color: var(--accent-color); color: white; border: none; cursor: pointer; font-weight: bold; }
+.full-ground-line { width: 100vw; height: 1px; background-color: rgba(0,0,0,0.1); position: fixed; bottom: 12vh; z-index: -1; }
+
+@media (max-width: 768px) {
+    .mobile-only-logo { display: block; height: 50px; width: auto; margin: 0 auto 10px auto; }
+    .maskot-container { display: none; }
+    .brand-name { font-size: 2.2rem; margin-bottom: 10px; }
+    .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
+    .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
+    .full-ground-line { display: none; }
+}
+/* --- STYL PRE BURGER A MENU --- */
+#menu-toggle {
+    position: fixed; top: 20px; left: 20px; width: 50px; height: 50px;
+    background: #fff; border-radius: 50%; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1); z-index: 1001;
+}
+.bar { width: 22px; height: 2px; background: #333; margin: 2px 0; }
+
+#sidebar {
+    position: fixed; top: 0; left: -320px; width: 300px; height: 100%;
+    background: #fff; z-index: 2000; transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 30px; box-shadow: 10px 0 30px rgba(0,0,0,0.05);
+}
+#sidebar.active { left: 0; }
+
+.sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.sidebar-header h3 { font-weight: 900; margin: 0; color: #2c3e50; }
+.close-btn { font-size: 30px; cursor: pointer; color: #ccc; line-height: 1; }
+
+.nav-item { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 700; border-radius: 10px; margin-bottom: 5px; }
+.nav-item.active { background: #f0f7ff; color: #3498db; }
+
+#sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.2); display: none; z-index: 1500; }
+#sidebar-overlay.active { display: block; }
