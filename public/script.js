@@ -1,3 +1,9 @@
+function toggleSidebar() {
+    const sb = document.getElementById('sidebar');
+    const ov = document.getElementById('sidebar-overlay');
+    sb.classList.toggle('active');
+    ov.classList.toggle('active');
+}
 // --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
