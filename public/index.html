@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<div id="menu-toggle" onclick="toggleSidebar()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
 
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h3>SERVICES</h3>
+            <span class="close-btn" onclick="toggleSidebar()">&times;</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">Secure Transfer</a>
+            <a href="#" class="nav-item disabled">More coming soon...</a>
+        </nav>
+    </div>
+
+    <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div id="loader-wrapper">
         <div class="loader-content">
             <img src="logo.png" alt="Logo" class="loader-logo bobbing"> <p class="loading-text">Loading...</p>
