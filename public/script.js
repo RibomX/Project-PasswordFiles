@@ -3,29 +3,32 @@ function toggleSidebar() {
     document.getElementById('sidebar-overlay').classList.toggle('active');
 }
 
+// LOGIKA LOUDOVANIA
 window.addEventListener('load', () => {
+    const progress = document.querySelector('.loader-progress');
     const loader = document.getElementById('loader-wrapper');
-    const loadFill = document.querySelector('.load-bar-fill');
-    const mainBox = document.getElementById('mainBox');
+    const content = document.getElementById('pageContent');
     
-    let progress = 0;
+    let width = 0;
     const interval = setInterval(() => {
-        progress += Math.random() * 25;
-        if (progress > 100) progress = 100;
-        loadFill.style.width = progress + '%';
-
-        if (progress === 100) {
+        width += Math.random() * 30;
+        if (width >= 100) {
+            width = 100;
             clearInterval(interval);
             setTimeout(() => {
                 loader.style.opacity = '0';
                 setTimeout(() => {
                     loader.style.display = 'none';
-                    // TRIGGERS THE BOTTOM-UP ANIMATION
-                    mainBox.classList.add('show');
+                    content.classList.add('visible'); // Spustí animáciu príchodu stránky
                 }, 500);
-            }, 400);
+            }, 300);
         }
+        progress.style.width = width + '%';
     }, 150);
 });
 
-// Zvyšok funkcií uploadFile a checkPassword s anglickými hláseniami...
+// Update file name text
+document.getElementById('fileInput').addEventListener('change', function() {
+    const fileName = this.files[0] ? this.files[0].name : "No file chosen";
+    document.getElementById('fileName').innerText = fileName;
+});
