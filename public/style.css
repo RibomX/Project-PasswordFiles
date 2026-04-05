@@ -228,3 +228,18 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     background: #f0f7ff; 
     color: #3498db; 
 }
+/* Animácia príchodu zdola */
+.animate-up {
+    animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px); /* Začne o 50px nižšie */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);    /* Skončí na svojom mieste */
+    }
+}
