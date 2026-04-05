@@ -22,7 +22,6 @@ async function uploadFile() {
     formData.append('file', fileInput.files[0]);
     formData.append('password', passwordInput.value);
 
-    // Reset a zobrazenie progresu (čistý bar bez percent)
     progressContainer.style.display = 'block';
     progressBar.style.width = '0%';
     status.innerHTML = 'Uploading...';
@@ -37,7 +36,6 @@ async function uploadFile() {
             progressBar.style.width = '100%';
             status.innerHTML = '<span style="color: #27ae60; font-weight: bold;">File uploaded successfully!</span>';
 
-            // Zmiznutie po 1 sekunde a premazanie políčok
             setTimeout(() => {
                 progressContainer.style.display = 'none';
                 status.innerText = '';
@@ -83,33 +81,30 @@ async function checkPassword() {
     }
 }
 
-// --- 3. LOGIKA PRE LOADING SCREEN (Simulácia + Animácia vysunutia) ---
+// --- 3. LOGIKA PRE LOADING SCREEN ---
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader-wrapper');
     const loadFill = document.querySelector('.load-bar-fill');
     const mainContent = document.getElementById('mainContent');
-   
+    
     let progress = 0;
-   
-    // Simulácia plnenia baru pri štarte stránky
+    
     const loadingInterval = setInterval(() => {
         progress += Math.random() * 15;
-       
+        
         if (progress > 100) progress = 100;
-       
+        
         if (loadFill) {
             loadFill.style.width = progress + '%';
         }
-       
+        
         if (progress === 100) {
             clearInterval(loadingInterval);
-           
-            // Fáza 1: Loader zmizne
+            
             setTimeout(() => {
                 loader.classList.add('loader-hidden');
             }, 400);
 
-            // Fáza 2: Box sa vysunie zdola
             setTimeout(() => {
                 if (mainContent) {
                     mainContent.classList.add('content-visible');
@@ -119,22 +114,26 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
+// --- 4. PREPÍNANIE TABOV (INSTANT FRAMES) ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
+    
+    // TOTO odstráni logo z vrchu pri prepnutí
     const brandName = document.querySelector('.brand-name');
 
     if (tab === 'sketch') {
         btnTransfer.classList.remove('active');
         btnSketch.classList.add('active');
         
+        // Skryje logo úplne (aj na mobile)
         if (brandName) brandName.style.display = 'none';
 
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 
-                <h1 class="brand-name" style="margin-bottom: 15px; font-size: 3.2rem; text-align: center;">Video to Sketch</h1>
+                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2c3e50;">InstantFrames</h1>
 
                 <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; min-height: auto !important; height: auto !important;">
                     <section class="upload-section" style="margin: 0;">
@@ -144,7 +143,7 @@ function switchTab(tab) {
                             <input type="file" id="videoInput" accept="video/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
                         </div>
 
-                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn" style="width: 100%; cursor: pointer; border: none; padding: 12px; border-radius: 10px; font-weight: 900; background: #3498db; color: white; font-size: 0.95rem; text-transform: uppercase;">
+                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; cursor: pointer; border: none; padding: 12px; border-radius: 10px; font-weight: 900; background: #3498db; color: white; font-size: 0.95rem; text-transform: uppercase;">
                             GENERATE ZIP
                         </button>
                         
@@ -152,7 +151,7 @@ function switchTab(tab) {
                     </section>
 
                     <div class="footer-info" style="margin-top: 15px; font-size: 0.7rem; opacity: 0.5; padding-bottom: 5px;">
-                        Auto-delete after 1 minute
+                        Auto-delete after processing
                     </div>
                 </div>
             </div>
@@ -166,8 +165,8 @@ function switchTab(tab) {
     }
 }
 
-// --- NOVÉ: FUNKCIA PRE GENEROVANIE ZIPU ---
-async function processSketchbook() {
+// --- 5. FUNKCIA PRE GENEROVANIE ZIPU (INSTANT FRAMES) ---
+async function processInstantFrames() {
     const videoInput = document.getElementById('videoInput');
     const status = document.getElementById('sketchStatus');
     const btn = document.getElementById('workBtn');
@@ -195,7 +194,7 @@ async function processSketchbook() {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "sketchbook.zip";
+            a.download = "InstantFrames.zip";
             document.body.appendChild(a);
             a.click();
             a.remove();
