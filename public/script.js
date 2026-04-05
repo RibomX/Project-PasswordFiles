@@ -121,61 +121,45 @@ function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
-    
-    // Nájdeme ten hlavný nápis v headeri, aby sme ho mohli skryť/zmeniť
     const brandName = document.querySelector('.brand-name');
 
     if (tab === 'sketch') {
         btnTransfer.classList.remove('active');
         btnSketch.classList.add('active');
         
-        // Skryjeme pôvodný nápis v headeri, aby sa to nebiło
         if (brandName) brandName.style.display = 'none';
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 40px; width: 100%;">
                 
-                <h1 class="brand-name" style="margin-bottom: 15px; font-size: 1.8rem;">Video to Sketch</h1>
+                <h1 class="brand-name" style="margin-bottom: 25px; font-size: 3rem; text-align: center;">Video to Sketch</h1>
 
-                <div class="container animate-up" style="background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px;">
+                <div class="container animate-up" style="background: white; padding: 25px 35px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 380px;">
                     <section class="upload-section">
-                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">Max 30s | Max 100MB</p>
+                        <p style="color: #888; font-size: 0.85rem; margin-bottom: 20px;">Max 30s | Max 100MB</p>
                         
-                        <div style="border: 2px dashed #eee; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-                            <input type="file" id="videoInput" accept="video/*" style="width: 100%; font-size: 0.8rem;">
+                        <div style="border: 2px dashed #eee; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                            <input type="file" id="videoInput" accept="video/*" style="width: 100%; font-size: 0.85rem; cursor: pointer;">
                         </div>
 
-                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn" style="width: 100%; cursor: pointer; border: none; padding: 12px; border-radius: 10px; font-weight: bold; background: #3498db; color: white; font-size: 0.9rem;">
+                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn" style="width: 100%; cursor: pointer; border: none; padding: 14px; border-radius: 10px; font-weight: 900; background: #3498db; color: white; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px;">
                             GENERATE ZIP
                         </button>
                         
                         <div id="sketchStatus" style="margin-top: 15px; font-size: 0.9rem; font-weight: bold; color: #3498db;"></div>
                     </section>
 
-                    <div class="footer-info" style="margin-top: 15px; font-size: 0.7rem; opacity: 0.6;">
+                    <div class="footer-info" style="margin-top: 20px; font-size: 0.75rem; opacity: 0.5;">
                         Auto-delete after 1 minute
                     </div>
                 </div>
             </div>
         `;
     } else {
-        // Pri návrate na Secure Transfer len obnovíme stránku
         location.reload();
     }
     
     if (typeof toggleSidebar === "function") {
         toggleSidebar();
     }
-}
-
-async function processSketchbook() {
-    const videoInput = document.getElementById('videoInput');
-    const status = document.getElementById('sketchStatus');
-    
-    if (!videoInput.files[0]) {
-        alert("Please select a video first!");
-        return;
-    }
-    
-    status.innerText = "Processing video... please wait.";
 }
