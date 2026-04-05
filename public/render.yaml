@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: secure-file-share
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+    # TOTO NAINŠTALUJE FFMPEG NA SERVER
+    buildFilter:
+      paths:
+        - ./**
+    stack: ruby # alebo nechať predvolené, ale dôležité sú "Native Runtimes"
