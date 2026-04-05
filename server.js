@@ -3,6 +3,14 @@ const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
 const mongoose = require('mongoose');
+
+// --- PRIDANÉ PRE SKETCHBOOK ---
+const { exec } = require('child_process');
+const archiver = require('archiver');
+const fs = require('fs');
+const path = require('path');
+// ------------------------------
+
 const app = express();
 const PORT = process.env.PORT || 10000; // Zmenené na 10000 pre Render
 
@@ -28,13 +36,13 @@ const fileSchema = new mongoose.Schema({
 });
 const File = mongoose.model('File', fileSchema);
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+// Multer nastavený tak, aby ukladal do 'uploads' priečinka (potrebné pre FFmpeg)
+const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json());
 app.use(express.static('public'));
 
-// NAHRÁVANIE
+// NAHRÁVANIE (Pôvodné)
 app.post('/upload', upload.single('file'), async (req, res) => {
     const password = req.body.password;
     if (!req.file || !password) return res.status(400).json({ error: 'Chýba súbor alebo heslo.' });
@@ -52,6 +60,8 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                     expiry: Date.now() + (3 * 60 * 60 * 1000)
                 });
                 res.json({ success: true });
+                // Zmazať dočasný súbor z disku po nahratí na Cloudinary
+                if (req.file.path) fs.unlinkSync(req.file.path);
             } catch (dbErr) {
                 res.status(500).json({ error: "Heslo už existuje." });
             }
@@ -60,13 +70,52 @@ app.post('/upload', upload.single('file'), async (req, res) => {
         }
       }
     );
-    streamifier.createReadStream(req.file.buffer).pipe(stream);
+    fs.createReadStream(req.file.path).pipe(stream);
 });
 
-// !!! OPRAVENÉ: ZMENENÉ NA GET A req.query !!!
+// --- NOVÁ ČASŤ: VIDEO TO SKETCHBOOK ---
+app.post('/process-sketchbook', upload.single('video'), (req, res) => {
+    if (!req.file) return res.status(400).send('No video uploaded.');
+
+    const videoPath = req.file.path;
+    const folderName = 'frames_' + Date.now();
+    const outputFolder = path.join(__dirname, folderName);
+    
+    if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder);
+
+    // Príkaz pre FFmpeg: každá 10. snímka
+    const ffmpegCmd = `ffmpeg -i ${videoPath} -vf "select=not(mod(n\,10))" -vsync vfr ${outputFolder}/frame_%03d.jpg`;
+
+    exec(ffmpegCmd, (error) => {
+        if (error) {
+            console.error('FFmpeg error:', error);
+            return res.status(500).send('Error processing video.');
+        }
+
+        const zipPath = videoPath + '.zip';
+        const output = fs.createWriteStream(zipPath);
+        const archive = archiver('zip');
+
+        output.on('close', () => {
+            res.download(zipPath, 'sketchbook.zip', () => {
+                try {
+                    if (fs.existsSync(outputFolder)) fs.rmSync(outputFolder, { recursive: true, force: true });
+                    if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
+                    if (fs.existsSync(zipPath)) fs.unlinkSync(zipPath);
+                } catch (e) { console.log("Cleanup error:", e); }
+            });
+        });
+
+        archive.pipe(output);
+        archive.directory(outputFolder, false);
+        archive.finalize();
+    });
+});
+// --------------------------------------
+
 app.get('/check-password', async (req, res) => {
     try {
-        const password = req.query.password; // Berie heslo z URL
+        const password = req.query.password; 
         const fileData = await File.findOne({ password: password });
         
         if (fileData) {
