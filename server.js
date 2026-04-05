@@ -97,7 +97,7 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     }
 
     // Príkaz s úvodzovkami pre cesty (dôležité pre linux)
-    const ffmpegCmd = `"${ffmpegPath}" -i "${videoPath}" -vf "select=not(mod(n\,10))" -vsync vfr "${outputFolder}/frame_%03d.jpg"`;
+   const ffmpegCmd = `"${ffmpegPath}" -i "${videoPath}" -vf "select='not(mod(n,10))'" -vsync vfr "${outputFolder}/frame_%03d.jpg"`;
 
     exec(ffmpegCmd, (error, stdout, stderr) => {
         if (error) {
