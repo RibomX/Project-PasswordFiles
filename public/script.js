@@ -120,15 +120,12 @@ function switchTab(tab) {
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
     
-    // TOTO odstráni logo z vrchu pri prepnutí
-    const brandName = document.querySelector('.brand-name');
-
     if (tab === 'sketch') {
         btnTransfer.classList.remove('active');
         btnSketch.classList.add('active');
         
-        // Skryje logo úplne (aj na mobile)
-        if (brandName) brandName.style.display = 'none';
+        // PRIDANÉ: Skryje logo z index.html pomocou CSS triedy
+        document.body.classList.add('hide-brand');
 
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
@@ -157,6 +154,8 @@ function switchTab(tab) {
             </div>
         `;
     } else {
+        // Pri návrate na Secure Transfer odstránime triedu a reloadneme
+        document.body.classList.remove('hide-brand');
         location.reload();
     }
     
