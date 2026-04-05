@@ -123,44 +123,46 @@ function switchTab(tab) {
     const btnSketch = document.getElementById('btn-sketch');
 
     if (tab === 'sketch') {
-        // 1. Zmeníme farbu tlačidiel v menu, aby si vedel, kde si
         btnTransfer.classList.remove('active');
         btnSketch.classList.add('active');
 
-        // 2. Vymeníme starý obsah za nový (pre Sketchbook)
         content.innerHTML = `
-            <div class="main-layout animate-content">
-                <div class="maskot-container">
-                    <img src="maskot.png" alt="Maskot" class="side-maskot">
-                </div>
-
-                <div class="container">
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; width: 100%;">
+                <h1 class="brand-name" style="margin-bottom: 20px;">Video to Sketch</h1>
+                <div class="container animate-up" style="background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 450px; margin: 0 auto;">
                     <section class="upload-section">
-                        <h2>Video to Sketchbook</h2>
-                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
-                            Max 30s | Max 100MB | Každá 10. snímka
-                        </p>
-                        
-                        <input type="file" id="videoInput" accept="video/*" style="margin-bottom: 20px;">
-                        
-                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn">
+                        <p style="color: #888; font-size: 0.9rem; margin-bottom: 25px;">Max 30s | Max 100MB</p>
+                        <div style="border: 2px dashed #eee; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                            <input type="file" id="videoInput" accept="video/*" style="width: 100%;">
+                        </div>
+                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn" style="width: 100%; cursor: pointer; border: none; padding: 15px; border-radius: 10px; font-weight: bold; background: #3498db; color: white;">
                             GENERATE ZIP
                         </button>
-                        
-                        <div id="sketchStatus" style="margin-top: 20px; font-weight: bold;"></div>
+                        <div id="sketchStatus" style="margin-top: 20px; font-weight: bold; color: #3498db;"></div>
                     </section>
-
-                    <div class="footer-info">
-                        ZIP will be deleted after 1 minute
+                    <div class="footer-info" style="margin-top: 25px; font-size: 0.8rem; opacity: 0.6;">
+                        Auto-delete after 1 minute
                     </div>
                 </div>
             </div>
         `;
     } else {
-        // Ak klikneš späť na Secure Transfer, proste obnovíme stránku
         location.reload();
     }
+    
+    if (typeof toggleSidebar === "function") {
+        toggleSidebar();
+    }
+}
 
-    // Na konci zavrieme bočné menu, aby nezavadzalo
-    toggleSidebar();
+async function processSketchbook() {
+    const videoInput = document.getElementById('videoInput');
+    const status = document.getElementById('sketchStatus');
+    
+    if (!videoInput.files[0]) {
+        alert("Please select a video first!");
+        return;
+    }
+    
+    status.innerText = "Processing video... please wait.";
 }
