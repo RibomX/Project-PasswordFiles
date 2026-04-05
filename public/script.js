@@ -4,6 +4,7 @@ function toggleSidebar() {
     sb.classList.toggle('active');
     ov.classList.toggle('active');
 }
+
 // --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
@@ -117,6 +118,7 @@ window.addEventListener('load', () => {
         }
     }, 120);
 });
+
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
@@ -161,5 +163,51 @@ function switchTab(tab) {
     
     if (typeof toggleSidebar === "function") {
         toggleSidebar();
+    }
+}
+
+// --- NOVÉ: FUNKCIA PRE GENEROVANIE ZIPU ---
+async function processSketchbook() {
+    const videoInput = document.getElementById('videoInput');
+    const status = document.getElementById('sketchStatus');
+    const btn = document.getElementById('workBtn');
+    
+    if (!videoInput || !videoInput.files[0]) {
+        alert("Please select a video first!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('video', videoInput.files[0]);
+
+    status.innerText = "Processing video... please wait.";
+    btn.disabled = true;
+    btn.innerText = "WORKING...";
+
+    try {
+        const response = await fetch('/process-sketchbook', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "sketchbook.zip";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            status.innerHTML = '<span style="color: #27ae60;">ZIP downloaded!</span>';
+        } else {
+            status.innerText = "Error processing video.";
+        }
+    } catch (err) {
+        status.innerText = "Connection error.";
+        console.error(err);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "GENERATE ZIP";
     }
 }
