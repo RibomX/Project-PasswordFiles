@@ -117,3 +117,50 @@ window.addEventListener('load', () => {
         }
     }, 120);
 });
+function switchTab(tab) {
+    const content = document.getElementById('dynamic-content');
+    const btnTransfer = document.getElementById('btn-transfer');
+    const btnSketch = document.getElementById('btn-sketch');
+
+    if (tab === 'sketch') {
+        // 1. Zmeníme farbu tlačidiel v menu, aby si vedel, kde si
+        btnTransfer.classList.remove('active');
+        btnSketch.classList.add('active');
+
+        // 2. Vymeníme starý obsah za nový (pre Sketchbook)
+        content.innerHTML = `
+            <div class="main-layout animate-content">
+                <div class="maskot-container">
+                    <img src="maskot.png" alt="Maskot" class="side-maskot">
+                </div>
+
+                <div class="container">
+                    <section class="upload-section">
+                        <h2>Video to Sketchbook</h2>
+                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 20px;">
+                            Max 30s | Max 100MB | Každá 10. snímka
+                        </p>
+                        
+                        <input type="file" id="videoInput" accept="video/*" style="margin-bottom: 20px;">
+                        
+                        <button onclick="processSketchbook()" id="workBtn" class="upload-btn">
+                            GENERATE ZIP
+                        </button>
+                        
+                        <div id="sketchStatus" style="margin-top: 20px; font-weight: bold;"></div>
+                    </section>
+
+                    <div class="footer-info">
+                        ZIP will be deleted after 1 minute
+                    </div>
+                </div>
+            </div>
+        `;
+    } else {
+        // Ak klikneš späť na Secure Transfer, proste obnovíme stránku
+        location.reload();
+    }
+
+    // Na konci zavrieme bočné menu, aby nezavadzalo
+    toggleSidebar();
+}
