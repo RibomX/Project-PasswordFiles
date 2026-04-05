@@ -9,6 +9,10 @@ const { exec } = require('child_process');
 const archiver = require('archiver');
 const fs = require('fs');
 const path = require('path');
+
+// TOTO zabezpečí funkčnosť FFmpeg na Renderi bez Buildpackov
+const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
+const ffmpegPath = ffmpegInstaller.path;
 // ------------------------------
 
 const app = express();
@@ -83,8 +87,15 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     
     if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder);
 
-    // Príkaz pre FFmpeg: každá 10. snímka
-    const ffmpegCmd = `ffmpeg -i ${videoPath} -vf "select=not(mod(n\,10))" -vsync vfr ${outputFolder}/frame_%03d.jpg`;
+    // OPRAVA PRE RENDER: Nastavenie povolení na spustenie FFmpeg
+    try {
+        fs.chmodSync(ffmpegPath, '755');
+    } catch (err) {
+        console.log("Permission fix error:", err);
+    }
+
+    // Príkaz pre FFmpeg s použitím správnej cesty
+    const ffmpegCmd = `"${ffmpegPath}" -i ${videoPath} -vf "select=not(mod(n\,10))" -vsync vfr ${outputFolder}/frame_%03d.jpg`;
 
     exec(ffmpegCmd, (error) => {
         if (error) {
@@ -98,6 +109,7 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
 
         output.on('close', () => {
             res.download(zipPath, 'sketchbook.zip', () => {
+                // Upratovanie po stiahnutí
                 try {
                     if (fs.existsSync(outputFolder)) fs.rmSync(outputFolder, { recursive: true, force: true });
                     if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
