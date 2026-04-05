@@ -10,13 +10,12 @@ const archiver = require('archiver');
 const fs = require('fs');
 const path = require('path');
 
-// TOTO zabezpečí funkčnosť FFmpeg na Renderi bez Buildpackov
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const ffmpegPath = ffmpegInstaller.path;
 // ------------------------------
 
 const app = express();
-const PORT = process.env.PORT || 10000; // Zmenené na 10000 pre Render
+const PORT = process.env.PORT || 10000;
 
 // TVOJ LINK NA DB
 const MONGO_URI = 'mongodb+srv://RibomX:bBa9bfKCgfYfD5vj@files.d4dcu2k.mongodb.net/?appName=Files'; 
@@ -40,7 +39,12 @@ const fileSchema = new mongoose.Schema({
 });
 const File = mongoose.model('File', fileSchema);
 
-// Multer nastavený tak, aby ukladal do 'uploads' priečinka (potrebné pre FFmpeg)
+// ZAISTENIE EXISTENCIE PRIEČINKA UPLOADS
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 const upload = multer({ dest: 'uploads/' });
 
 app.use(express.json());
@@ -64,7 +68,6 @@ app.post('/upload', upload.single('file'), async (req, res) => {
                     expiry: Date.now() + (3 * 60 * 60 * 1000)
                 });
                 res.json({ success: true });
-                // Zmazať dočasný súbor z disku po nahratí na Cloudinary
                 if (req.file.path) fs.unlinkSync(req.file.path);
             } catch (dbErr) {
                 res.status(500).json({ error: "Heslo už existuje." });
@@ -77,7 +80,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
     fs.createReadStream(req.file.path).pipe(stream);
 });
 
-// --- NOVÁ ČASŤ: VIDEO TO SKETCHBOOK ---
+// --- VIDEO TO SKETCHBOOK ---
 app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     if (!req.file) return res.status(400).send('No video uploaded.');
 
@@ -85,21 +88,20 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     const folderName = 'frames_' + Date.now();
     const outputFolder = path.join(__dirname, folderName);
     
-    if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder);
+    if (!fs.existsSync(outputFolder)) fs.mkdirSync(outputFolder, { recursive: true });
 
-    // OPRAVA PRE RENDER: Nastavenie povolení na spustenie FFmpeg
     try {
         fs.chmodSync(ffmpegPath, '755');
     } catch (err) {
         console.log("Permission fix error:", err);
     }
 
-    // Príkaz pre FFmpeg s použitím správnej cesty
-    const ffmpegCmd = `"${ffmpegPath}" -i ${videoPath} -vf "select=not(mod(n\,10))" -vsync vfr ${outputFolder}/frame_%03d.jpg`;
+    // Príkaz s úvodzovkami pre cesty (dôležité pre linux)
+    const ffmpegCmd = `"${ffmpegPath}" -i "${videoPath}" -vf "select=not(mod(n\,10))" -vsync vfr "${outputFolder}/frame_%03d.jpg"`;
 
-    exec(ffmpegCmd, (error) => {
+    exec(ffmpegCmd, (error, stdout, stderr) => {
         if (error) {
-            console.error('FFmpeg error:', error);
+            console.error('FFmpeg error:', stderr);
             return res.status(500).send('Error processing video.');
         }
 
@@ -109,7 +111,6 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
 
         output.on('close', () => {
             res.download(zipPath, 'sketchbook.zip', () => {
-                // Upratovanie po stiahnutí
                 try {
                     if (fs.existsSync(outputFolder)) fs.rmSync(outputFolder, { recursive: true, force: true });
                     if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
@@ -123,13 +124,11 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
         archive.finalize();
     });
 });
-// --------------------------------------
 
 app.get('/check-password', async (req, res) => {
     try {
         const password = req.query.password; 
         const fileData = await File.findOne({ password: password });
-        
         if (fileData) {
             res.json({ found: true, url: fileData.url, name: fileData.originalName });
         } else {
@@ -140,14 +139,12 @@ app.get('/check-password', async (req, res) => {
     }
 });
 
-// ČISTIČ
 setInterval(async () => {
     try {
         const expiredFiles = await File.find({ expiry: { $lt: Date.now() } });
         for (const file of expiredFiles) {
             await cloudinary.uploader.destroy(file.public_id);
             await File.deleteOne({ _id: file._id });
-            console.log(`🗑️ Zmazané: ${file.password}`);
         }
     } catch (err) {
         console.error("Chyba čističa:", err);
