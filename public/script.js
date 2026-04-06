@@ -5,7 +5,7 @@ function toggleSidebar() {
     ov.classList.toggle('active');
 }
 
-// --- 1. FUNKCIA PRE UPLOAD SÚBORU ---
+// --- 1. UPLOAD FILE (Secure Transfer) ---
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
@@ -53,7 +53,7 @@ async function uploadFile() {
     }
 }
 
-// --- 2. FUNKCIA PRE KONTROLU HESLA ---
+// --- 2. CHECK PASSWORD (Download) ---
 async function checkPassword() {
     const password = document.getElementById('downloadPassword').value;
     const status = document.getElementById('downloadStatus');
@@ -81,7 +81,7 @@ async function checkPassword() {
     }
 }
 
-// --- 3. LOGIKA PRE LOADING SCREEN ---
+// --- 3. LOADING SCREEN ---
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader-wrapper');
     const loadFill = document.querySelector('.load-bar-fill');
@@ -91,37 +91,26 @@ window.addEventListener('load', () => {
     
     const loadingInterval = setInterval(() => {
         progress += Math.random() * 15;
-        
         if (progress > 100) progress = 100;
-        
-        if (loadFill) {
-            loadFill.style.width = progress + '%';
-        }
+        if (loadFill) loadFill.style.width = progress + '%';
         
         if (progress === 100) {
             clearInterval(loadingInterval);
-            
+            setTimeout(() => loader.classList.add('loader-hidden'), 400);
             setTimeout(() => {
-                loader.classList.add('loader-hidden');
-            }, 400);
-
-            setTimeout(() => {
-                if (mainContent) {
-                    mainContent.classList.add('content-visible');
-                }
+                if (mainContent) mainContent.classList.add('content-visible');
             }, 800);
         }
     }, 120);
 });
 
-// --- 4. PREPÍNANIE TABOV ---
+// --- 4. SWITCH TABS ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
     const btnResizer = document.getElementById('btn-resizer');
 
-    // Reset aktívnych tlačidiel
     [btnTransfer, btnSketch, btnResizer].forEach(btn => btn?.classList.remove('active'));
 
     if (tab === 'resizer') {
@@ -133,20 +122,20 @@ function switchTab(tab) {
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2c3e50;">Image Resizer</h1>
                 <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px;">
                     <section class="upload-section" style="margin: 0;">
-                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Cieľová šírka (px):</p>
-                        <input type="number" id="targetWidth" value="1080" placeholder="Napr. 1080" 
+                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Target width (px):</p>
+                        <input type="number" id="targetWidth" value="1080" placeholder="e.g. 1080" 
                                style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
                         <div style="border: 2px dashed #eee; padding: 15px; border-radius: 15px; margin-bottom: 15px; background: #fafafa;">
-                            <input type="file" id="imageInput" accept="image/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
+                            <input type="file" id="imageInput" accept="image/*" style="max-width: 250px; width: 100%; font-size: 0.8rem; cursor: pointer; display: block; margin: 0 auto;">
                         </div>
                         <button onclick="processResize()" id="resBtn" class="upload-btn" 
-                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: transform 0.2s;">
+                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
                             RESIZE IMAGE
                         </button>
                         <div id="resStatus" style="margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #e67e22;"></div>
                     </section>
                     <div class="footer-info" style="margin-top: 15px; font-size: 0.7rem; opacity: 0.5;">
-                        Zmena rozlíšenia bez straty kvality
+                        High quality image processing
                     </div>
                 </div>
             </div>
@@ -158,17 +147,17 @@ function switchTab(tab) {
 
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2c3e50;">InstantFrames</h1>
+                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
                 <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px;">
                     <section class="upload-section" style="margin: 0;">
                         <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">Video to JPG Frames | Max 30s</p>
                         <div style="border: 2px dashed #eee; padding: 15px; border-radius: 15px; margin-bottom: 15px; background: #fafafa;">
-                            <input type="file" id="videoInput" accept="video/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
+                            <input type="file" id="videoInput" accept="video/*" style="max-width: 250px; width: 100%; font-size: 0.8rem; cursor: pointer; display: block; margin: 0 auto;">
                         </div>
-                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; background: #3498db; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
                             GENERATE ZIP
                         </button>
-                        <div id="sketchStatus" style="margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #3498db;"></div>
+                        <div id="sketchStatus" style="margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #9b59b6;"></div>
                     </section>
                 </div>
             </div>
@@ -181,7 +170,7 @@ function switchTab(tab) {
     if (typeof toggleSidebar === "function") toggleSidebar();
 }
 
-// --- 5. POMOCNÉ FUNKCIE PRE NÁSTROJE ---
+// --- 5. PROCESSING LOGIC ---
 
 async function processResize() {
     const input = document.getElementById('imageInput');
@@ -189,13 +178,13 @@ async function processResize() {
     const status = document.getElementById('resStatus');
     const btn = document.getElementById('resBtn');
     
-    if (!input.files[0]) return alert("Vyberte obrázok!");
+    if (!input.files[0]) return alert("Please select an image!");
 
     const formData = new FormData();
     formData.append('image', input.files[0]);
     formData.append('width', widthInput.value);
 
-    status.innerText = "Spracovávam obrázok...";
+    status.innerText = "Processing image...";
     btn.disabled = true;
 
     try {
@@ -207,18 +196,17 @@ async function processResize() {
             a.href = url;
             a.download = `resized_${widthInput.value}px.jpg`;
             a.click();
-            status.innerHTML = '<span style="color: #27ae60;">Hotovo! Sťahujem...</span>';
+            status.innerHTML = '<span style="color: #27ae60;">Done! Downloading...</span>';
         } else {
-            status.innerText = "Chyba na serveri.";
+            status.innerText = "Error on server.";
         }
     } catch (err) {
-        status.innerText = "Chyba pripojenia.";
+        status.innerText = "Connection error.";
     } finally {
         btn.disabled = false;
     }
 }
 
-// PRIDANÁ CHÝBAJÚCA FUNKCIA:
 async function processInstantFrames() {
     const videoInput = document.getElementById('videoInput');
     const status = document.getElementById('sketchStatus');
@@ -229,7 +217,7 @@ async function processInstantFrames() {
     const formData = new FormData();
     formData.append('video', videoInput.files[0]);
 
-    status.innerText = "Processing video... please wait.";
+    status.innerText = "Processing video... wait please.";
     btn.disabled = true;
 
     try {
