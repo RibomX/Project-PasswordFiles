@@ -114,19 +114,45 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// --- 4. PREPÍNANIE TABOV (TRANSFER, INSTANT FRAMES, RESIZER) ---
+// --- 4. PREPÍNANIE TABOV ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
     const btnResizer = document.getElementById('btn-resizer');
 
-    // Odstránime "active" triedu zo všetkých tlačidiel v menu
-    [btnTransfer, btnSketch, btnResizer].forEach(btn => {
-        if (btn) btn.classList.remove('active');
-    });
+    // Reset aktívnych tlačidiel
+    [btnTransfer, btnSketch, btnResizer].forEach(btn => btn?.classList.remove('active'));
 
-    if (tab === 'sketch') {
+    if (tab === 'resizer') {
+        if (btnResizer) btnResizer.classList.add('active');
+        document.body.classList.add('hide-brand');
+
+        content.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
+                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2c3e50;">Image Resizer</h1>
+                <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px;">
+                    <section class="upload-section" style="margin: 0;">
+                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Cieľová šírka (px):</p>
+                        <input type="number" id="targetWidth" value="1080" placeholder="Napr. 1080" 
+                               style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 15px; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
+                        <div style="border: 2px dashed #eee; padding: 15px; border-radius: 15px; margin-bottom: 15px; background: #fafafa;">
+                            <input type="file" id="imageInput" accept="image/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
+                        </div>
+                        <button onclick="processResize()" id="resBtn" class="upload-btn" 
+                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: transform 0.2s;">
+                            RESIZE IMAGE
+                        </button>
+                        <div id="resStatus" style="margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #e67e22;"></div>
+                    </section>
+                    <div class="footer-info" style="margin-top: 15px; font-size: 0.7rem; opacity: 0.5;">
+                        Zmena rozlíšenia bez straty kvality
+                    </div>
+                </div>
+            </div>
+        `;
+    } 
+    else if (tab === 'sketch') {
         if (btnSketch) btnSketch.classList.add('active');
         document.body.classList.add('hide-brand');
 
@@ -135,55 +161,64 @@ function switchTab(tab) {
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2c3e50;">InstantFrames</h1>
                 <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px;">
                     <section class="upload-section" style="margin: 0;">
-                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">Max 30s | Max 100MB</p>
-                        <div style="border: 2px dashed #eee; padding: 12px; border-radius: 12px; margin-bottom: 15px;">
+                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 15px;">Video to JPG Frames | Max 30s</p>
+                        <div style="border: 2px dashed #eee; padding: 15px; border-radius: 15px; margin-bottom: 15px; background: #fafafa;">
                             <input type="file" id="videoInput" accept="video/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
                         </div>
-                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; background: #3498db; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 900;">
+                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; background: #3498db; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
                             GENERATE ZIP
                         </button>
-                        <div id="sketchStatus" style="margin-top: 12px; font-size: 0.85rem; font-weight: bold; color: #3498db;"></div>
+                        <div id="sketchStatus" style="margin-top: 15px; font-size: 0.85rem; font-weight: bold; color: #3498db;"></div>
                     </section>
                 </div>
             </div>
         `;
     } 
-    else if (tab === 'resizer') {
-        if (btnResizer) btnResizer.classList.add('active');
-        document.body.classList.add('hide-brand');
-
-        content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px;">
-                    <section class="upload-section" style="margin: 0;">
-                        <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Zadaj šírku v pixeloch (px)</p>
-                        <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 15px; text-align: center; font-weight: 900; font-size: 1.1rem; color: #e67e22;">
-                        
-                        <div style="border: 2px dashed #eee; padding: 12px; border-radius: 12px; margin-bottom: 15px;">
-                            <input type="file" id="imageInput" accept="image/*" style="width: 100%; font-size: 0.8rem; cursor: pointer;">
-                        </div>
-                        <button onclick="processResize()" id="resBtn" class="upload-btn" style="width: 100%; background: #e67e22; color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 900;">
-                            RESIZE IMAGE
-                        </button>
-                        <div id="resStatus" style="margin-top: 12px; font-size: 0.85rem; font-weight: bold; color: #e67e22;"></div>
-                    </section>
-                </div>
-            </div>
-        `;
-    }
     else {
-        // Návrat na Secure Transfer (Reload stránky)
         document.body.classList.remove('hide-brand');
         location.reload();
     }
-
     if (typeof toggleSidebar === "function") toggleSidebar();
 }
 
-// --- 5. POMOCNÉ FUNKCIE PRE BACKEND ---
+// --- 5. POMOCNÉ FUNKCIE PRE NÁSTROJE ---
 
-// Funkcia pre InstantFrames (Video to Images)
+async function processResize() {
+    const input = document.getElementById('imageInput');
+    const widthInput = document.getElementById('targetWidth');
+    const status = document.getElementById('resStatus');
+    const btn = document.getElementById('resBtn');
+    
+    if (!input.files[0]) return alert("Vyberte obrázok!");
+
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    formData.append('width', widthInput.value);
+
+    status.innerText = "Spracovávam obrázok...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/resize-image', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resized_${widthInput.value}px.jpg`;
+            a.click();
+            status.innerHTML = '<span style="color: #27ae60;">Hotovo! Sťahujem...</span>';
+        } else {
+            status.innerText = "Chyba na serveri.";
+        }
+    } catch (err) {
+        status.innerText = "Chyba pripojenia.";
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+// PRIDANÁ CHÝBAJÚCA FUNKCIA:
 async function processInstantFrames() {
     const videoInput = document.getElementById('videoInput');
     const status = document.getElementById('sketchStatus');
@@ -207,42 +242,12 @@ async function processInstantFrames() {
             a.download = "InstantFrames.zip";
             a.click();
             status.innerHTML = '<span style="color: #27ae60;">ZIP downloaded!</span>';
-        } else { status.innerText = "Error processing video."; }
-    } catch (err) { status.innerText = "Connection error."; }
-    finally { btn.disabled = false; }
-}
-
-// Funkcia pre Image Resizer
-async function processResize() {
-    const input = document.getElementById('imageInput');
-    const widthInput = document.getElementById('targetWidth');
-    const status = document.getElementById('resStatus');
-    const btn = document.getElementById('resBtn');
-    
-    if (!input || !input.files[0]) return alert("Please select an image!");
-
-    const formData = new FormData();
-    formData.append('image', input.files[0]);
-    formData.append('width', widthInput.value);
-
-    status.innerText = "Resizing... please wait.";
-    btn.disabled = true;
-
-    try {
-        const response = await fetch('/resize-image', { method: 'POST', body: formData });
-        if (response.ok) {
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `resized_${widthInput.value}px.jpg`;
-            a.click();
-            status.innerHTML = '<span style="color: #27ae60;">Hotovo!</span>';
-        } else { status.innerText = "Error resizing image."; }
-    } catch (err) { status.innerText = "Connection error."; }
-    finally { btn.disabled = false; }
-}
+        } else {
+            status.innerText = "Error processing video.";
+        }
+    } catch (err) {
+        status.innerText = "Connection error.";
+    } finally {
         btn.disabled = false;
-        btn.innerText = "GENERATE ZIP";
     }
 }
