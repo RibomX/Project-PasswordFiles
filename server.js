@@ -4,15 +4,16 @@ const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
 const mongoose = require('mongoose');
 
-// --- PRIDANÉ PRE SKETCHBOOK ---
+// --- PRIDANÉ PRE SKETCHBOOK A IMAGE RESIZER ---
 const { exec } = require('child_process');
 const archiver = require('archiver');
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp'); // Potrebné pre Image Resizer
 
 const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
 const ffmpegPath = ffmpegInstaller.path;
-// ------------------------------
+// ----------------------------------------------
 
 const app = express();
 const PORT = process.env.PORT || 10000;
@@ -96,8 +97,7 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
         console.log("Permission fix error:", err);
     }
 
-    // Príkaz s úvodzovkami pre cesty (dôležité pre linux)
-   const ffmpegCmd = `"${ffmpegPath}" -i "${videoPath}" -vf "select='not(mod(n,10))'" -vsync vfr "${outputFolder}/frame_%03d.jpg"`;
+    const ffmpegCmd = `"${ffmpegPath}" -i "${videoPath}" -vf "select='not(mod(n,10))'" -vsync vfr "${outputFolder}/frame_%03d.jpg"`;
 
     exec(ffmpegCmd, (error, stdout, stderr) => {
         if (error) {
@@ -123,6 +123,31 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
         archive.directory(outputFolder, false);
         archive.finalize();
     });
+});
+
+// --- NOVÝ BLOK: IMAGE RESIZER ---
+app.post('/resize-image', upload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).send('No image uploaded.');
+
+    const targetWidth = parseInt(req.body.width) || 1080;
+    const outputPath = req.file.path + "_resized.jpg";
+
+    try {
+        await sharp(req.file.path)
+            .resize({ width: targetWidth, withoutEnlargement: true })
+            .jpeg({ quality: 100 })
+            .toFile(outputPath);
+
+        res.download(outputPath, `resized_${targetWidth}px.jpg`, () => {
+            try {
+                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+                if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+            } catch (e) { console.log("Cleanup error:", e); }
+        });
+    } catch (err) {
+        console.error("Resize error:", err);
+        res.status(500).send('Error resizing image.');
+    }
 });
 
 app.get('/check-password', async (req, res) => {
