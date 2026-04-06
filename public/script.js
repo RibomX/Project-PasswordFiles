@@ -122,10 +122,10 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
                 
-                <div class="container animate-up" style="background: white; padding: 25px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto; display: table;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
                         <input type="number" id="targetWidth" value="1080" placeholder="e.g. 1080" 
@@ -148,10 +148,10 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
                 
-                <div class="container animate-up" style="background: white; padding: 25px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto; display: table;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
                         <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; display: flex; justify-content: center; align-items: center;">
