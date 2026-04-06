@@ -125,11 +125,17 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     });
 });
 
-// --- OPRAVENÝ BLOK: IMAGE RESIZER (RAM FRIENDLY) ---
+// --- OPRAVENÝ BLOK: IMAGE RESIZER (S POISTKOU PROTI PÁDU RAM) ---
 app.post('/resize-image', upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).send('No image uploaded.');
 
-    const targetWidth = parseInt(req.body.width) || 1080;
+    let targetWidth = parseInt(req.body.width) || 1080;
+
+    // --- POISTKA: Render Free Tier nezvládne extrémne rozmery ---
+    if (targetWidth > 3500) {
+        targetWidth = 3500;
+    }
+
     const outputPath = req.file.path + "_resized.jpg";
 
     try {
