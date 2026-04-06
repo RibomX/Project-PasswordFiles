@@ -124,16 +124,17 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto;">
-                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 5px;">
+                
+                <div class="container animate-up" style="background: white; padding: 25px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto; display: table;">
+                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
                         <input type="number" id="targetWidth" value="1080" placeholder="e.g. 1080" 
-                               style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
+                               style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none; margin-bottom: 5px;">
                         <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; display: flex; justify-content: center; align-items: center;">
                             <input type="file" id="imageInput" accept="image/*" style="width: 165px; font-size: 0.8rem; cursor: pointer;">
                         </div>
                         <button onclick="processResize()" id="resBtn" class="upload-btn" 
-                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 5px;">
                             RESIZE IMAGE
                         </button>
                         <div id="resStatus" style="margin-top: 5px; font-size: 0.85rem; font-weight: bold; color: #e67e22;"></div>
@@ -149,8 +150,9 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
-                <div class="container animate-up" style="background: white; padding: 20px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto;">
-                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 5px;">
+                
+                <div class="container animate-up" style="background: white; padding: 25px 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 360px; height: auto; display: table;">
+                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
                         <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; display: flex; justify-content: center; align-items: center;">
                             <input type="file" id="videoInput" accept="video/*" style="width: 165px; font-size: 0.8rem; cursor: pointer;">
