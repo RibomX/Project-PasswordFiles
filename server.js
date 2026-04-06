@@ -125,7 +125,7 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     });
 });
 
-// --- NOVÝ BLOK: IMAGE RESIZER ---
+// --- NOVÝ BLOK: IMAGE RESIZER (OPRAVENÝ PRE ZVÄČŠOVANIE) ---
 app.post('/resize-image', upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).send('No image uploaded.');
 
@@ -134,8 +134,15 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
 
     try {
         await sharp(req.file.path)
-            .resize({ width: targetWidth, withoutEnlargement: true })
-            .jpeg({ quality: 100 })
+            .resize({ 
+                width: targetWidth, 
+                withoutEnlargement: false, // ZMENENÉ: Teraz povolí zväčšenie
+                kernel: sharp.kernel.lanczos3 // PRIDANÉ: Najlepšia kvalita pre zväčšovanie
+            })
+            .jpeg({ 
+                quality: 100, 
+                chromaSubsampling: '4:4:4' // Maximálne zachovanie farieb
+            })
             .toFile(outputPath);
 
         res.download(outputPath, `resized_${targetWidth}px.jpg`, () => {
