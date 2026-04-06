@@ -125,7 +125,7 @@ app.post('/process-sketchbook', upload.single('video'), (req, res) => {
     });
 });
 
-// --- NOVÝ BLOK: IMAGE RESIZER (OPRAVENÝ PRE ZVÄČŠOVANIE) ---
+// --- OPRAVENÝ BLOK: IMAGE RESIZER (RAM FRIENDLY) ---
 app.post('/resize-image', upload.single('image'), async (req, res) => {
     if (!req.file) return res.status(400).send('No image uploaded.');
 
@@ -133,16 +133,16 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
     const outputPath = req.file.path + "_resized.jpg";
 
     try {
+        // Vypnutie cache šetrí pamäť na Render Free Tier
+        sharp.cache(false);
+
         await sharp(req.file.path)
             .resize({ 
                 width: targetWidth, 
-                withoutEnlargement: false, // ZMENENÉ: Teraz povolí zväčšenie
-                kernel: sharp.kernel.lanczos3 // PRIDANÉ: Najlepšia kvalita pre zväčšovanie
+                withoutEnlargement: false, 
+                fastShrinkOnLoad: true 
             })
-            .jpeg({ 
-                quality: 100, 
-                chromaSubsampling: '4:4:4' // Maximálne zachovanie farieb
-            })
+            .jpeg({ quality: 90 }) // Mierne nižšia kvalita znižuje záťaž RAM
             .toFile(outputPath);
 
         res.download(outputPath, `resized_${targetWidth}px.jpg`, () => {
