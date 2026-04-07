@@ -114,8 +114,9 @@ function switchTab(tab) {
     const btnTransfer = document.getElementById('btn-transfer');
     const btnSketch = document.getElementById('btn-sketch');
     const btnResizer = document.getElementById('btn-resizer');
+    const btnLasso = document.getElementById('btn-lasso');
 
-    [btnTransfer, btnSketch, btnResizer].forEach(btn => btn?.classList.remove('active'));
+    [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
 
     if (tab === 'resizer') {
         if (btnResizer) btnResizer.classList.add('active');
@@ -124,7 +125,6 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                
                 <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
@@ -150,7 +150,6 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
-                
                 <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
@@ -166,6 +165,13 @@ function switchTab(tab) {
             </div>
         `;
     } 
+    else if (tab === 'lasso') {
+        if (btnLasso) btnLasso.classList.add('active');
+        document.body.classList.add('hide-brand');
+        // Zobrazíme sekciu Laso Tool, ktorú máš v HTML
+        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+        document.getElementById('section-lasso').style.display = 'block';
+    }
     else {
         document.body.classList.remove('hide-brand');
         location.reload();
@@ -240,5 +246,115 @@ async function processInstantFrames() {
         status.innerText = "Connection error.";
     } finally {
         btn.disabled = false;
+    }
+}
+
+// --- 6. LASO TOOL LOGIC (NEW) ---
+
+let lassoPoints = [];
+let isLassoDrawing = false;
+let lassoCanvas, lassoCtx, lassoImg;
+
+function startLassoEditor() {
+    const input = document.getElementById('lassoInput');
+    if (!input.files[0]) return alert("Please select an image first!");
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        lassoImg = new Image();
+        lassoImg.onload = function() {
+            document.getElementById('lasso-step-1').style.display = 'none';
+            document.getElementById('lasso-step-2').style.display = 'block';
+
+            lassoCanvas = document.getElementById('lassoCanvas');
+            lassoCtx = lassoCanvas.getContext('2d');
+
+            // Nastavenie veľkosti plátna podľa obrázka (max 800px šírka pre prehľadnosť)
+            const scale = Math.min(1, 800 / lassoImg.width);
+            lassoCanvas.width = lassoImg.width * scale;
+            lassoCanvas.height = lassoImg.height * scale;
+
+            drawLassoState();
+
+            // Eventy pre kreslenie (Pravé tlačidlo)
+            lassoCanvas.oncontextmenu = (e) => e.preventDefault(); // Zakáže menu
+            lassoCanvas.onmousedown = (e) => {
+                if (e.button === 2) { // Pravé tlačidlo
+                    isLassoDrawing = true;
+                    lassoPoints = [];
+                    addLassoPoint(e);
+                }
+            };
+            window.onmousemove = (e) => {
+                if (isLassoDrawing) addLassoPoint(e);
+            };
+            window.onmouseup = () => {
+                isLassoDrawing = false;
+            };
+        };
+        lassoImg.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+}
+
+function addLassoPoint(e) {
+    const rect = lassoCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (lassoImg.width / lassoCanvas.width);
+    const y = (e.clientY - rect.top) * (lassoImg.height / lassoCanvas.height);
+    lassoPoints.push([Math.round(x), Math.round(y)]);
+    drawLassoState();
+}
+
+function drawLassoState() {
+    lassoCtx.clearRect(0, 0, lassoCanvas.width, lassoCanvas.height);
+    lassoCtx.drawImage(lassoImg, 0, 0, lassoCanvas.width, lassoCanvas.height);
+
+    if (lassoPoints.length > 1) {
+        lassoCtx.beginPath();
+        lassoCtx.setLineDash([5, 5]);
+        lassoCtx.strokeStyle = "#2ecc71";
+        lassoCtx.lineWidth = 2;
+        
+        const scale = lassoCanvas.width / lassoImg.width;
+        lassoCtx.moveTo(lassoPoints[0][0] * scale, lassoPoints[0][1] * scale);
+        for (let i = 1; i < lassoPoints.length; i++) {
+            lassoCtx.lineTo(lassoPoints[i][0] * scale, lassoPoints[i][1] * scale);
+        }
+        lassoCtx.stroke();
+    }
+}
+
+function resetLasso() {
+    lassoPoints = [];
+    drawLassoState();
+}
+
+async function processLasso() {
+    if (lassoPoints.length < 3) return alert("Please draw a shape first (hold right click)!");
+
+    const input = document.getElementById('lassoInput');
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    formData.append('points', JSON.stringify(lassoPoints));
+
+    try {
+        const response = await fetch('/lasso-clipping', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "cutout.png";
+            a.click();
+            
+            // Návrat na krok 1
+            document.getElementById('lasso-step-2').style.display = 'none';
+            document.getElementById('lasso-step-1').style.display = 'block';
+            input.value = "";
+        } else {
+            alert("Server error during clipping.");
+        }
+    } catch (e) {
+        alert("Connection error.");
     }
 }
