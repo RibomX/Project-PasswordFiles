@@ -1,4 +1,3 @@
-
 function toggleSidebar() {
     const sb = document.getElementById('sidebar');
     const ov = document.getElementById('sidebar-overlay');
@@ -6,7 +5,7 @@ function toggleSidebar() {
     ov.classList.toggle('active');
 }
 
-// --- 1. UPLOAD FILE ---
+// --- 1. UPLOAD FILE (Secure Transfer) ---
 async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
     const passwordInput = document.getElementById('passwordInput');
@@ -28,10 +27,15 @@ async function uploadFile() {
     status.innerHTML = 'Uploading...';
 
     try {
-        const response = await fetch('/upload', { method: 'POST', body: formData });
+        const response = await fetch('/upload', {
+            method: 'POST',
+            body: formData
+        });
+
         if (response.ok) {
             progressBar.style.width = '100%';
             status.innerHTML = '<span style="color: #27ae60; font-weight: bold;">File uploaded successfully!</span>';
+
             setTimeout(() => {
                 progressContainer.style.display = 'none';
                 status.innerText = '';
@@ -39,31 +43,41 @@ async function uploadFile() {
                 fileInput.value = '';
             }, 1000);
         } else {
-            status.innerText = 'Upload failed.';
+            status.innerText = 'Upload failed. Try a different password.';
             progressContainer.style.display = 'none';
         }
     } catch (err) {
+        console.error(err);
         status.innerText = 'Server error.';
         progressContainer.style.display = 'none';
     }
 }
 
-// --- 2. CHECK PASSWORD ---
+// --- 2. CHECK PASSWORD (Download) ---
 async function checkPassword() {
     const password = document.getElementById('downloadPassword').value;
     const status = document.getElementById('downloadStatus');
-    if (!password) return alert("Enter password!");
+
+    if (!password) {
+        alert("Enter password!");
+        return;
+    }
+
     status.innerText = 'Checking...';
+
     try {
         const response = await fetch('/check-password?password=' + encodeURIComponent(password));
+        if (!response.ok) throw new Error('Server error');
+
         const data = await response.json();
+
         if (data.found) {
             status.innerHTML = `Found: <a href="${data.url}" target="_blank" style="color: #3498db; font-weight: bold;">Download ${data.name}</a>`;
         } else {
             status.innerText = 'Wrong password or expired.';
         }
     } catch (err) {
-        status.innerText = 'Error connecting.';
+        status.innerText = 'Error connecting to database.';
     }
 }
 
@@ -71,145 +85,228 @@ async function checkPassword() {
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader-wrapper');
     const loadFill = document.querySelector('.load-bar-fill');
+    const mainContent = document.getElementById('mainContent');
+    
     let progress = 0;
+    
     const loadingInterval = setInterval(() => {
         progress += Math.random() * 15;
         if (progress > 100) progress = 100;
         if (loadFill) loadFill.style.width = progress + '%';
+        
         if (progress === 100) {
             clearInterval(loadingInterval);
             setTimeout(() => loader.classList.add('loader-hidden'), 400);
+            setTimeout(() => {
+                if (mainContent) {
+                    mainContent.classList.add('content-visible');
+                    const h1 = mainContent.querySelector('h1');
+                    if (h1) h1.style.color = "#3498db";
+                }
+            }, 800);
         }
     }, 120);
 });
 
-// --- 4. SWITCH TABS (SCELNUTE BIELE POLICKA) ---
+// --- 4. SWITCH TABS ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
-    const btns = [document.getElementById('btn-transfer'), document.getElementById('btn-sketch'), document.getElementById('btn-resizer'), document.getElementById('btn-lasso')];
-    btns.forEach(btn => btn?.classList.remove('active'));
+    const btnTransfer = document.getElementById('btn-transfer');
+    const btnSketch = document.getElementById('btn-sketch');
+    const btnResizer = document.getElementById('btn-resizer');
+    const btnLasso = document.getElementById('btn-lasso');
 
-    // KLÚČOVÁ ZMENA: display: table zabezpečí, že sa box "stiahne" na šírku obsahu
-    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: table !important; margin: 0 auto !important; min-width: 320px !important; max-width: 90% !important; height: auto !important;";
+    [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
+
+    // Spoločný štýl pre kompaktný biely box
+    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 320px !important; max-width: 90% !important; height: auto !important;";
 
     if (tab === 'resizer') {
-        document.getElementById('btn-resizer')?.classList.add('active');
+        if (btnResizer) btnResizer.classList.add('active');
         document.body.classList.add('hide-brand');
+
         content.innerHTML = `
-            <div style="padding-top: 20px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                <div style="${cardBaseStyle}">
-                    <p style="color: #888; font-size: 0.8rem; margin: 0 0 5px 0;">Target width (px):</p>
-                    <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none; margin-bottom: 10px;">
-                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 10px;">
-                        <input type="file" id="imageInput" accept="image/*">
-                    </div>
-                    <button onclick="processResize()" id="resBtn" style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
-                    <div id="resStatus" style="margin-top: 10px; color: #e67e22;"></div>
+                <div class="container animate-up" style="${cardBaseStyle}">
+                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
+                        <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
+                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
+                            <input type="file" id="imageInput" accept="image/*" style="width: 100%;">
+                        </div>
+                        <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
+                        <div id="resStatus" style="color: #e67e22; margin-top: 10px;"></div>
+                    </section>
                 </div>
-            </div>`;
+            </div>
+        `;
     } 
     else if (tab === 'sketch') {
-        document.getElementById('btn-sketch')?.classList.add('active');
+        if (btnSketch) btnSketch.classList.add('active');
         document.body.classList.add('hide-brand');
+
         content.innerHTML = `
-            <div style="padding-top: 20px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
-                <div style="${cardBaseStyle}">
-                    <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Video to JPG Frames | Max 30s</p>
-                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 10px;">
-                        <input type="file" id="videoInput" accept="video/*">
-                    </div>
-                    <button onclick="processInstantFrames()" id="workBtn" style="width: 100%; background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
-                    <div id="sketchStatus" style="margin-top: 10px; color: #9b59b6;"></div>
+                <div class="container animate-up" style="${cardBaseStyle}">
+                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
+                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
+                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
+                            <input type="file" id="videoInput" accept="video/*" style="width: 100%;">
+                        </div>
+                        <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
+                        <div id="sketchStatus" style="color: #9b59b6; margin-top: 10px;"></div>
+                    </section>
                 </div>
-            </div>`;
+            </div>
+        `;
     } 
     else if (tab === 'lasso') {
-        document.getElementById('btn-lasso')?.classList.add('active');
+        if (btnLasso) btnLasso.classList.add('active');
         document.body.classList.add('hide-brand');
+
         content.innerHTML = `
-            <div style="padding-top: 20px; width: 100%;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
-                <div id="lasso-step-1" style="${cardBaseStyle}">
-                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object.</p>
+                
+                <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle} max-width: 400px !important;">
+                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object (Left Mouse Button).</p>
                     <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
-                        <input type="file" id="lassoInput" accept="image/*">
+                        <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
-                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">START LASSO TOOL</button>
+                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                        START LASO TOOL
+                    </button>
                 </div>
-                <div id="lasso-step-2" style="display: none; ${cardBaseStyle}">
-                    <div id="lassoCanvasContainer" style="position: relative; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; line-height: 0;">
+
+                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px; width: fit-content; max-width: 95%;">
+                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
+                    <p id="lassoHelpText" style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline the object.</p>
                     <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
-                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE</button>
+                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
                         <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
                     </div>
                 </div>
-            </div>`;
+            </div>
+        `;
     }
     else {
+        document.body.classList.remove('hide-brand');
         location.reload();
     }
     if (typeof toggleSidebar === "function") toggleSidebar();
 }
 
-// --- 5. PROCESSING ---
+// --- 5. PROCESSING LOGIC ---
+
 async function processResize() {
     const input = document.getElementById('imageInput');
-    const width = document.getElementById('targetWidth').value;
+    const widthInput = document.getElementById('targetWidth');
     const status = document.getElementById('resStatus');
-    if (!input.files[0]) return alert("Select image!");
+    const btn = document.getElementById('resBtn');
+    
+    if (!input.files[0]) return alert("Please select an image!");
+
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    formData.append('width', widthInput.value);
+
     status.innerText = "Processing...";
-    const fd = new FormData(); fd.append('image', input.files[0]); fd.append('width', width);
+    btn.disabled = true;
+
     try {
-        const res = await fetch('/resize-image', { method: 'POST', body: fd });
-        if (res.ok) {
-            const blob = await res.blob();
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "resized.jpg"; a.click();
-            status.innerHTML = "Done!";
+        const response = await fetch('/resize-image', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `resized_${widthInput.value}px.jpg`;
+            a.click();
+            status.innerHTML = '<span style="color: #27ae60;">Done!</span>';
         }
-    } catch(e) { status.innerText = "Error."; }
+    } catch (err) {
+        status.innerText = "Error.";
+    } finally {
+        btn.disabled = false;
+    }
 }
 
 async function processInstantFrames() {
-    const input = document.getElementById('videoInput');
+    const videoInput = document.getElementById('videoInput');
     const status = document.getElementById('sketchStatus');
-    if (!input.files[0]) return alert("Select video!");
+    const btn = document.getElementById('workBtn');
+    
+    if (!videoInput.files[0]) return alert("Please select a video!");
+
+    const formData = new FormData();
+    formData.append('video', videoInput.files[0]);
+
     status.innerText = "Processing...";
-    const fd = new FormData(); fd.append('video', input.files[0]);
+    btn.disabled = true;
+
     try {
-        const res = await fetch('/process-sketchbook', { method: 'POST', body: fd });
-        if (res.ok) {
-            const blob = await res.blob();
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = "frames.zip"; a.click();
-            status.innerHTML = "Done!";
+        const response = await fetch('/process-sketchbook', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "InstantFrames.zip";
+            a.click();
+            status.innerHTML = '<span style="color: #27ae60;">Done!</span>';
         }
-    } catch(e) { status.innerText = "Error."; }
+    } catch (err) {
+        status.innerText = "Error.";
+    } finally {
+        btn.disabled = false;
+    }
 }
 
-// --- 6. LASSO LOGIC ---
-let lassoPoints = [], isLassoDrawing = false, lassoCanvas, lassoCtx, lassoImg;
+// --- 6. LASO TOOL LOGIC ---
+
+let lassoPoints = [];
+let isLassoDrawing = false;
+let lassoCanvas, lassoCtx, lassoImg;
 
 function startLassoEditor() {
     const input = document.getElementById('lassoInput');
-    if (!input.files[0]) return alert("Select image!");
+    if (!input || !input.files[0]) return alert("Please select an image first!");
+
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = function(e) {
         lassoImg = new Image();
-        lassoImg.onload = () => {
+        lassoImg.onload = function() {
             document.getElementById('lasso-step-1').style.display = 'none';
-            const s2 = document.getElementById('lasso-step-2');
-            s2.style.display = 'table'; 
+            document.getElementById('lasso-step-2').style.display = 'block';
+
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
-            const scale = Math.min((window.innerWidth * 0.9) / lassoImg.width, 450 / lassoImg.height, 1);
+
+            // --- CONSTANT SIZE SCALING ---
+            // Max height 400px (aby bolo vidno buttony), max width 80% okna
+            const maxW = window.innerWidth * 0.8;
+            const maxH = 400; 
+            let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
+            if (scale > 1) scale = 1;
+
             lassoCanvas.width = lassoImg.width * scale;
             lassoCanvas.height = lassoImg.height * scale;
-            drawLasso();
-            lassoCanvas.onmousedown = (ev) => { isLassoDrawing = true; lassoPoints = []; addPt(ev); };
-            window.onmousemove = (ev) => { if (isLassoDrawing) addPt(ev); };
+
+            drawLassoState();
+
+            // MOUSE EVENTS (LEFT CLICK)
+            lassoCanvas.onmousedown = (e) => {
+                if (e.button === 0) { // Left Click
+                    isLassoDrawing = true;
+                    lassoPoints = [];
+                    addLassoPoint(e);
+                }
+            };
+            window.onmousemove = (e) => { if (isLassoDrawing) addLassoPoint(e); };
             window.onmouseup = () => { isLassoDrawing = false; };
         };
         lassoImg.src = e.target.result;
@@ -217,32 +314,72 @@ function startLassoEditor() {
     reader.readAsDataURL(input.files[0]);
 }
 
-function addPt(e) {
-    const r = lassoCanvas.getBoundingClientRect();
-    lassoPoints.push([Math.round(e.clientX - r.left), Math.round(e.clientY - r.top)]);
-    drawLasso();
+function addLassoPoint(e) {
+    if (!lassoCanvas) return;
+    const rect = lassoCanvas.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (lassoImg.width / lassoCanvas.width);
+    const y = (e.clientY - rect.top) * (lassoImg.height / lassoCanvas.height);
+    lassoPoints.push([Math.round(x), Math.round(y)]);
+    drawLassoState();
 }
 
-function drawLasso() {
+function drawLassoState() {
+    if (!lassoCtx) return;
+    lassoCtx.clearRect(0, 0, lassoCanvas.width, lassoCanvas.height);
     lassoCtx.drawImage(lassoImg, 0, 0, lassoCanvas.width, lassoCanvas.height);
     if (lassoPoints.length > 1) {
-        lassoCtx.beginPath(); lassoCtx.strokeStyle = "#2ecc71"; lassoCtx.lineWidth = 3;
-        lassoCtx.moveTo(lassoPoints[0][0], lassoPoints[0][1]);
-        lassoPoints.forEach(p => lassoCtx.lineTo(p[0], p[1]));
+        lassoCtx.beginPath();
+        lassoCtx.setLineDash([5, 5]);
+        lassoCtx.strokeStyle = "#2ecc71";
+        lassoCtx.lineWidth = 2;
+        const scale = lassoCanvas.width / lassoImg.width;
+        lassoCtx.moveTo(lassoPoints[0][0] * scale, lassoPoints[0][1] * scale);
+        for (let i = 1; i < lassoPoints.length; i++) {
+            lassoCtx.lineTo(lassoPoints[i][0] * scale, lassoPoints[i][1] * scale);
+        }
         lassoCtx.stroke();
     }
 }
 
-function resetLasso() { lassoPoints = []; drawLasso(); }
+function resetLasso() {
+    lassoPoints = [];
+    drawLassoState();
+}
 
 async function processLasso() {
-    if (lassoPoints.length < 3) return;
-    const fd = new FormData(); fd.append('image', document.getElementById('lassoInput').files[0]);
-    const scale = lassoImg.width / lassoCanvas.width;
-    fd.append('points', JSON.stringify(lassoPoints.map(p => [p[0]*scale, p[1]*scale])));
-    const res = await fetch('/lasso-clipping', { method: 'POST', body: fd });
-    if (res.ok) {
-        const b = await res.blob();
-        const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = "cutout.png"; a.click();
+    if (lassoPoints.length < 3) return alert("Please draw a shape first (left click)!");
+    
+    const genBtn = document.getElementById('lassoGenBtn');
+    const helpText = document.getElementById('lassoHelpText');
+    
+    // Indikátor nahrávania
+    genBtn.disabled = true;
+    genBtn.innerText = "PROCESSING...";
+    helpText.innerText = "Please wait, generating your cutout...";
+
+    const input = document.getElementById('lassoInput');
+    const formData = new FormData();
+    formData.append('image', input.files[0]);
+    formData.append('points', JSON.stringify(lassoPoints));
+
+    try {
+        const response = await fetch('/lasso-clipping', { method: 'POST', body: formData });
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "cutout.png";
+            a.click();
+            switchTab('lasso');
+        } else {
+            alert("Server error.");
+        }
+    } catch (e) { 
+        alert("Connection error."); 
+    } finally {
+        genBtn.disabled = false;
+        genBtn.innerText = "GENERATE PICTURE";
+        helpText.innerText = "Hold LEFT MOUSE BUTTON to outline the object.";
     }
 }
