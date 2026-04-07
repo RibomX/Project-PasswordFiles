@@ -125,7 +125,7 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 300px !important; max-width: 360px !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
                         <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
@@ -146,7 +146,7 @@ function switchTab(tab) {
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
-                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 300px !important; max-width: 360px !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
                         <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
@@ -165,23 +165,23 @@ function switchTab(tab) {
 
         content.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2ecc71;">Laso Tool</h1>
+                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
                 
-                <div id="lasso-step-1" class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 400px !important;">
-                    <p style="color: #888; margin-bottom: 15px;">Vyberte obrázok a orezávajte voľnou rukou (pravé tlačidlo).</p>
+                <div id="lasso-step-1" class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 300px !important; max-width: 400px !important;">
+                    <p style="color: #888; margin-bottom: 15px;">Select an image and outline the object (Left Mouse Button).</p>
                     <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
-                        <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer;">
+                        <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
                     <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
                         START LASO TOOL
                     </button>
                 </div>
 
-                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px;">
+                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px; width: fit-content; max-width: 95%;">
                     <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
-                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Držte PRAVÉ TLAČIDLO a obkreslite objekt.</p>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline the object.</p>
                     <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
                         <button onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
                         <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
@@ -283,15 +283,21 @@ function startLassoEditor() {
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
 
-            const scale = Math.min(1, 800 / lassoImg.width);
+            // --- CONSTANT SIZE SCALING ---
+            // Max height 500px, max width 80% of window
+            const maxW = window.innerWidth * 0.8;
+            const maxH = 500; 
+            let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
+            if (scale > 1) scale = 1;
+
             lassoCanvas.width = lassoImg.width * scale;
             lassoCanvas.height = lassoImg.height * scale;
 
             drawLassoState();
 
-            lassoCanvas.oncontextmenu = (e) => e.preventDefault();
+            // MOUSE EVENTS (LEFT CLICK)
             lassoCanvas.onmousedown = (e) => {
-                if (e.button === 2) { 
+                if (e.button === 0) { // Left Click
                     isLassoDrawing = true;
                     lassoPoints = [];
                     addLassoPoint(e);
@@ -338,7 +344,7 @@ function resetLasso() {
 }
 
 async function processLasso() {
-    if (lassoPoints.length < 3) return alert("Please draw a shape first (hold right click)!");
+    if (lassoPoints.length < 3) return alert("Please draw a shape first (hold left click)!");
     const input = document.getElementById('lassoInput');
     const formData = new FormData();
     formData.append('image', input.files[0]);
@@ -353,7 +359,6 @@ async function processLasso() {
             a.href = url;
             a.download = "cutout.png";
             a.click();
-            // Reset na začiatok Laso sekcie
             switchTab('lasso');
         }
     } catch (e) { alert("Server error."); }
