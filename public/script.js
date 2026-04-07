@@ -108,7 +108,7 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// --- 4. SWITCH TABS ---
+// --- 4. SWITCH TABS (OPRAVENÝ VZHĽAD) ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
@@ -118,15 +118,15 @@ function switchTab(tab) {
 
     [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
 
-    // Spoločný štýl pre kompaktný biely box
-    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 320px !important; max-width: 90% !important; height: auto !important;";
+    // OPRAVA: display: inline-block zabezpečí, že biele pozadie končí tam, kde končí obsah
+    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: inline-block !important; min-width: 320px !important; max-width: 95% !important; height: auto !important;";
 
     if (tab === 'resizer') {
         if (btnResizer) btnResizer.classList.add('active');
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
+            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
@@ -147,7 +147,7 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
+            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
@@ -167,7 +167,7 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
+            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
                 
                 <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle} max-width: 400px !important;">
@@ -175,16 +175,16 @@ function switchTab(tab) {
                     <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
                         <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
-                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">
                         START LASO TOOL
                     </button>
                 </div>
 
-                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px; width: fit-content; max-width: 95%;">
+                <div id="lasso-step-2" style="display: none; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-block; max-width: 95%;">
                     <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
-                    <p id="lassoHelpText" style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline the object.</p>
+                    <p id="lassoHelpText" style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline.</p>
                     <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
                         <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
                         <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
@@ -281,13 +281,13 @@ function startLassoEditor() {
         lassoImg = new Image();
         lassoImg.onload = function() {
             document.getElementById('lasso-step-1').style.display = 'none';
-            document.getElementById('lasso-step-2').style.display = 'block';
+            // Zobrazíme krok 2 ako inline-block
+            const step2 = document.getElementById('lasso-step-2');
+            step2.style.display = 'inline-block';
 
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
 
-            // --- CONSTANT SIZE SCALING ---
-            // Max height 400px (aby bolo vidno buttony), max width 80% okna
             const maxW = window.innerWidth * 0.8;
             const maxH = 400; 
             let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
@@ -298,9 +298,8 @@ function startLassoEditor() {
 
             drawLassoState();
 
-            // MOUSE EVENTS (LEFT CLICK)
             lassoCanvas.onmousedown = (e) => {
-                if (e.button === 0) { // Left Click
+                if (e.button === 0) {
                     isLassoDrawing = true;
                     lassoPoints = [];
                     addLassoPoint(e);
@@ -347,15 +346,11 @@ function resetLasso() {
 }
 
 async function processLasso() {
-    if (lassoPoints.length < 3) return alert("Please draw a shape first (left click)!");
+    if (lassoPoints.length < 3) return alert("Please draw a shape first!");
     
     const genBtn = document.getElementById('lassoGenBtn');
-    const helpText = document.getElementById('lassoHelpText');
-    
-    // Indikátor nahrávania
     genBtn.disabled = true;
     genBtn.innerText = "PROCESSING...";
-    helpText.innerText = "Please wait, generating your cutout...";
 
     const input = document.getElementById('lassoInput');
     const formData = new FormData();
@@ -380,6 +375,5 @@ async function processLasso() {
     } finally {
         genBtn.disabled = false;
         genBtn.innerText = "GENERATE PICTURE";
-        helpText.innerText = "Hold LEFT MOUSE BUTTON to outline the object.";
     }
 }
