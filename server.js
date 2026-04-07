@@ -163,6 +163,41 @@ app.post('/resize-image', upload.single('image'), async (req, res) => {
     }
 });
 
+// --- NOVÝ BLOK: LASSO CLIPPING TOOL ---
+app.post('/lasso-clipping', upload.single('image'), async (req, res) => {
+    if (!req.file) return res.status(400).send('No image uploaded.');
+    
+    try {
+        const points = JSON.parse(req.body.points);
+        const outputPath = req.file.path + "_cutout.png";
+
+        // Vytvorenie SVG masky podľa bodov z frontendu
+        const metadata = await sharp(req.file.path).metadata();
+        const svgMask = `
+        <svg width="${metadata.width}" height="${metadata.height}">
+            <polygon points="${points.map(p => p.join(',')).join(' ')}" fill="white" />
+        </svg>`;
+
+        await sharp(req.file.path)
+            .composite([{
+                input: Buffer.from(svgMask),
+                blend: 'dest-in'
+            }])
+            .png()
+            .toFile(outputPath);
+
+        res.download(outputPath, "cutout.png", () => {
+            try {
+                if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+                if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+            } catch (e) { console.log("Cleanup error:", e); }
+        });
+    } catch (err) {
+        console.error("Lasso error:", err);
+        res.status(500).send('Error processing lasso tool.');
+    }
+});
+
 app.get('/check-password', async (req, res) => {
     try {
         const password = req.query.password; 
