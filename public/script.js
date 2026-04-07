@@ -109,7 +109,7 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// --- 4. SWITCH TABS ---
+// --- 4. SWITCH TABS (OPRAVENÝ VZHĽAD) ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
@@ -119,8 +119,8 @@ function switchTab(tab) {
 
     [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
 
-    // Spoločný štýl pre kompaktný biely box
-    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: fit-content !important; min-width: 320px !important; max-width: 90% !important; height: auto !important;";
+    // OPRAVA: display: inline-block zabezpečí, že biele pozadie končí tam, kde končí obsah
+    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: inline-block !important; min-width: 320px !important; max-width: 95% !important; height: auto !important;";
 
     if (tab === 'resizer') {
         if (btnResizer) btnResizer.classList.add('active');
@@ -171,23 +171,23 @@ function switchTab(tab) {
             <div style="display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
                 
-                <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle} max-width: 400px !important;">
-                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object (Left Mouse Button).</p>
+                <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle}">
+                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object.</p>
                     <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
                         <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
-                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">
                         START LASO TOOL
                     </button>
                 </div>
 
-                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px; width: fit-content; max-width: 95%;">
+                <div id="lasso-step-2" style="display: none; ${cardBaseStyle}">
                     <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
-                    <p id="lassoHelpText" style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline the object.</p>
+                    <p id="lassoHelpText" style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline.</p>
                     <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
-                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
+                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE</button>
                         <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
                     </div>
                 </div>
@@ -267,7 +267,7 @@ async function processInstantFrames() {
     }
 }
 
-// --- 6. LASO TOOL LOGIC ---
+// --- 6. LASO TOOL LOGIC (FIXED POINTS & SCALE) ---
 
 let lassoPoints = [];
 let isLassoDrawing = false;
@@ -282,15 +282,13 @@ function startLassoEditor() {
         lassoImg = new Image();
         lassoImg.onload = function() {
             document.getElementById('lasso-step-1').style.display = 'none';
-            document.getElementById('lasso-step-2').style.display = 'block';
+            document.getElementById('lasso-step-2').style.display = 'inline-block';
 
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
 
-            // --- CONSTANT SIZE SCALING ---
-            // Max height 400px (aby bolo vidno buttony), max width 80% okna
-            const maxW = window.innerWidth * 0.8;
-            const maxH = 400; 
+            const maxW = window.innerWidth * 0.9;
+            const maxH = 450; 
             let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
             if (scale > 1) scale = 1;
 
@@ -299,9 +297,8 @@ function startLassoEditor() {
 
             drawLassoState();
 
-            // MOUSE EVENTS (LEFT CLICK)
             lassoCanvas.onmousedown = (e) => {
-                if (e.button === 0) { // Left Click
+                if (e.button === 0) {
                     isLassoDrawing = true;
                     lassoPoints = [];
                     addLassoPoint(e);
@@ -318,8 +315,9 @@ function startLassoEditor() {
 function addLassoPoint(e) {
     if (!lassoCanvas) return;
     const rect = lassoCanvas.getBoundingClientRect();
-    const x = (e.clientX - rect.left) * (lassoImg.width / lassoCanvas.width);
-    const y = (e.clientY - rect.top) * (lassoImg.height / lassoCanvas.height);
+    // Ukladáme body priamo v pixeloch plátna (nie originálu)
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
     lassoPoints.push([Math.round(x), Math.round(y)]);
     drawLassoState();
 }
@@ -330,13 +328,11 @@ function drawLassoState() {
     lassoCtx.drawImage(lassoImg, 0, 0, lassoCanvas.width, lassoCanvas.height);
     if (lassoPoints.length > 1) {
         lassoCtx.beginPath();
-        lassoCtx.setLineDash([5, 5]);
         lassoCtx.strokeStyle = "#2ecc71";
-        lassoCtx.lineWidth = 2;
-        const scale = lassoCanvas.width / lassoImg.width;
-        lassoCtx.moveTo(lassoPoints[0][0] * scale, lassoPoints[0][1] * scale);
+        lassoCtx.lineWidth = 3;
+        lassoCtx.moveTo(lassoPoints[0][0], lassoPoints[0][1]);
         for (let i = 1; i < lassoPoints.length; i++) {
-            lassoCtx.lineTo(lassoPoints[i][0] * scale, lassoPoints[i][1] * scale);
+            lassoCtx.lineTo(lassoPoints[i][0], lassoPoints[i][1]);
         }
         lassoCtx.stroke();
     }
@@ -348,20 +344,20 @@ function resetLasso() {
 }
 
 async function processLasso() {
-    if (lassoPoints.length < 3) return alert("Please draw a shape first (left click)!");
+    if (lassoPoints.length < 3) return alert("Please draw a shape first!");
     
     const genBtn = document.getElementById('lassoGenBtn');
-    const helpText = document.getElementById('lassoHelpText');
-    
-    // Indikátor nahrávania
     genBtn.disabled = true;
     genBtn.innerText = "PROCESSING...";
-    helpText.innerText = "Please wait, generating your cutout...";
 
-    const input = document.getElementById('lassoInput');
     const formData = new FormData();
-    formData.append('image', input.files[0]);
-    formData.append('points', JSON.stringify(lassoPoints));
+    formData.append('image', document.getElementById('lassoInput').files[0]);
+    
+    // PREPOČET: Tu body prepočítame na originálnu veľkosť pre server
+    const scale = lassoImg.width / lassoCanvas.width;
+    const finalPoints = lassoPoints.map(p => [Math.round(p[0] * scale), Math.round(p[1] * scale)]);
+    
+    formData.append('points', JSON.stringify(finalPoints));
 
     try {
         const response = await fetch('/lasso-clipping', { method: 'POST', body: formData });
@@ -372,7 +368,6 @@ async function processLasso() {
             a.href = url;
             a.download = "cutout.png";
             a.click();
-            switchTab('lasso');
         } else {
             alert("Server error.");
         }
@@ -380,7 +375,6 @@ async function processLasso() {
         alert("Connection error."); 
     } finally {
         genBtn.disabled = false;
-        genBtn.innerText = "GENERATE PICTURE";
-        helpText.innerText = "Hold LEFT MOUSE BUTTON to outline the object.";
+        genBtn.innerText = "GENERATE";
     }
-} 
+}
