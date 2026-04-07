@@ -51,7 +51,7 @@
     </header>
 
     <div id="dynamic-content">
-        <div class="main-layout">
+        <div id="section-transfer" class="tab-content main-layout">
             <div class="maskot-container">
                 <img src="maskot.png" alt="Maskot" class="side-maskot">
             </div>
@@ -81,7 +81,28 @@
                 </div>
             </div>
         </div>
-    </div>
+
+        <div id="section-lasso" class="tab-content main-layout" style="display: none;">
+            <div class="container animate-content">
+                <h2 style="color: #ff8c00;">Laso Tool</h2>
+                <p>Nahraj obrázok a voľnou rukou (pravým tlačidlom) obkresli oblasť.</p>
+                
+                <section class="upload-section">
+                    <input type="file" id="lassoInput" accept="image/*" onchange="handleLassoUpload(event)">
+                    
+                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; margin-top: 20px; max-width: 100%;">
+                        <canvas id="lassoCanvas" style="border: 2px dashed #ff8c00; cursor: crosshair;"></canvas>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <button onclick="resetLasso()" style="background-color: #7f8c8d;">Reset</button>
+                        <button onclick="processLasso()" id="lassoBtn">Vyrezať a stiahnuť</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        </div>
 
     <div class="full-ground-line"></div>
 
