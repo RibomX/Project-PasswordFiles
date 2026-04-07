@@ -258,8 +258,9 @@ function startLassoEditor() {
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
 
-            const maxW = window.innerWidth * 0.8;
-            const maxH = 400; 
+            // --- OPRAVA VEĽKOSTI PRE VIDITEĽNOSŤ TLAČIDIEL ---
+            const maxW = window.innerWidth * 0.7; // Zmenšené z 0.8
+            const maxH = window.innerHeight * 0.5; // Zmenšené z fixných 400px na 50% výšky okna
             let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
             if (scale > 1) scale = 1;
             lassoCanvas.width = lassoImg.width * scale;
