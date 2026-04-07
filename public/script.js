@@ -108,7 +108,7 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// --- 4. SWITCH TABS (TOTÁLNE BEZ BIELYCH MIEST) ---
+// --- 4. SWITCH TABS ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
@@ -118,25 +118,22 @@ function switchTab(tab) {
 
     [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
 
-    // Fix: height: fit-content a min-height: auto zabezpečia, že biela končí hneď za tlačidlom
     const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: inline-flex !important; flex-direction: column !important; min-width: 320px !important; max-width: 95% !important; height: fit-content !important; min-height: auto !important;";
-    
     const wrapperStyle = "display: flex; flex-direction: column; align-items: center; padding-top: 20px; width: 100%; height: auto;";
 
     if (tab === 'resizer') {
         if (btnResizer) btnResizer.classList.add('active');
         document.body.classList.add('hide-brand');
-
         content.innerHTML = `
             <div style="${wrapperStyle}">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #e67e22;">Image Resizer</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
                     <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
-                    <input type="number" id="targetWidth" value="1080" style="width: 200px; margin: 5px auto 10px auto; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
-                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 10px; width: fit-content; align-self: center;">
-                        <input type="file" id="imageInput" accept="image/*" style="width: auto;">
+                    <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none; margin-bottom: 10px;">
+                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 10px;">
+                        <input type="file" id="imageInput" accept="image/*" style="width: 100%;">
                     </div>
-                    <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 900; cursor: pointer; align-self: center;">RESIZE IMAGE</button>
+                    <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
                     <div id="resStatus" style="color: #e67e22; margin-top: 10px;"></div>
                 </div>
             </div>`;
@@ -144,16 +141,15 @@ function switchTab(tab) {
     else if (tab === 'sketch') {
         if (btnSketch) btnSketch.classList.add('active');
         document.body.classList.add('hide-brand');
-
         content.innerHTML = `
             <div style="${wrapperStyle}">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
                     <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Video to JPG Frames | Max 30s</p>
-                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 15px; width: fit-content; align-self: center;">
-                        <input type="file" id="videoInput" accept="video/*" style="width: auto;">
+                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 15px;">
+                        <input type="file" id="videoInput" accept="video/*" style="width: 100%;">
                     </div>
-                    <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 900; cursor: pointer; align-self: center;">GENERATE ZIP</button>
+                    <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
                     <div id="sketchStatus" style="color: #9b59b6; margin-top: 10px;"></div>
                 </div>
             </div>`;
@@ -161,25 +157,15 @@ function switchTab(tab) {
     else if (tab === 'lasso') {
         if (btnLasso) btnLasso.classList.add('active');
         document.body.classList.add('hide-brand');
-
         content.innerHTML = `
-            <div style="${wrapperStyle}">
+            <div style="${wrapperStyle}" id="lasso-wrapper">
                 <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
-                <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle}">
+                <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle} max-width: 400px !important;">
                     <p style="color: #888; margin-bottom: 15px;">Select image and outline object.</p>
-                    <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px; width: fit-content; align-self: center;">
-                        <input type="file" id="lassoInput" accept="image/*" style="width: auto;">
+                    <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
+                        <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
-                    <button onclick="startLassoEditor()" style="background: #2ecc71; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-weight: 900; cursor: pointer; align-self: center;">START LASO TOOL</button>
-                </div>
-                <div id="lasso-step-2" style="display: none; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-flex; flex-direction: column; width: fit-content; height: fit-content; margin-top: 10px;">
-                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
-                        <canvas id="lassoCanvas"></canvas>
-                    </div>
-                    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
-                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE</button>
-                        <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
-                    </div>
+                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">START LASO TOOL</button>
                 </div>
             </div>`;
     }
@@ -190,7 +176,7 @@ function switchTab(tab) {
     if (typeof toggleSidebar === "function") toggleSidebar();
 }
 
-// --- 5. & 6. ZVYŠOK LOGIKY ---
+// --- 5. PROCESSING LOGIC ---
 async function processResize() {
     const input = document.getElementById('imageInput');
     const widthInput = document.getElementById('targetWidth');
@@ -239,6 +225,7 @@ async function processInstantFrames() {
     } catch (err) { status.innerText = "Error."; } finally { btn.disabled = false; }
 }
 
+// --- 6. LASO TOOL LOGIC ---
 let lassoPoints = [];
 let isLassoDrawing = false;
 let lassoCanvas, lassoCtx, lassoImg;
@@ -246,21 +233,38 @@ let lassoCanvas, lassoCtx, lassoImg;
 function startLassoEditor() {
     const input = document.getElementById('lassoInput');
     if (!input || !input.files[0]) return alert("Please select an image first!");
+
     const reader = new FileReader();
     reader.onload = function(e) {
         lassoImg = new Image();
         lassoImg.onload = function() {
-            document.getElementById('lasso-step-1').style.display = 'none';
-            const step2 = document.getElementById('lasso-step-2');
-            step2.style.display = 'inline-flex';
+            const step1 = document.getElementById('lasso-step-1');
+            if(step1) step1.style.display = 'none';
+
+            const wrapper = document.getElementById('lasso-wrapper');
+            const step2HTML = `
+                <div id="lasso-step-2" class="animate-up" style="background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-flex; flex-direction: column; max-width: 95%;">
+                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
+                        <canvas id="lassoCanvas"></canvas>
+                    </div>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline.</p>
+                    <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
+                        <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
+                        <button onclick="switchTab('lasso')" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
+                    </div>
+                </div>`;
+            
+            wrapper.insertAdjacentHTML('beforeend', step2HTML);
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
+
             const maxW = window.innerWidth * 0.8;
             const maxH = 400; 
             let scale = Math.min(maxW / lassoImg.width, maxH / lassoImg.height);
             if (scale > 1) scale = 1;
             lassoCanvas.width = lassoImg.width * scale;
             lassoCanvas.height = lassoImg.height * scale;
+
             drawLassoState();
             lassoCanvas.onmousedown = (e) => {
                 if (e.button === 0) {
@@ -302,11 +306,6 @@ function drawLassoState() {
         }
         lassoCtx.stroke();
     }
-}
-
-function resetLasso() {
-    lassoPoints = [];
-    drawLassoState();
 }
 
 async function processLasso() {
