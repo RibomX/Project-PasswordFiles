@@ -108,7 +108,7 @@ window.addEventListener('load', () => {
     }, 120);
 });
 
-// --- 4. SWITCH TABS (OPRAVENÝ VZHĽAD) ---
+// --- 4. SWITCH TABS (OPRAVENÝ KOMPAKTNÝ VZHĽAD) ---
 function switchTab(tab) {
     const content = document.getElementById('dynamic-content');
     const btnTransfer = document.getElementById('btn-transfer');
@@ -118,26 +118,27 @@ function switchTab(tab) {
 
     [btnTransfer, btnSketch, btnResizer, btnLasso].forEach(btn => btn?.classList.remove('active'));
 
-    // OPRAVA: display: inline-block zabezpečí, že biele pozadie končí tam, kde končí obsah
-    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: inline-block !important; min-width: 320px !important; max-width: 95% !important; height: auto !important;";
+    // TAJOMSTVO: display: inline-flex zabezpečí, že biela karta sa "stiahne" podľa obsahu
+    const cardBaseStyle = "background: white !important; padding: 25px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; display: inline-flex !important; flex-direction: column !important; min-width: 320px !important; max-width: 95% !important; height: auto !important;";
+    
+    // Obalový štýl, aby sme kartu udržali v strede
+    const wrapperStyle = "display: block; text-align: center; padding-top: 20px; width: 100%;";
 
     if (tab === 'resizer') {
         if (btnResizer) btnResizer.classList.add('active');
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
+            <div style="${wrapperStyle}">
+                <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #e67e22;">Image Resizer</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
-                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
-                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
-                        <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
-                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
-                            <input type="file" id="imageInput" accept="image/*" style="width: 100%;">
-                        </div>
-                        <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
-                        <div id="resStatus" style="color: #e67e22; margin-top: 10px;"></div>
-                    </section>
+                    <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
+                    <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none; margin-bottom: 10px;">
+                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 10px;">
+                        <input type="file" id="imageInput" accept="image/*" style="width: 100%;">
+                    </div>
+                    <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
+                    <div id="resStatus" style="color: #e67e22; margin-top: 10px;"></div>
                 </div>
             </div>
         `;
@@ -147,17 +148,15 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
+            <div style="${wrapperStyle}">
+                <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
                 <div class="container animate-up" style="${cardBaseStyle}">
-                    <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
-                        <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
-                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
-                            <input type="file" id="videoInput" accept="video/*" style="width: 100%;">
-                        </div>
-                        <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
-                        <div id="sketchStatus" style="color: #9b59b6; margin-top: 10px;"></div>
-                    </section>
+                    <p style="color: #888; font-size: 0.8rem; margin-bottom: 10px;">Video to JPG Frames | Max 30s</p>
+                    <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; margin-bottom: 15px;">
+                        <input type="file" id="videoInput" accept="video/*" style="width: 100%;">
+                    </div>
+                    <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
+                    <div id="sketchStatus" style="color: #9b59b6; margin-top: 10px;"></div>
                 </div>
             </div>
         `;
@@ -167,11 +166,11 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: block; text-align: center; padding-top: 20px; width: 100%;">
-                <h1 style="margin-bottom: 15px; font-size: 3rem; text-align: center; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
+            <div style="${wrapperStyle}">
+                <h1 style="margin-bottom: 15px; font-size: 3rem; font-weight: 900; color: #2ecc71;">Lasso Tool</h1>
                 
                 <div id="lasso-step-1" class="container animate-up" style="${cardBaseStyle} max-width: 400px !important;">
-                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object (Left Mouse Button).</p>
+                    <p style="color: #888; margin-bottom: 15px;">Select image and outline object.</p>
                     <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
                         <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer; width: 100%;">
                     </div>
@@ -180,7 +179,7 @@ function switchTab(tab) {
                     </button>
                 </div>
 
-                <div id="lasso-step-2" style="display: none; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-block; max-width: 95%;">
+                <div id="lasso-step-2" style="display: none; background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-flex; flex-direction: column; max-width: 95%;">
                     <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
@@ -201,7 +200,6 @@ function switchTab(tab) {
 }
 
 // --- 5. PROCESSING LOGIC ---
-
 async function processResize() {
     const input = document.getElementById('imageInput');
     const widthInput = document.getElementById('targetWidth');
@@ -267,7 +265,6 @@ async function processInstantFrames() {
 }
 
 // --- 6. LASO TOOL LOGIC ---
-
 let lassoPoints = [];
 let isLassoDrawing = false;
 let lassoCanvas, lassoCtx, lassoImg;
@@ -281,9 +278,9 @@ function startLassoEditor() {
         lassoImg = new Image();
         lassoImg.onload = function() {
             document.getElementById('lasso-step-1').style.display = 'none';
-            // Zobrazíme krok 2 ako inline-block
             const step2 = document.getElementById('lasso-step-2');
-            step2.style.display = 'inline-block';
+            // Zobrazíme krok 2 ako kompaktný flex
+            step2.style.display = 'inline-flex';
 
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
