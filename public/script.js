@@ -123,21 +123,17 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #e67e22;">Image Resizer</h1>
-                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 8px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Target width (px):</p>
-                        <input type="number" id="targetWidth" value="1080" placeholder="e.g. 1080" 
-                               style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none; margin-bottom: 5px;">
-                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; display: flex; justify-content: center; align-items: center;">
-                            <input type="file" id="imageInput" accept="image/*" style="width: 165px; font-size: 0.8rem; cursor: pointer;">
+                        <input type="number" id="targetWidth" value="1080" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #eee; text-align: center; font-weight: 900; font-size: 1.2rem; color: #e67e22; outline: none;">
+                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
+                            <input type="file" id="imageInput" accept="image/*">
                         </div>
-                        <button onclick="processResize()" id="resBtn" class="upload-btn" 
-                                style="width: 100%; background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-top: 5px;">
-                            RESIZE IMAGE
-                        </button>
-                        <div id="resStatus" style="margin-top: 5px; font-size: 0.85rem; font-weight: bold; color: #e67e22;"></div>
+                        <button onclick="processResize()" id="resBtn" style="background: #e67e22; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">RESIZE IMAGE</button>
+                        <div id="resStatus" style="color: #e67e22; margin-top: 10px;"></div>
                     </section>
                 </div>
             </div>
@@ -148,18 +144,16 @@ function switchTab(tab) {
         document.body.classList.add('hide-brand');
 
         content.innerHTML = `
-            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%; min-height: auto !important;">
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
                 <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #9b59b6;">InstantFrames</h1>
-                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important; height: auto !important; min-height: 10px !important; display: block !important; margin: 0 auto 50px auto !important;">
+                <div class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 360px !important;">
                     <section class="upload-section" style="margin: 0; display: flex; flex-direction: column; gap: 12px;">
                         <p style="color: #888; font-size: 0.8rem; margin: 0;">Video to JPG Frames | Max 30s</p>
-                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa; display: flex; justify-content: center; align-items: center;">
-                            <input type="file" id="videoInput" accept="video/*" style="width: 165px; font-size: 0.8rem; cursor: pointer;">
+                        <div style="border: 2px dashed #eee; padding: 10px; border-radius: 15px; background: #fafafa;">
+                            <input type="file" id="videoInput" accept="video/*">
                         </div>
-                        <button onclick="processInstantFrames()" id="workBtn" class="upload-btn" style="width: 100%; background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
-                            GENERATE ZIP
-                        </button>
-                        <div id="sketchStatus" style="margin-top: 5px; font-size: 0.85rem; font-weight: bold; color: #9b59b6;"></div>
+                        <button onclick="processInstantFrames()" id="workBtn" style="background: #9b59b6; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer;">GENERATE ZIP</button>
+                        <div id="sketchStatus" style="color: #9b59b6; margin-top: 10px;"></div>
                     </section>
                 </div>
             </div>
@@ -168,9 +162,33 @@ function switchTab(tab) {
     else if (tab === 'lasso') {
         if (btnLasso) btnLasso.classList.add('active');
         document.body.classList.add('hide-brand');
-        // Zobrazíme sekciu Laso Tool, ktorú máš v HTML
-        document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
-        document.getElementById('section-lasso').style.display = 'block';
+
+        content.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; padding-top: 30px; width: 100%;">
+                <h1 style="margin-bottom: 15px; font-size: 3.2rem; text-align: center; font-weight: 900; color: #2ecc71;">Laso Tool</h1>
+                
+                <div id="lasso-step-1" class="container animate-up" style="background: white !important; padding: 30px !important; border-radius: 25px !important; box-shadow: 0 10px 40px rgba(0,0,0,0.1) !important; text-align: center !important; width: 90% !important; max-width: 400px !important;">
+                    <p style="color: #888; margin-bottom: 15px;">Vyberte obrázok a orezávajte voľnou rukou (pravé tlačidlo).</p>
+                    <div style="border: 2px dashed #2ecc71; padding: 20px; border-radius: 15px; background: #fafafa; margin-bottom: 20px;">
+                        <input type="file" id="lassoInput" accept="image/*" style="cursor: pointer;">
+                    </div>
+                    <button onclick="startLassoEditor()" style="width: 100%; background: #2ecc71; color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;">
+                        START LASO TOOL
+                    </button>
+                </div>
+
+                <div id="lasso-step-2" style="display: none; background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; margin-bottom: 50px;">
+                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd;">
+                        <canvas id="lassoCanvas"></canvas>
+                    </div>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Držte PRAVÉ TLAČIDLO a obkreslite objekt.</p>
+                    <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+                        <button onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
+                        <button onclick="resetLasso()" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
     else {
         document.body.classList.remove('hide-brand');
@@ -193,7 +211,7 @@ async function processResize() {
     formData.append('image', input.files[0]);
     formData.append('width', widthInput.value);
 
-    status.innerText = "Processing image...";
+    status.innerText = "Processing...";
     btn.disabled = true;
 
     try {
@@ -205,12 +223,10 @@ async function processResize() {
             a.href = url;
             a.download = `resized_${widthInput.value}px.jpg`;
             a.click();
-            status.innerHTML = '<span style="color: #27ae60;">Done! Downloading...</span>';
-        } else {
-            status.innerText = "Error on server.";
+            status.innerHTML = '<span style="color: #27ae60;">Done!</span>';
         }
     } catch (err) {
-        status.innerText = "Connection error.";
+        status.innerText = "Error.";
     } finally {
         btn.disabled = false;
     }
@@ -221,12 +237,12 @@ async function processInstantFrames() {
     const status = document.getElementById('sketchStatus');
     const btn = document.getElementById('workBtn');
     
-    if (!videoInput || !videoInput.files[0]) return alert("Please select a video!");
+    if (!videoInput.files[0]) return alert("Please select a video!");
 
     const formData = new FormData();
     formData.append('video', videoInput.files[0]);
 
-    status.innerText = "Processing video... wait please.";
+    status.innerText = "Processing...";
     btn.disabled = true;
 
     try {
@@ -238,18 +254,16 @@ async function processInstantFrames() {
             a.href = url;
             a.download = "InstantFrames.zip";
             a.click();
-            status.innerHTML = '<span style="color: #27ae60;">ZIP downloaded!</span>';
-        } else {
-            status.innerText = "Error processing video.";
+            status.innerHTML = '<span style="color: #27ae60;">Done!</span>';
         }
     } catch (err) {
-        status.innerText = "Connection error.";
+        status.innerText = "Error.";
     } finally {
         btn.disabled = false;
     }
 }
 
-// --- 6. LASO TOOL LOGIC (NEW) ---
+// --- 6. LASO TOOL LOGIC ---
 
 let lassoPoints = [];
 let isLassoDrawing = false;
@@ -257,7 +271,7 @@ let lassoCanvas, lassoCtx, lassoImg;
 
 function startLassoEditor() {
     const input = document.getElementById('lassoInput');
-    if (!input.files[0]) return alert("Please select an image first!");
+    if (!input || !input.files[0]) return alert("Please select an image first!");
 
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -269,28 +283,22 @@ function startLassoEditor() {
             lassoCanvas = document.getElementById('lassoCanvas');
             lassoCtx = lassoCanvas.getContext('2d');
 
-            // Nastavenie veľkosti plátna podľa obrázka (max 800px šírka pre prehľadnosť)
             const scale = Math.min(1, 800 / lassoImg.width);
             lassoCanvas.width = lassoImg.width * scale;
             lassoCanvas.height = lassoImg.height * scale;
 
             drawLassoState();
 
-            // Eventy pre kreslenie (Pravé tlačidlo)
-            lassoCanvas.oncontextmenu = (e) => e.preventDefault(); // Zakáže menu
+            lassoCanvas.oncontextmenu = (e) => e.preventDefault();
             lassoCanvas.onmousedown = (e) => {
-                if (e.button === 2) { // Pravé tlačidlo
+                if (e.button === 2) { 
                     isLassoDrawing = true;
                     lassoPoints = [];
                     addLassoPoint(e);
                 }
             };
-            window.onmousemove = (e) => {
-                if (isLassoDrawing) addLassoPoint(e);
-            };
-            window.onmouseup = () => {
-                isLassoDrawing = false;
-            };
+            window.onmousemove = (e) => { if (isLassoDrawing) addLassoPoint(e); };
+            window.onmouseup = () => { isLassoDrawing = false; };
         };
         lassoImg.src = e.target.result;
     };
@@ -298,6 +306,7 @@ function startLassoEditor() {
 }
 
 function addLassoPoint(e) {
+    if (!lassoCanvas) return;
     const rect = lassoCanvas.getBoundingClientRect();
     const x = (e.clientX - rect.left) * (lassoImg.width / lassoCanvas.width);
     const y = (e.clientY - rect.top) * (lassoImg.height / lassoCanvas.height);
@@ -306,15 +315,14 @@ function addLassoPoint(e) {
 }
 
 function drawLassoState() {
+    if (!lassoCtx) return;
     lassoCtx.clearRect(0, 0, lassoCanvas.width, lassoCanvas.height);
     lassoCtx.drawImage(lassoImg, 0, 0, lassoCanvas.width, lassoCanvas.height);
-
     if (lassoPoints.length > 1) {
         lassoCtx.beginPath();
         lassoCtx.setLineDash([5, 5]);
         lassoCtx.strokeStyle = "#2ecc71";
         lassoCtx.lineWidth = 2;
-        
         const scale = lassoCanvas.width / lassoImg.width;
         lassoCtx.moveTo(lassoPoints[0][0] * scale, lassoPoints[0][1] * scale);
         for (let i = 1; i < lassoPoints.length; i++) {
@@ -331,7 +339,6 @@ function resetLasso() {
 
 async function processLasso() {
     if (lassoPoints.length < 3) return alert("Please draw a shape first (hold right click)!");
-
     const input = document.getElementById('lassoInput');
     const formData = new FormData();
     formData.append('image', input.files[0]);
@@ -346,15 +353,8 @@ async function processLasso() {
             a.href = url;
             a.download = "cutout.png";
             a.click();
-            
-            // Návrat na krok 1
-            document.getElementById('lasso-step-2').style.display = 'none';
-            document.getElementById('lasso-step-1').style.display = 'block';
-            input.value = "";
-        } else {
-            alert("Server error during clipping.");
+            // Reset na začiatok Laso sekcie
+            switchTab('lasso');
         }
-    } catch (e) {
-        alert("Connection error.");
-    }
+    } catch (e) { alert("Server error."); }
 }
