@@ -189,7 +189,6 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 .nav-item.active {
     color: #fff !important;
     font-weight: 800;
-    background-color: #f0f0f0;
 }
 
 .nav-item.active[onclick*="transfer"], .nav-item.active[onclick*="Transfer"] {
@@ -197,7 +196,8 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
 }
 
-.nav-item.active[onclick*="frames"], .nav-item.active[onclick*="Frames"] {
+/* Opravené na 'sketch', aby to sedelo s tvojím HTML pre InstantFrames */
+.nav-item.active[onclick*="sketch"], .nav-item.active[onclick*="Sketch"] {
     background-color: #8e44ad !important;
     box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
 }
