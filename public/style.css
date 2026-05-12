@@ -3,11 +3,11 @@
     --container-bg: #ffffff;
     --text-color: #333;
     --primary-color: #2c3e50;
-    --accent-color: #3498db; /* Tvoja modrá */
+    --accent-color: #3498db;
     --secondary-text: #888;
 }
 
-/* --- NOVÉ: ŠTÝLY PRE GOOSEWEB LOGO --- */
+/* --- FIXNUTÉ LOGO ŠTÝLY --- */
 .gooseweb-brand-header {
     width: 100%;
     display: flex;
@@ -21,31 +21,17 @@
 
 .gooseweb-logo-box {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 12px;
 }
 
-.gooseweb-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+.gooseweb-full-logo {
+    height: 60px; /* Uprav podľa uváženia, aby nápis GooseWeb vynikol */
+    width: auto;
+    object-fit: contain;
 }
 
-.gooseweb-text {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: #333;
-    letter-spacing: -1px;
-}
-
-/* Skrytie loga pri prepnutí sekcie, ak to máš v JS nastavené */
-body.hide-brand .gooseweb-brand-header {
-    display: none !important;
-}
-
-/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
+/* Zvyšok CSS ostáva bez zmien */
 html, body {
     height: 100vh;
     margin: 0;
@@ -62,7 +48,6 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* --- !!! NOVO PRIDANÝ LOADING SCREEN STYLES !!! --- */
 #loader-wrapper {
     position: fixed;
     top: 0;
@@ -165,9 +150,7 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
     .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
     .full-ground-line { display: none; }
-    /* Responzivita pre logo */
-    .gooseweb-text { font-size: 22px; }
-    .gooseweb-icon { width: 40px; height: 40px; }
+    .gooseweb-full-logo { height: 45px; }
 }
 
 #menu-toggle {
