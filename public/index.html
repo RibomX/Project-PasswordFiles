@@ -7,41 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* NOVÉ: Štýly pre GooseWeb Logo */
-        .gooseweb-brand-header {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px 0 10px 0;
-            background: transparent;
-            position: relative;
-            z-index: 5; /* Pod menu-toggle (1000+), aby neprekrývalo hamburger */
-        }
-        .gooseweb-logo-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .gooseweb-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        .gooseweb-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
-            font-weight: 900;
-            color: #333;
-            letter-spacing: -1px;
-        }
-
-        /* Pôvodné štýly */
-        body.hide-brand .top-header, 
-        body.hide-brand .gooseweb-brand-header {
-            display: none !important;
-        }
+        /* Odstránené body.hide-brand, aby logo ostalo viditeľné všade */
         
         .btn-green {
             background-color: #2ecc71 !important;
@@ -56,19 +22,12 @@
         .btn-green:hover {
             background-color: #27ae60 !important;
         }
-
-        /* Úprava aby logo v strede nekolidovalo s hamburgerom na mobiloch */
-        @media (max-width: 768px) {
-            .gooseweb-text { font-size: 22px; }
-            .gooseweb-icon { width: 40px; height: 40px; }
-        }
     </style>
 </head>
 <body>
     <header class="gooseweb-brand-header">
         <div class="gooseweb-logo-box">
-            <img src="logo_gooseweb.png" alt="GooseWeb Logo" class="gooseweb-icon">
-            <span class="gooseweb-text">GooseWeb</span>
+            <img src="logo_gooseweb.png" alt="GooseWeb Logo" class="gooseweb-full-logo">
         </div>
     </header>
 
@@ -84,11 +43,11 @@
             <span class="close-btn" onclick="toggleSidebar()">&times;</span>
         </div>
        <nav>
-    <a href="#" class="nav-item active" id="btn-transfer" onclick="switchTab('transfer')">Secure Transfer</a>
-    <a href="#" class="nav-item" id="btn-sketch" onclick="switchTab('sketch')">InstantFrames</a>
-    <a href="#" class="nav-item" id="btn-resizer" onclick="switchTab('resizer')">Image Resizer</a>
-    <a href="#" class="nav-item" id="btn-lasso" onclick="switchTab('lasso')">Laso Tool</a>
-</nav>
+            <a href="#" class="nav-item active" id="btn-transfer" onclick="switchTab('transfer')">Secure Transfer</a>
+            <a href="#" class="nav-item" id="btn-sketch" onclick="switchTab('sketch')">InstantFrames</a>
+            <a href="#" class="nav-item" id="btn-resizer" onclick="switchTab('resizer')">Image Resizer</a>
+            <a href="#" class="nav-item" id="btn-lasso" onclick="switchTab('lasso')">Laso Tool</a>
+        </nav>
     </div>
 
     <div id="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -160,11 +119,9 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="full-ground-line"></div>
-
     <script src="script.js"></script>
 </body>
 </html>
