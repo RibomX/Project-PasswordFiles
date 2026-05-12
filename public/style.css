@@ -7,7 +7,7 @@
     --secondary-text: #888;
 }
 
-/* --- LOGO V PRAVOM HORNOM ROHU (PRE VŠETKY STRÁNKY) --- */
+/* --- LOGO V PRAVOM HORNOM ROHU (VÄČŠIE A VIAC V ROHU) --- */
 .gooseweb-brand-header {
     width: auto;
     display: flex;
@@ -15,9 +15,10 @@
     padding: 0;
     background: transparent;
     position: absolute;
-    top: 20px;
-    right: 30px;
+    top: 10px;        /* Posunuté ešte vyššie (z 20px na 10px) */
+    right: 15px;      /* Posunuté viac doprava (z 30px na 15px) */
     z-index: 5;
+    transition: all 0.3s ease;
 }
 
 .gooseweb-logo-box {
@@ -27,7 +28,7 @@
 }
 
 .gooseweb-full-logo {
-    height: 80px;
+    height: 90px;      /* Zväčšené (zo 65px na 80px) */
     width: auto;
     object-fit: contain;
 }
