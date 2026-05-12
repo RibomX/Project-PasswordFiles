@@ -277,3 +277,21 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     margin-top: 20px;
     border: 2px solid #2ecc71;
 }
+/* --- ŠPECIFICKÁ OPRAVA LEN PRE SECURE TRANSFER --- */
+
+/* Keď je zobrazený Secure Transfer, logo sa zmenší a posunie */
+#section-transfer:not([style*="display: none"]) ~ .gooseweb-brand-header,
+body:has(#section-transfer[style*="display: block"]) .gooseweb-brand-header {
+    top: 10px; /* Posun vyššie k okraju */
+}
+
+#section-transfer:not([style*="display: none"]) ~ .gooseweb-brand-header .gooseweb-full-logo,
+body:has(#section-transfer[style*="display: block"]) .gooseweb-full-logo {
+    height: 70px; /* Zmenšené logo, aby nezavadzalo maskotovi */
+}
+
+/* Oprava centrovania obsahu pri Secure Transfer */
+#section-transfer[style*="display: block"] .main-layout {
+    margin-top: 40px; /* Vytvorí miesto pre to posunuté logo */
+    align-items: center; /* Pekne zarovná maskota a box k sebe */
+}
