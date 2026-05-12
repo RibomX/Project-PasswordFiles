@@ -26,12 +26,11 @@
 }
 
 .gooseweb-full-logo {
-    height: 60px; /* Uprav podľa uváženia, aby nápis GooseWeb vynikol */
+    height: 60px;
     width: auto;
     object-fit: contain;
 }
 
-/* Zvyšok CSS ostáva bez zmien */
 html, body {
     height: 100vh;
     margin: 0;
@@ -111,6 +110,11 @@ body {
     visibility: hidden;
 }
 
+/* OPRAVA: Pridaný margin-top, aby boxy nezačínali príliš nízko kvôli logu */
+.tab-content {
+    margin-top: -20px;
+}
+
 .container {
     background: var(--container-bg);
     padding: 25px 35px;
@@ -133,7 +137,8 @@ body {
 }
 
 .mobile-only-logo { display: none; }
-.top-header { margin-bottom: 20px; text-align: center; }
+/* OPRAVA: Zmenšený margin dole, aby to netlačilo boxy */
+.top-header { margin-bottom: 10px; text-align: center; }
 .brand-name { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--primary-color); letter-spacing: -1px; }
 .main-layout { display: flex; align-items: flex-end; justify-content: center; gap: 60px; width: 100%; }
 .side-maskot { height: 460px; width: auto; display: block; }
