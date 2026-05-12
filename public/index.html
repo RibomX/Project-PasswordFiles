@@ -62,11 +62,6 @@
         </div>
     </div>
 
-    <header class="top-header">
-        <img src="logo.png" alt="Logo" class="mobile-only-logo">
-        <h1 class="brand-name" style="color: #3498db;">Secure Transfer</h1>
-    </header>
-
     <div id="dynamic-content">
         <div id="section-transfer" class="tab-content main-layout">
             <div class="maskot-container">
@@ -74,6 +69,11 @@
             </div>
 
             <div class="container animate-content" id="mainContent">
+                <header class="top-header">
+                    <img src="logo.png" alt="Logo" class="mobile-only-logo">
+                    <h1 class="brand-name" style="color: #3498db;">Secure Transfer</h1>
+                </header>
+
                 <section class="upload-section">
                     <input type="file" id="fileInput">
                     <input type="text" id="passwordInput" placeholder="Set download password">
@@ -98,10 +98,10 @@
 
         <div id="section-lasso" class="tab-content main-layout" style="display: none;">
             <div class="container animate-content">
-                <h2 style="color: #2ecc71;">Laso Tool</h2>
+                <h2 style="color: #2ecc71; text-align: center; font-size: 2.5rem; font-weight: 900; margin-bottom: 20px;">Laso Tool</h2>
                 
                 <div id="lasso-step-1" class="upload-section" style="background: white; padding: 30px; border-radius: 15px;">
-                    <p style="color: #666;">Najskôr vyberte obrázok, ktorý chcete upraviť.</p>
+                    <p style="color: #666; text-align: center;">Select image and outline object.</p>
                     <input type="file" id="lassoInput" accept="image/*" style="border-color: #2ecc71;">
                     <br><br>
                     <button onclick="startLassoEditor()" class="btn-green">Start Laso Tool</button>
