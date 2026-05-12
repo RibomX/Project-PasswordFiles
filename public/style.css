@@ -7,7 +7,7 @@
     --secondary-text: #888;
 }
 
-/* --- LOGO V PRAVOM HORNOM ROHU (VÄČŠIE A VIAC V ROHU) --- */
+/* --- LOGO V PRAVOM HORNOM ROHU --- */
 .gooseweb-brand-header {
     width: auto;
     display: flex;
@@ -15,8 +15,8 @@
     padding: 0;
     background: transparent;
     position: absolute;
-    top: 2px;        /* Posunuté ešte vyššie (z 20px na 10px) */
-    right: 10px;      /* Posunuté viac doprava (z 30px na 15px) */
+    top: 2px;
+    right: 10px;
     z-index: 5;
     transition: all 0.3s ease;
 }
@@ -28,7 +28,7 @@
 }
 
 .gooseweb-full-logo {
-    height: 100px;      /* Zväčšené (zo 65px na 80px) */
+    height: 100px;
     width: auto;
     object-fit: contain;
 }
@@ -68,7 +68,6 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* UPRAVENÉ: Zobrazenie iba husi bez textu pre loader */
 .loader-logo {
     height: 90px;
     width: 90px;
@@ -100,7 +99,7 @@ body {
 .load-bar-fill {
     width: 0%;
     height: 100%;
-    background-color: #888; 
+    background-color: #888;
     border-radius: 99px;
     transition: width 0.3s ease-out;
 }
@@ -134,6 +133,7 @@ body {
     opacity: 0;
     transform: translateY(100px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    margin-top: 60px; /* PRIDANÉ: Posúva políčka nižšie, aby nezmizli pod logom */
 }
 
 .content-visible {
@@ -157,7 +157,7 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     .maskot-container { display: none; }
     .brand-name { font-size: 2.2rem; margin-bottom: 10px; }
     .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
-    .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
+    .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; margin-top: 20px; }
     .full-ground-line { display: none; }
     .gooseweb-full-logo { height: 45px; }
 }
@@ -178,44 +178,37 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 }
 
 #sidebar.active { left: 0; box-shadow: 10px 0 40px rgba(0,0,0,0.1); }
-
 #sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.2); display: none; z-index: 3500; }
 #sidebar-overlay.active { display: block; }
 
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 .close-btn { font-size: 30px; cursor: pointer; color: #ccc; }
 .nav-item { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 700; border-radius: 10px; }
-/* --- FAREBNÉ ZVÝRAZNENIE V SIDEBARE --- */
 
-/* Základ pre aktívny prvok - text bude vždy biely, aby bol čitateľný na sýtych farbách */
+/* --- FAREBNÉ ZVÝRAZNENIE V SIDEBARE --- */
 .nav-item.active {
     color: #fff !important;
     font-weight: 800;
 }
 
-/* Secure Transfer - Tmavosvetlá "hustá" modrá */
 .nav-item.active[onclick*="transfer"] {
     background-color: #2980b9 !important;
     box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
 }
 
-/* InstantFrames - Fialová */
 .nav-item.active[onclick*="frames"] {
     background-color: #8e44ad !important;
     box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
 }
 
-/* Image Resizer - Oranžová */
 .nav-item.active[onclick*="resizer"] {
     background-color: #e67e22 !important;
     box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
 }
 
-/* Lasso Tool - Zelená */
 .nav-item.active[onclick*="lasso"] {
     background-color: #27ae60 !important;
     box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
-}
 }
 
 .animate-up { animation: slideUp 0.6s ease-out forwards; }
@@ -231,5 +224,3 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 }
 
 .btn-green:hover { background-color: #27ae60; transform: scale(1.05); }
-
-#lasso-step-2 { margin-top: 20px; border: 2px solid #2ecc71; }
