@@ -185,9 +185,37 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 .close-btn { font-size: 30px; cursor: pointer; color: #ccc; }
 .nav-item { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 700; border-radius: 10px; }
-.nav-item.active { 
-    background: #f0f0f0; /* Svetlosivé pozadie */
-    color: #333;         /* Tmavosivý/čierny text, aby to ladilo */
+/* --- FAREBNÉ ZVÝRAZNENIE V SIDEBARE --- */
+
+/* Základ pre aktívny prvok - text bude vždy biely, aby bol čitateľný na sýtych farbách */
+.nav-item.active {
+    color: #fff !important;
+    font-weight: 800;
+}
+
+/* Secure Transfer - Tmavosvetlá "hustá" modrá */
+.nav-item.active[onclick*="transfer"] {
+    background-color: #2980b9 !important;
+    box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
+}
+
+/* InstantFrames - Fialová */
+.nav-item.active[onclick*="frames"] {
+    background-color: #8e44ad !important;
+    box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
+}
+
+/* Image Resizer - Oranžová */
+.nav-item.active[onclick*="resizer"] {
+    background-color: #e67e22 !important;
+    box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
+}
+
+/* Lasso Tool - Zelená */
+.nav-item.active[onclick*="lasso"] {
+    background-color: #27ae60 !important;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
+}
 }
 
 .animate-up { animation: slideUp 0.6s ease-out forwards; }
