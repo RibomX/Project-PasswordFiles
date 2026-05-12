@@ -185,7 +185,10 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 .close-btn { font-size: 30px; cursor: pointer; color: #ccc; }
 .nav-item { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 700; border-radius: 10px; }
-.nav-item.active { background: #f0f7ff; color: #3498db; }
+.nav-item.active { 
+    background: #f0f0f0; /* Svetlosivé pozadie */
+    color: #333;         /* Tmavosivý/čierny text, aby to ladilo */
+}
 
 .animate-up { animation: slideUp 0.6s ease-out forwards; }
 
