@@ -99,7 +99,7 @@ body {
 .load-bar-fill {
     width: 0%;
     height: 100%;
-    background-color: #888;
+    background-color: #888; 
     border-radius: 99px;
     transition: width 0.3s ease-out;
 }
@@ -133,7 +133,7 @@ body {
     opacity: 0;
     transform: translateY(100px);
     transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-    margin-top: 60px; /* PRIDANÉ: Posúva políčka nižšie, aby nezmizli pod logom */
+    margin-top: 60px;
 }
 
 .content-visible {
@@ -185,28 +185,29 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 .close-btn { font-size: 30px; cursor: pointer; color: #ccc; }
 .nav-item { display: block; padding: 15px; text-decoration: none; color: #333; font-weight: 700; border-radius: 10px; }
 
-/* --- FAREBNÉ ZVÝRAZNENIE V SIDEBARE --- */
+/* --- OPRAVENÉ FAREBNÉ ZVÝRAZNENIE V SIDEBARE --- */
 .nav-item.active {
     color: #fff !important;
     font-weight: 800;
+    background-color: #f0f0f0;
 }
 
-.nav-item.active[onclick*="transfer"] {
+.nav-item.active[onclick*="transfer"], .nav-item.active[onclick*="Transfer"] {
     background-color: #2980b9 !important;
     box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
 }
 
-.nav-item.active[onclick*="frames"] {
+.nav-item.active[onclick*="frames"], .nav-item.active[onclick*="Frames"] {
     background-color: #8e44ad !important;
     box-shadow: 0 4px 10px rgba(142, 68, 173, 0.3);
 }
 
-.nav-item.active[onclick*="resizer"] {
+.nav-item.active[onclick*="resizer"], .nav-item.active[onclick*="Resizer"] {
     background-color: #e67e22 !important;
     box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);
 }
 
-.nav-item.active[onclick*="lasso"] {
+.nav-item.active[onclick*="lasso"], .nav-item.active[onclick*="Lasso"] {
     background-color: #27ae60 !important;
     box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
 }
