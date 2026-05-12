@@ -7,12 +7,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Tento štýl schová logo a Secure Transfer nadpis, keď sa v JS prepne sekcia */
-        body.hide-brand .top-header {
+        /* NOVÉ: Štýly pre GooseWeb Logo */
+        .gooseweb-brand-header {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0 10px 0;
+            background: transparent;
+            position: relative;
+            z-index: 5; /* Pod menu-toggle (1000+), aby neprekrývalo hamburger */
+        }
+        .gooseweb-logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .gooseweb-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .gooseweb-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            color: #333;
+            letter-spacing: -1px;
+        }
+
+        /* Pôvodné štýly */
+        body.hide-brand .top-header, 
+        body.hide-brand .gooseweb-brand-header {
             display: none !important;
         }
         
-        /* Zelené tlačidlo pre Laso Tool */
         .btn-green {
             background-color: #2ecc71 !important;
             color: white !important;
@@ -26,9 +56,22 @@
         .btn-green:hover {
             background-color: #27ae60 !important;
         }
+
+        /* Úprava aby logo v strede nekolidovalo s hamburgerom na mobiloch */
+        @media (max-width: 768px) {
+            .gooseweb-text { font-size: 22px; }
+            .gooseweb-icon { width: 40px; height: 40px; }
+        }
     </style>
 </head>
 <body>
+    <header class="gooseweb-brand-header">
+        <div class="gooseweb-logo-box">
+            <img src="logo_gooseweb.png" alt="GooseWeb Logo" class="gooseweb-icon">
+            <span class="gooseweb-text">GooseWeb</span>
+        </div>
+    </header>
+
     <div id="menu-toggle" onclick="toggleSidebar()">
         <div class="bar"></div>
         <div class="bar"></div>
