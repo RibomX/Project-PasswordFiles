@@ -7,6 +7,45 @@
     --secondary-text: #888;
 }
 
+/* --- NOVÉ: ŠTÝLY PRE GOOSEWEB LOGO --- */
+.gooseweb-brand-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0 10px 0;
+    background: transparent;
+    position: relative;
+    z-index: 5;
+}
+
+.gooseweb-logo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gooseweb-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.gooseweb-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #333;
+    letter-spacing: -1px;
+}
+
+/* Skrytie loga pri prepnutí sekcie, ak to máš v JS nastavené */
+body.hide-brand .gooseweb-brand-header {
+    display: none !important;
+}
+
+/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
 html, body {
     height: 100vh;
     margin: 0;
@@ -34,8 +73,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 9999; /* Nad všetkým */
-    transition: opacity 0.6s ease-out, visibility 0.6s ease-out; /* Hladké zmiznutie loaderu */
+    z-index: 9999;
+    transition: opacity 0.6s ease-out, visibility 0.6s ease-out;
 }
 
 .loader-content {
@@ -43,7 +82,6 @@ body {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Jemný pohyb loga hore-dole */
 .loader-logo {
     height: 90px;
     margin-bottom: 25px;
@@ -59,7 +97,6 @@ body {
     letter-spacing: 2px;
 }
 
-/* LOADING BAR */
 .load-bar-container {
     width: 250px;
     height: 14px;
@@ -71,28 +108,24 @@ body {
 }
 
 .load-bar-fill {
-    width: 0%; /* Začína na 0 */
+    width: 0%;
     height: 100%;
-    background-color: var(--accent-color); /* Modrá výplň */
+    background-color: var(--accent-color);
     border-radius: 99px;
-    transition: width 0.3s ease-out; /* Hladké plnenie */
+    transition: width 0.3s ease-out;
 }
 
-/* KEYFRAMES PRE ANIMÁCIE */
 @keyframes bobbing {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); } /* Jemný pohyb hore */
+    50% { transform: translateY(-15px); }
     100% { transform: translateY(0px); }
 }
 
-/* Trieda na zmiznutie loaderu */
 .loader-hidden {
     opacity: 0;
     visibility: hidden;
 }
 
-/* --- !!! LOGIKA PRE VYSUNUTIE OBSAHU !!! --- */
-/* Štandardný container na PC */
 .container {
     background: var(--container-bg);
     padding: 25px 35px;
@@ -104,21 +137,16 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    /* Počiatočné nastavenie pre animáciu vysunutia */
-    opacity: 0; /* Skrytý */
-    transform: translateY(100px); /* Posunutý o 100px nižšie spoza čiary */
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out; /* Hladké vysunutie */
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
 }
 
-/* Trieda, ktorú pridáme cez JS na "vytiahnutie" boxu */
 .content-visible {
-    opacity: 1; /* Viditeľný */
-    transform: translateY(0px); /* Na svojej normalnej pozícii */
+    opacity: 1;
+    transform: translateY(0px);
 }
 
-
-/* --- ZVYŠOK TVOJHO PÔVODNÉHO CSS (BEZ ZMIEN) --- */
 .mobile-only-logo { display: none; }
 .top-header { margin-bottom: 20px; text-align: center; }
 .brand-name { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--primary-color); letter-spacing: -1px; }
@@ -137,11 +165,11 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     .main-layout { flex-direction: column; align-items: center; padding: 0 20px; }
     .container { width: 100%; max-width: 360px; min-height: auto; box-shadow: none; border: 1px solid #eee; }
     .full-ground-line { display: none; }
+    /* Responzivita pre logo */
+    .gooseweb-text { font-size: 22px; }
+    .gooseweb-icon { width: 40px; height: 40px; }
 }
-/* --- STYL PRE BURGER A MENU --- */
 
-
-/* 1. SAMOTNÉ OKRÚHLE TLAČIDLO (BURGER) */
 #menu-toggle {
     position: fixed; 
     top: 20px; 
@@ -156,10 +184,9 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     align-items: center; 
     cursor: pointer;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-    z-index: 3000; /* Zvýšený z-index, aby bol nad loaderom aj maskotom */
+    z-index: 3000;
 }
 
-/* Tri čiarky vnútri krúžku */
 .bar { 
     width: 22px; 
     height: 2px; 
@@ -168,27 +195,24 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     border-radius: 10px;
 }
 
-/* 2. BOČNÁ LIŠTA (SIDEBAR) - POSUNUTÁ VIAC DOĽAVA */
 #sidebar {
     position: fixed; 
     top: 0; 
-    left: -350px; /* Dostatočne ďaleko, aby nebolo vidno ani tieň */
+    left: -350px; 
     width: 300px; 
     height: 100%;
     background: #fff; 
     z-index: 4000; 
     transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 30px;
-    box-shadow: none; /* Žiadny tieň, keď je zavretá */
+    box-shadow: none;
 }
 
-/* Keď klikneš a pridá sa trieda .active cez JS */
 #sidebar.active { 
     left: 0; 
     box-shadow: 10px 0 40px rgba(0,0,0,0.1); 
 }
 
-/* 3. ZATMAVENIE POZADIA */
 #sidebar-overlay { 
     position: fixed; 
     inset: 0; 
@@ -201,7 +225,6 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     display: block; 
 }
 
-/* 4. DOPLNKY DO MENU */
 .sidebar-header { 
     display: flex; 
     justify-content: space-between; 
@@ -228,7 +251,7 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     background: #f0f7ff; 
     color: #3498db; 
 }
-/* Animácia príchodu zdola */
+
 .animate-up {
     animation: slideUp 0.6s ease-out forwards;
 }
@@ -236,14 +259,14 @@ button { background-color: var(--accent-color); color: white; border: none; curs
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(50px); /* Začne o 50px nižšie */
+        transform: translateY(50px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);    /* Skončí na svojom mieste */
+        transform: translateY(0);
     }
 }
-/* Zelené tlačidlo pre Laso Tool */
+
 .btn-green {
     background-color: #2ecc71;
     color: white;
@@ -261,7 +284,6 @@ button { background-color: var(--accent-color); color: white; border: none; curs
     transform: scale(1.05);
 }
 
-/* Štýl pre bielu plochu editora */
 #lasso-step-2 {
     margin-top: 20px;
     border: 2px solid #2ecc71;
