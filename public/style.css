@@ -15,7 +15,7 @@
     padding: 0;
     background: transparent;
     position: absolute;
-    top: 10px;        /* Posunuté ešte vyššie (z 20px na 10px) */
+    top: 5px;        /* Posunuté ešte vyššie (z 20px na 10px) */
     right: 15px;      /* Posunuté viac doprava (z 30px na 15px) */
     z-index: 5;
     transition: all 0.3s ease;
@@ -28,7 +28,7 @@
 }
 
 .gooseweb-full-logo {
-    height: 90px;      /* Zväčšené (zo 65px na 80px) */
+    height: 100px;      /* Zväčšené (zo 65px na 80px) */
     width: auto;
     object-fit: contain;
 }
