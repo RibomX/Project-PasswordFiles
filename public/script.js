@@ -244,10 +244,10 @@ function startLassoEditor() {
             const wrapper = document.getElementById('lasso-wrapper');
             const step2HTML = `
                 <div id="lasso-step-2" class="animate-up" style="background: white; padding: 25px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); text-align: center; display: inline-flex; flex-direction: column; max-width: 95%;">
-                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0;">
+                    <div id="lassoCanvasContainer" style="position: relative; display: inline-block; cursor: crosshair; background: #f0f0f0; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; line-height: 0; touch-action: none;">
                         <canvas id="lassoCanvas"></canvas>
                     </div>
-                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON to outline.</p>
+                    <p style="margin-top: 10px; color: #666; font-size: 0.8rem;">Hold LEFT MOUSE BUTTON or drag finger to outline.</p>
                     <div style="margin-top: 15px; display: flex; gap: 10px; justify-content: center;">
                         <button id="lassoGenBtn" onclick="processLasso()" style="background: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 900; cursor: pointer;">GENERATE PICTURE</button>
                         <button onclick="switchTab('lasso')" style="background: #95a5a6; color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer;">RESET</button>
@@ -267,6 +267,8 @@ function startLassoEditor() {
             lassoCanvas.height = lassoImg.height * scale;
 
             drawLassoState();
+            
+            // --- DESKTOP (MYŠ) ---
             lassoCanvas.onmousedown = (e) => {
                 if (e.button === 0) {
                     isLassoDrawing = true;
@@ -276,6 +278,20 @@ function startLassoEditor() {
             };
             window.onmousemove = (e) => { if (isLassoDrawing) addLassoPoint(e); };
             window.onmouseup = () => { isLassoDrawing = false; };
+
+            // --- MOBIL (DOTYK) ---
+            lassoCanvas.ontouchstart = (e) => {
+                isLassoDrawing = true;
+                lassoPoints = [];
+                if (e.touches.length > 0) addLassoPoint(e.touches[0]);
+            };
+            window.ontouchmove = (e) => { 
+                if (isLassoDrawing && e.touches.length > 0) {
+                    if (e.cancelable) e.preventDefault();
+                    addLassoPoint(e.touches[0]);
+                }
+            };
+            window.ontouchend = () => { isLassoDrawing = false; };
         };
         lassoImg.src = e.target.result;
     };
